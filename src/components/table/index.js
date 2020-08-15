@@ -1,0 +1,77 @@
+import { useState, useEffect } from 'react';
+import { Table, Input, Button, Row, Col, Space } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+
+const TableSystem = (props) => {
+
+	const {
+		columns,
+		data,
+	} = props;
+
+	const [ sourceColumns, setSourceColumns ] = useState(columns);
+
+	const getColumnSearchProps = dataIndex => ({
+		filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+			return (
+				<div style={{ padding: 8 }}>
+					<Input
+						placeholder={`Search ${dataIndex}`}
+						value={selectedKeys[0]}
+						onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+						onPressEnter={() => handleSearch(confirm)}
+						style={{ width: 188, marginBottom: 8, display: 'block' }}
+					/>
+					<Space>
+						<Button
+							type="primary"
+							onClick={() => handleSearch(confirm)}
+							icon={<SearchOutlined />}
+							size="small"
+							style={{ width: 90 }}
+						>
+							Search
+					</Button>
+						<Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+							Reset
+					</Button>
+					</Space>
+				</div>
+			)
+		},
+		filterIcon: filtered => {
+			return(
+				<SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+			)
+		},
+		onFilter: (value, record) =>
+			record[dataIndex] ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()) : '',
+	});
+
+	const handleSearch = confirm => {
+		confirm();
+	};
+
+	const handleReset = clearFilters => {
+		clearFilters();
+	};
+
+	useEffect(() => {
+		let aux = [];
+		sourceColumns.map((response, index) => {
+			response.search ? aux.push({ ...response, ...getColumnSearchProps(response.dataIndex) }) : aux.push({ ...response });
+		});
+		setSourceColumns(aux);
+	}, []);
+
+	return (
+		<Row>
+			<Col span={24}>
+				<Table dataSource={data} columns={sourceColumns} size="small" scroll={{x: 'auto'}} className="text-color-secondary" />;
+			</Col>
+		</Row>
+	);
+	
+}
+
+export default TableSystem
