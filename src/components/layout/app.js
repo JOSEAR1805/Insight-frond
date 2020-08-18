@@ -5,17 +5,27 @@ import SiderbarApp from "./sidebar";
 import ContentApp from "./content";
 import FooterApp from "./footer";
 
-const SiderDemo = (props) => (
-	<Layout style={{ minHeight: '100vh' }}>
-		<HeaderApp/>
+const SiderDemo = (props) => {
+	const {
+		children,
+		routes,
+	} = props;
+
+	return (
 		<Layout>
 			<SiderbarApp/>
-			<ContentApp>
-				{props.children}
-			</ContentApp>
+			<Layout style={{ minHeight: '100vh' }}>
+				<HeaderApp/>
+				<Layout >
+					<ContentApp routes={routes && routes.length >= 1? routes: []}>
+						{ children }
+					</ContentApp>
+
+				</Layout>
+				<FooterApp/>
+			</Layout>
 		</Layout>
-		<FooterApp/>
-	</Layout>
-);
+	);
+}
 
 export default SiderDemo;

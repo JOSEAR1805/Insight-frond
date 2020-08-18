@@ -9,39 +9,34 @@ import {
 	} from '@ant-design/icons';
 
 const UserList = () => {
+
 	const routes = [
 		{
 			key: '1',
-			path: '/users/',
-			breadcrumbName: 'Usuarios',
+			path: '/profiles',
+			breadcrumbName: 'Perfiles',
 		}
 	];
 
 	const data = [
 		{
 			key: '1',
-			name: 'Alejandro',
-			last_name: 'Sanchez',
-			phone: '+56 53453453',
-			email: 'alejandrosanchez@test.com',
-			address: 'Chile',
+			name: 'Perfil 1',
+			description: 'dakl dak  da d asd as dl sal dla sld lkas dllasdl asl dl aslkd ',
 		},
 		{
 			key: '2',
-			name: 'Elver',
-			last_name: 'Valderrama',
-			phone: '+56 942342342',
-			email: 'elvervalderrama@test.com',
-			address: 'Chile',
+			name: 'Perfil 2',
+			description: 'dsfs rew rwepopo f lf slk fls dlf lsd fl sdlflkdsmlf lsd f dslk ',
+			
 		},
 		{
 			key: '3',
-			name: 'José',
-			last_name: 'Artigas',
-			phone: '+58 534534534',
-			email: 'joseartigas@test.com',
-			address: 'Venezuela',
+			name: 'Perfil 3',
+			description: 'dsljanflksfksd fñsdmñlfmñsdfñlmsdñlmflñsdmlñfmlñsdmñflmsdñlmflñsdmlñfmlsdmlfmdñs',
+			
 		},
+		
 	];
 
 	const columns = [
@@ -52,27 +47,9 @@ const UserList = () => {
 			search: true,
 		},
 		{
-			title: 'Apellido',
-			dataIndex: 'last_name',
-			key: 'last_name',
-			search: true,
-		},
-		{
-			title: 'Teléfono',
-			dataIndex: 'phone',
-			key: 'phone',
-			search: true,
-		},
-		{
-			title: 'Correo E.',
-			dataIndex: 'email',
-			key: 'email',
-			search: true,
-		},
-		{
-			title: 'Dirección',
-			dataIndex: 'address',
-			key: 'address',
+			title: 'Descripción',
+			dataIndex: 'description',
+			key: 'description',
 			search: true,
 		},
 		{
@@ -115,15 +92,17 @@ const UserList = () => {
 		<App routes={routes}>
 			<Row gutter={[8, 16]} justify="end">
 				<Col>
-					<Link href="/users/add">
-						<Button type="primary" size="small">NUEVO USUARIO</Button>
+					<Link href="/profiles/add">
+						<a>
+							<Button type="primary" size="small">NUEVO PERFIL</Button>
+						</a>
 					</Link>
 				</Col>
 			</Row>
-			
 			<TableSystem columns={columns} data={data}/>
 		</App>
 	);
+
 }
 
 export default UserList;

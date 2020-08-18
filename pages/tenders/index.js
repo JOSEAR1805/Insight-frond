@@ -1,6 +1,12 @@
-import { Row, Col } from 'antd';
+import { Row, Col, Button, Tooltip } from 'antd';
 import App from "../../src/components/layout/app";
 import TableSystem from '../../src/components/table';
+import Link from "next/link";
+import {
+	DeleteTwoTone,
+	EyeTwoTone,
+	EditTwoTone
+	} from '@ant-design/icons';
 
 const TenderList = () => {
 
@@ -42,47 +48,92 @@ const TenderList = () => {
 			title: 'Pais',
 			dataIndex: 'country',
 			key: 'country',
+			search: true,
 		},
 		{
 			title: 'Fecha',
 			dataIndex: 'date',
 			key: 'date',
+			search: true,
 		},
 		{
-			title: 'Link',
+			title: 'Descripción',
 			dataIndex: 'description',
 			key: 'description',
+			search: true,
+			width: '20%',
 		},
 		{
 			title: 'Codigo',
 			dataIndex: 'code',
 			key: 'code',
+			search: true,
 		},
 		{
 			title: 'Lugar de Ejecución',
 			dataIndex: 'placeOfExecution',
 			key: 'placeOfExecution',
+			search: true,
 		},
 		{
 			title: 'Fin de Plazo',
 			dataIndex: 'closingDate',
 			key: 'closingDate',
+			search: true,
+			width: '10%'
 		},
 		{
 			title: 'Entidad Adjudicadora',
 			dataIndex: 'awardingEntity',
 			key: 'awardingEntity',
+			search: true,
+			width: '20%'
+		},
+		{
+			title: 'Acción',
+			dataIndex: 'key',
+			key: 'key',
+			search: false,
+			width: '10%',
+			render: (key) => {
+				return (
+					<Row gutter={[8, 0]} justify="center">
+						<Col>
+							<Link href="#" >
+								<Tooltip title="Ver Detalle!" color={'cyan'}>
+									<EyeTwoTone twoToneColor="#13c2c2" style={{ fontSize: '16px'}}/>
+								</Tooltip>
+							</Link>
+						</Col>
+						<Col>
+							<Link href="#" >
+								<Tooltip title="Editar!" color={'orange'}>
+									<EditTwoTone twoToneColor="#fa8c16" style={{ fontSize: '16px'}}/>
+								</Tooltip>
+							</Link>
+						</Col>
+						<Col>
+							<Link href="#" >
+								<Tooltip title="Eliminar!" color={'red'}>
+									<DeleteTwoTone twoToneColor="#ff0000" style={{ fontSize: '16px'}}/>
+								</Tooltip>
+							</Link>
+						</Col>
+					</Row>
+				)
+			}
 		},
 	];
 
 	return (
 		<App>
-			<Row gutter={[16, 16]}>
-					<Col span={12} >
-					<h1 style={{margin: '0px'}} >Listado de Licitaciones</h1>
+			{/* <Row gutter={[8, 16]}>
+				<Col justify="end">
+					<Link href="/users/add">
+						<Button type="primary" size="small">NUEVO USUARIO</Button>
+					</Link>
 				</Col>
-					<Col span={12} />
-			</Row>
+			</Row> */}
 			<TableSystem columns={columns} data={data}/>
 		</App>
 	);

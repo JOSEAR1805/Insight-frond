@@ -2,6 +2,18 @@ import App from "../../src/components/layout/app";
 import FormSystem from '../../src/components/form';
 
 const UserForm = () => {
+	const routes = [
+		{
+			key: '1',
+			path: '/users',
+			breadcrumbName: 'Usuarios',
+		},
+		{
+			key: '2',
+			path: '/users/add',
+			breadcrumbName: 'Nuevo Usuario',
+		},
+	];
 	
 	const data = [
 		{
@@ -37,7 +49,7 @@ const UserForm = () => {
 	];
 
 	return (
-		<App>
+		<App routes={routes}>
 			<FormSystem items={data} />
 		</App>
 	);

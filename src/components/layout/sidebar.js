@@ -1,16 +1,28 @@
-import { useState } from 'react';
-import { Layout, Menu  } from 'antd';
-import { HomeOutlined, DesktopOutlined, TeamOutlined } from '@ant-design/icons';
+import { Layout, Menu, Avatar  } from 'antd';
 import Link from "next/link";
+import { 
+	HomeOutlined, 
+	DesktopOutlined, 
+	TeamOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const sidebarApp = () => {
-	const [ collapsed, setCollapsed ] = useState();
 
 	return (
-		<Sider collapsible collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)} >
+		<Sider
+      breakpoint="sm"
+      collapsedWidth="0"
+      onBreakpoint={broken => {
+        // console.log(broken);
+      }}
+      onCollapse={(collapsed, type) => {
+        // console.log(collapsed, type);
+      }}
+    >
+			<div className="logo" />
+
 			<Menu theme="dark" defaultSelectedKeys={['0']} mode="inline">
 				<Menu.Item key="0" icon={<HomeOutlined />}>
 					<Link href="/">
@@ -32,17 +44,17 @@ const sidebarApp = () => {
 				<SubMenu key="sub2" icon={<TeamOutlined />} title="Usuarios">
 					<Menu.Item key="21">
 						<Link href="/users/">
-              				<a >Gestión de Usuarios</a>
-            			</Link>
+              <a>Gestión de Usuarios</a>
+						</Link>
 					</Menu.Item>
 					<Menu.Item key="22">
-						<Link href="/profile/">
-              				<a>Gestión de Perfil</a>
-            			</Link>
+						<Link href="/profiles/">
+              <a>Gestión de Perfil</a>
+            </Link>
 					</Menu.Item>
 				</SubMenu>
 			</Menu>
-		</Sider>
+    </Sider>
 	);
 }
 

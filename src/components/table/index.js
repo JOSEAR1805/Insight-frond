@@ -11,12 +11,12 @@ const TableSystem = (props) => {
 
 	const [ sourceColumns, setSourceColumns ] = useState(columns);
 
-	const getColumnSearchProps = dataIndex => ({
+	const getColumnSearchProps = item => ({
 		filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
 			return (
 				<div style={{ padding: 8 }}>
 					<Input
-						placeholder={`Search ${dataIndex}`}
+						placeholder={`Buscar ${item.title}`}
 						value={selectedKeys[0]}
 						onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
 						onPressEnter={() => handleSearch(confirm)}
@@ -30,10 +30,10 @@ const TableSystem = (props) => {
 							size="small"
 							style={{ width: 90 }}
 						>
-							Search
+							Buscar
 					</Button>
 						<Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-							Reset
+							Resetear
 					</Button>
 					</Space>
 				</div>
@@ -45,7 +45,7 @@ const TableSystem = (props) => {
 			)
 		},
 		onFilter: (value, record) =>
-			record[dataIndex] ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()) : '',
+			record[item.dataIndex] ? record[item.dataIndex].toString().toLowerCase().includes(value.toLowerCase()) : '',
 	});
 
 	const handleSearch = confirm => {
@@ -59,7 +59,7 @@ const TableSystem = (props) => {
 	useEffect(() => {
 		let aux = [];
 		sourceColumns.map((response, index) => {
-			response.search ? aux.push({ ...response, ...getColumnSearchProps(response.dataIndex) }) : aux.push({ ...response });
+			response.search ? aux.push({ ...response, ...getColumnSearchProps(response) }) : aux.push({ ...response });
 		});
 		setSourceColumns(aux);
 	}, []);
@@ -67,7 +67,7 @@ const TableSystem = (props) => {
 	return (
 		<Row>
 			<Col span={24}>
-				<Table dataSource={data} columns={sourceColumns} size="small" scroll={{x: 'auto'}} className="text-color-secondary" />;
+				<Table dataSource={data} columns={sourceColumns} size="small" scroll={{x: 'auto'}} pagination={{ position: [ 'bottomCenter']  }} className="text-color-secondary" />;
 			</Col>
 		</Row>
 	);

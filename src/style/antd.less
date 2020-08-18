@@ -14,24 +14,34 @@
 @border-color-base: #d9d9d9; // major border color
 @box-shadow-base: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05); // major shadow for layers
 
+.ant-layout-sider-zero-width-trigger {
+	top: 0px;
+	height: 40px;
+}
+
 .logo {
 	margin: 4px;
 	height: 30px;
 	width: 192px;
-	background: #08979c;
+	background: #cccccc;
 }
 
 .ant-layout-header {
 	height: 40px;
-	padding: 0px;
+	padding: 0px 15px;
 	line-height: 40px;
 	background: #08979c;
 	border-bottom: 1px solid #87e8de;
+
+	.ant-avatar {
+    width: 30px;
+    height: 30px;
+	}
 }
 
 .ant-layout-footer {
 	height: 40px;
-	padding: 0px;
+	padding: 0px 15px;
 	text-align: center;
 	padding: 10px 0px;
 	background: #08979c;
@@ -40,6 +50,7 @@
 
 .ant-layout-sider {
 		background: #08979c;
+		border-right: 1px solid #87e8de;
 }
 
 .ant-menu.ant-menu-dark, .ant-menu-dark .ant-menu-sub, .ant-menu.ant-menu-dark .ant-menu-sub {
@@ -96,3 +107,31 @@
 		padding: 0px;
 	}
 }
+
+.ant-breadcrumb {
+	margin: 10px 15px;
+}
+
+.ant-table-small .ant-table-thead > tr > th {
+	background-color: #0000002e;
+	// border-left: 1px solid;
+	// border-right: 1px solid;
+	.ant-table-filter-trigger {
+		color: #473a68;
+	}
+
+}
+
+.ant-layout-content {
+	min-height: 95%;
+	max-height: 95%;
+}
+
+.site-tag-plus {
+  background: #fff;
+  border-style: dashed;
+}
+  [data-theme="dark"] .site-tag-plus {
+    background: transparent;
+    border-style: dashed;
+  }
