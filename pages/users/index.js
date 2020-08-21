@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Button, Tooltip } from "antd";
+import { useRouter } from "next/router";
+
 import App from "../../src/components/layout/app";
 import TableSystem from "../../src/components/table";
 import Link from "next/link";
@@ -8,6 +10,8 @@ import { DeleteTwoTone, EyeTwoTone, EditTwoTone } from "@ant-design/icons";
 import axios from "axios";
 
 const UserList = () => {
+  const router = useRouter();
+
   const routes = [
     {
       key: "1",
@@ -46,8 +50,8 @@ const UserList = () => {
   const columns = [
     {
       title: "Nombre",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "first_name",
+      key: "first_name",
       search: true,
     },
     {
@@ -56,12 +60,12 @@ const UserList = () => {
       key: "last_name",
       search: true,
     },
-    {
-      title: "Teléfono",
-      dataIndex: "phone",
-      key: "phone",
-      search: true,
-    },
+    // {
+    //   title: "Teléfono",
+    //   dataIndex: "phone",
+    //   key: "phone",
+    //   search: true,
+    // },
     {
       title: "Correo E.",
       dataIndex: "email",
@@ -70,7 +74,7 @@ const UserList = () => {
     },
     {
       title: "Dirección",
-      dataIndex: "address",
+      dataIndex: "username",
       key: "address",
       search: true,
     },
@@ -80,26 +84,20 @@ const UserList = () => {
       key: "key",
       search: false,
       width: "10%",
-      render: (key) => {
+      render: (text, record) => {
         return (
           <Row gutter={[8, 0]} justify="center">
             <Col>
               <Link href="#">
-                <Tooltip title="Ver Detalle!" color={"cyan"}>
-                  <EyeTwoTone
-                    twoToneColor="#13c2c2"
-                    style={{ fontSize: "16px" }}
-                  />
-                </Tooltip>
-              </Link>
-            </Col>
-            <Col>
-              <Link href="#">
-                <Tooltip title="Editar!" color={"orange"}>
-                  <EditTwoTone
-                    twoToneColor="#fa8c16"
-                    style={{ fontSize: "16px" }}
-                  />
+                <Tooltip title="Editar" color={"orange"}>
+                  <Link href="/users/[edit]" as={`/users/${record.id}`}>
+                    <a>
+                      <EditTwoTone
+                        twoToneColor="#fa8c16"
+                        style={{ fontSize: "16px" }}
+                      />
+                    </a>
+                  </Link>
                 </Tooltip>
               </Link>
             </Col>
@@ -107,6 +105,7 @@ const UserList = () => {
               <Link href="#">
                 <Tooltip title="Eliminar!" color={"red"}>
                   <DeleteTwoTone
+                    onClick={() => deleteUser(record.id)}
                     twoToneColor="#ff0000"
                     style={{ fontSize: "16px" }}
                   />
@@ -140,12 +139,18 @@ const UserList = () => {
   const getUsers = async () => {
     const csrftoken = getCookie("csrftoken");
     const payload = await axios
-      .get("http://127.0.0.1:8000/users", {
-        headers: { "X-CSRFToken": csrftoken },
-      })
+      .get("http://localhost:8000/users")
       .catch((err) => console.log(err));
 
-    // console.log(payload, "***");
+    setData(payload.data);
+  };
+
+  const deleteUser = async (id) => {
+    const payload = await axios
+      .delete(`http://localhost:8000/users/${id}/`)
+      .catch((err) => console.log(err));
+
+    console.log(payload, "***");
   };
 
   useEffect(() => {
