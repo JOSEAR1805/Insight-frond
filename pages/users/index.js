@@ -127,7 +127,7 @@ const UserList = () => {
     });
 
     const payload = await axios
-      .get("http://66.97.36.222/users/", { httpsAgent: agent })
+      .get("http://66.97.36.222/users", { httpsAgent: agent })
       .catch((err) => console.log(err));
 
     setData(payload.data);
