@@ -8,7 +8,7 @@ const FormSystem = (props) => {
     console.log("Success:", values);
 
     const payload = await axios
-      .post("http://66.97.36.222/users/", values)
+      .post("https://api-insight.tk/users/", values)
       .catch((err) => console.log(err));
 
     console.log(payload, "*****");

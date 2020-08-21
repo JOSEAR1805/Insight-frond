@@ -66,13 +66,13 @@ const UserForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .put(`http://66.97.36.222/users/${edit}/`, values)
+      .put(`https://api-insight.tk/users/${edit}/`, values)
       .catch((err) => console.log(err));
   };
 
   const getData = async (id) => {
     const payload = await axios
-      .get(`http://66.97.36.222/users/${id}/`)
+      .get(`https://api-insight.tk/users/${id}/`)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
