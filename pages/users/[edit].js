@@ -66,13 +66,13 @@ const UserForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .put(`http://localhost:8000/users/${edit}/`, values)
+      .put(`http://66.97.36.222/users/${edit}/`, values)
       .catch((err) => console.log(err));
   };
 
   const getData = async (id) => {
     const payload = await axios
-      .get(`http://localhost:8000/users/${id}/`)
+      .get(`http://66.97.36.222/users/${id}/`)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

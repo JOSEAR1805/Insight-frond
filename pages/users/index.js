@@ -139,7 +139,7 @@ const UserList = () => {
   const getUsers = async () => {
     const csrftoken = getCookie("csrftoken");
     const payload = await axios
-      .get("http://localhost:8000/users")
+      .get("http://66.97.36.222/users")
       .catch((err) => console.log(err));
 
     setData(payload.data);
@@ -147,7 +147,7 @@ const UserList = () => {
 
   const deleteUser = async (id) => {
     const payload = await axios
-      .delete(`http://localhost:8000/users/${id}/`)
+      .delete(`http://66.97.36.222/users/${id}/`)
       .catch((err) => console.log(err));
 
     console.log(payload, "***");
