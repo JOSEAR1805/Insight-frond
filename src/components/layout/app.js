@@ -12,10 +12,9 @@ const SiderDemo = (props) => {
   return (
     <Layout>
       <Head>
-        <title>My page title</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta
-          http-equiv="Content-Security-Policy"
+          httpEquiv="Content-Security-Policy: default-src *://66.97.36.222"
           content="upgrade-insecure-requests"
         />
       </Head>
