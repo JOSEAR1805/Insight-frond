@@ -137,9 +137,14 @@ const UserList = () => {
   };
 
   const getUsers = async () => {
+    // At request level
+    const agent = new https.Agent({
+      rejectUnauthorized: false,
+    });
+
     const csrftoken = getCookie("csrftoken");
     const payload = await axios
-      .get("http://66.97.36.222/users")
+      .get("http://66.97.36.222/users/", { httpsAgent: agent })
       .catch((err) => console.log(err));
 
     setData(payload.data);
