@@ -1,12 +1,8 @@
-import { Layout } from 'antd';
+import { Layout } from "antd";
 const { Footer } = Layout;
 
 const FooterApp = () => {
-	return (
-		<Footer>
-			Ant Design ©2018 Created by Ant UED
-		</Footer>
-	);
-}
+  return <Footer>Insight 2020</Footer>;
+};
 
 export default FooterApp;

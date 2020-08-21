@@ -68,6 +68,12 @@ const UserForm = () => {
     const payload = await axios
       .put(`https://api-insight.tk/users/${edit}/`, values)
       .catch((err) => console.log(err));
+
+    if (payload && payload.data) {
+      router.push("/users");
+    } else {
+      alert("Error guardando");
+    }
   };
 
   const getData = async (id) => {

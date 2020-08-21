@@ -137,7 +137,7 @@ const UserList = () => {
       .delete(`https://api-insight.tk/users/${id}/`)
       .catch((err) => console.log(err));
 
-    console.log(payload, "***");
+    router.reload();
   };
 
   useEffect(() => {

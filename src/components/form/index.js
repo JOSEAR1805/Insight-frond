@@ -1,8 +1,11 @@
 import { Form, Input, Row, Col, Button, Space } from "antd";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const FormSystem = (props) => {
   const { children, items } = props;
+
+  const router = useRouter();
 
   const onFinish = async (values) => {
     console.log("Success:", values);
@@ -11,7 +14,11 @@ const FormSystem = (props) => {
       .post("https://api-insight.tk/users/", values)
       .catch((err) => console.log(err));
 
-    console.log(payload, "*****");
+    if (payload && payload.data) {
+      router.push("/users");
+    } else {
+      alert("Error guardando");
+    }
   };
 
   return (
