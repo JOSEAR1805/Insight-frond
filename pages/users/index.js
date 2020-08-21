@@ -122,15 +122,14 @@ const UserList = () => {
 
   const getUsers = async () => {
     // At request level
-    const agent = new https.Agent({
-      rejectUnauthorized: false,
-    });
 
     const payload = await axios
-      .get("http://66.97.36.222/users", { httpsAgent: agent })
+      .get("http://66.97.36.222/users")
       .catch((err) => console.log(err));
 
-    setData(payload.data);
+    if (payload && payload.data) {
+      setData(payload.data);
+    }
   };
 
   const deleteUser = async (id) => {
