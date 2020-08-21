@@ -5,8 +5,6 @@ const withCSS = require("@zeit/next-css");
 
 const isProd = process.env.NODE_ENV === "production";
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 // fix: prevents error when .less files are required by node
 if (typeof require !== "undefined") {
   require.extensions[".less"] = (file) => {};
