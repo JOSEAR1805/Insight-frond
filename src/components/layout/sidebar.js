@@ -41,6 +41,16 @@ const sidebarApp = () => {
 						</Link>
 					</Menu.Item>
 				</SubMenu>
+				<Menu.Item key="3" icon={<DesktopOutlined />}>
+					<Link href="/countries">
+						<a>Paises</a>
+					</Link>
+				</Menu.Item>
+				<Menu.Item key="4" icon={<HomeOutlined />}>
+					<Link href="/categories">
+						<a>Categorias</a>
+					</Link>
+				</Menu.Item>
 				<SubMenu key="sub2" icon={<TeamOutlined />} title="Usuarios">
 					<Menu.Item key="21">
 						<Link href="/users/">

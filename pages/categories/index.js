@@ -9,22 +9,29 @@ import { DeleteTwoTone, EyeTwoTone, EditTwoTone } from "@ant-design/icons";
 
 import axios from "axios";
 
-const CountryList = () => {
+const CategoryList = () => {
   const router = useRouter();
-
+  const [countries, setCountries] = useState([]);
+  const [data, setData] = useState([]);
+  const [ total, setTotal ] = useState([]);
   const routes = [
     {
       key: "1",
-      path: "/countries/",
-      breadcrumbName: "Paises",
+      path: "/categories/",
+      breadcrumbName: "Categorias",
     },
   ];
-
   const columns = [
     {
-      title: "Nombre",
+      title: "Nombre de Categoría",
       dataIndex: "name",
       key: "name",
+      search: true,
+    },
+    {
+      title: "Pais",
+      dataIndex: "country",
+      key: "country",
       search: true,
     },
     {
@@ -34,13 +41,12 @@ const CountryList = () => {
       search: false,
       width: "10%",
       render: (text, record) => {
-        console.log(record);
         return (
           <Row gutter={[8, 0]} justify="center">
             <Col>
               <Link href="#">
-                <Tooltip >
-                  <Link href="/countries/[edit]" as={`/countries/${record.id}`} title="Editar!" color={"orange"}>
+                <Tooltip title="Editar" color={"orange"}>
+                  <Link href="/categories/[edit]" as={`/categories/${record.id}`}>
                     <a>
                       <EditTwoTone
                         twoToneColor="#fa8c16"
@@ -55,7 +61,7 @@ const CountryList = () => {
               <Link href="#">
                 <Tooltip title="Eliminar!" color={"red"}>
                   <DeleteTwoTone
-                    onClick={() => deleteCountry(record.id)}
+                    onClick={() => deleteCategory(record.id)}
                     twoToneColor="#ff0000"
                     style={{ fontSize: "16px" }}
                   />
@@ -68,24 +74,48 @@ const CountryList = () => {
     },
   ];
 
-  const [data, setData] = useState([]);
-
   const getCountry = async () => {
     // At request level
-
     const payload = await axios
       .get("https://api-insight.tk/countries/")
       .catch((err) => console.log(err));
 
+    // console.log(payload.data);
+
     if (payload && payload.data) {
-      setData(payload.data);
+      setCountries(payload.data);
+      getCategory(payload.data)
     }
   };
 
-  const deleteCountry = async (id) => {
-    const payload = await axios
-      .delete(`https://api-insight.tk/countries/${id}/`)
+  const getCategory = async (aux) => {
+    let payload = await axios
+      .get("https://api-insight.tk/categories")
       .catch((err) => console.log(err));
+
+      
+    if (payload && payload.data) {
+
+      console.log(aux, '------')
+      payload.data.map((resp) => {
+        aux.map((resp1) => {
+          console.log(resp, resp1)
+
+          if (resp1.id === resp.country) {
+            resp.country = String(resp1.name);
+          }
+        })
+      })
+        setData(payload.data)
+    }
+  };
+  
+  const deleteCategory = async (id) => {
+    
+      const payload = await axios
+      .delete(`https://api-insight.tk/categories/${id}/`)
+      .catch((err) => console.log(err));
+    
 
     router.reload();
   };
@@ -98,17 +128,17 @@ const CountryList = () => {
     <App routes={routes}>
       <Row gutter={[8, 16]} justify="end">
         <Col>
-          <Link href="/countries/add">
+          <Link href="/categories/add">
             <Button type="primary" size="small">
-              AGREGAR PAIS
+              NUEVA CATEGORÍA
             </Button>
           </Link>
         </Col>
       </Row>
 
-      <TableSystem columns={columns} data={data} />
+      <TableSystem columns={columns} data={data}/>
     </App>
   );
 };
 
-export default CountryList;
+export default CategoryList;

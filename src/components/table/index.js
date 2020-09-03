@@ -4,11 +4,7 @@ import { SearchOutlined } from '@ant-design/icons';
 
 const TableSystem = (props) => {
 
-	const {
-		columns,
-		data,
-	} = props;
-
+	const {columns, data } = props;
 	const [ sourceColumns, setSourceColumns ] = useState(columns);
 
 	const getColumnSearchProps = item => ({

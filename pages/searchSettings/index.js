@@ -1,105 +1,177 @@
-import { Row, Col, Button, Tooltip } from 'antd';
+import { useState, useEffect } from "react";
+import { Row, Col, Button, Tooltip } from "antd";
+import { useRouter } from "next/router";
+
 import App from "../../src/components/layout/app";
-import TableSystem from '../../src/components/table';
+import TableSystem from "../../src/components/table";
 import Link from "next/link";
-import {
-	DeleteTwoTone,
-	EyeTwoTone,
-	EditTwoTone
-	} from '@ant-design/icons';
+import { DeleteTwoTone, EyeTwoTone, EditTwoTone } from "@ant-design/icons";
 
+import axios from "axios";
 
-const SearchSettingsList = () => {
-	const routes = [
-		{
-			key: '1',
-			path: '/searchSettings/',
-			breadcrumbName: 'Urls de Búsquedad',
-		}
+const CategoryList = () => {
+  const router = useRouter();
+  const [countries, setCountries] = useState([]);
+  const [categories, setcategories] = useState([]);
+	const [searchSettings, setSearchSettings ] = useState([]);
+	
+  const routes = [
+    {
+      key: "1",
+      path: "/searchSettings/",
+      breadcrumbName: "Configuración de Búsqueda",
+    },
 	];
+	
+  const columns = [
+		{
+      title: "Pais",
+      dataIndex: "country",
+      key: "country",
+      search: true,
+    },
+    {
+      title: "Categoría",
+      dataIndex: "category",
+      key: "category",
+      search: true,
+		},
+		{
+      title: "Titulo",
+      dataIndex: "name",
+      key: "name",
+      search: true,
+    },
+    {
+      title: "Descripción",
+      dataIndex: "description",
+      key: "description",
+      search: true,
+		},
+		{
+      title: "Url web",
+      dataIndex: "url",
+      key: "url",
+      search: true,
+    },
+    {
+      title: "Acción",
+      dataIndex: "key",
+      key: "key",
+      search: false,
+      width: "10%",
+      render: (text, record) => {
+        return (
+          <Row gutter={[8, 0]} justify="center">
+            <Col>
+              <Link href="#">
+                <Tooltip title="Editar" color={"orange"}>
+                  <Link href="/categories/[edit]" as={`/categories/${record.id}`}>
+                    <a>
+                      <EditTwoTone
+                        twoToneColor="#fa8c16"
+                        style={{ fontSize: "16px" }}
+                      />
+                    </a>
+                  </Link>
+                </Tooltip>
+              </Link>
+            </Col>
+            <Col>
+              <Link href="#">
+                <Tooltip title="Eliminar!" color={"red"}>
+                  <DeleteTwoTone
+                    onClick={() => deleteCategory(record.id)}
+                    twoToneColor="#ff0000"
+                    style={{ fontSize: "16px" }}
+                  />
+                </Tooltip>
+              </Link>
+            </Col>
+          </Row>
+        );
+      },
+    },
+  ];
+  
+  const getCountry = async () => {
+    const payload = await axios
+      .get("https://api-insight.tk/countries/")
+      .catch((err) => console.log(err));
 
-	const data = [
-		{
-			key: '1',
-			country: 'Venezuela',
-			pageName: 'Nomdnan dsajhksf j fsd fjs',
-		},
-		{
-			key: '2',
-			country: 'Venezuela',
-			pageName: 'Nomdnan dsajhksf j fsd fjs',
-		},
-		{
-			key: '3',
-			country: 'Venezuela',
-			pageName: 'Nomdnan dsajhksf j fsd fjs',
-		},
-	];
+    if (payload && payload.data) {
+      setCountries(payload.data);
+    }
+  };
 
-	const columns = [
-		{
-			title: 'Pais',
-			dataIndex: 'country',
-			key: 'country',
-			search: true,
-		},
-		{
-			title: 'Nombre de Pagina',
-			dataIndex: 'pageName',
-			key: 'pageName',
-			search: true,
-		},
-		{
-			title: 'Acción',
-			dataIndex: 'key',
-			key: 'key',
-			search: false,
-			width: '10%',
-			render: (key) => {
-				return (
-					<Row gutter={[8, 0]} justify="center">
-						<Col>
-							<Link href="#" >
-								<Tooltip title="Ver Detalle!" color={'cyan'}>
-									<EyeTwoTone twoToneColor="#13c2c2" style={{ fontSize: '16px'}}/>
-								</Tooltip>
-							</Link>
-						</Col>
-						<Col>
-							<Link href="#" >
-								<Tooltip title="Editar!" color={'orange'}>
-									<EditTwoTone twoToneColor="#fa8c16" style={{ fontSize: '16px'}}/>
-								</Tooltip>
-							</Link>
-						</Col>
-						<Col>
-							<Link href="#" >
-								<Tooltip title="Eliminar!" color={'red'}>
-									<DeleteTwoTone twoToneColor="#ff0000" style={{ fontSize: '16px'}}/>
-								</Tooltip>
-							</Link>
-						</Col>
-					</Row>
-				)
-			}
-		},
-	];
+  const getCategory = async () => {
+    const payload = await axios
+      .get("https://api-insight.tk/categories")
+      .catch((err) => console.log(err));
+      
+    if (payload && payload.data) {
+      setcategories(payload.data)
+    }
+	};
+	
+	const getSearchSettings = async () => {
+    // At request level
+    let payload = await axios
+      .get("https://api-insight.tk/search_settings/")
+      .catch((err) => console.log(err));
 
-	return (
-		<App routes={routes}>
-			<Row gutter={[8, 16]} justify="end">
-				<Col>
-					<Link href="/searchSettings/add">
-						<a>
-							<Button type="primary" size="small">NUEVA URL</Button>
-						</a>
-					</Link>
-				</Col>
-			</Row>
-			<TableSystem columns={columns} data={data}/>
-		</App>
-	);
+    if (payload && payload.data) {
+			console.log(payload.data)
 
-}
+			// getCountry();
+			// getCategory();
 
-export default SearchSettingsList;
+			// console.log('---', countries, categories)
+			// payload.data.map((resp) => {
+      //   // console.log(resp);
+
+      //   // countries.map((res_coun)=> {
+      //   //   if (res_coun.id === resp.country) {
+      //   //     console.log(res_coun);
+			// 	// 	}
+      //   // })
+      //   // categories.map(()=>{
+
+      //   // })
+			// })
+			setSearchSettings(payload.data);
+    }
+  };
+  
+  const deleteCategory = async (id) => {
+    
+      const payload = await axios
+      .delete(`https://api-insight.tk/categories/${id}/`)
+      .catch((err) => console.log(err));
+    
+
+    router.reload();
+  };
+
+  useEffect(() => {
+    getSearchSettings();
+  }, []);
+
+  return (
+    <App routes={routes}>
+      <Row gutter={[8, 16]} justify="end">
+        <Col>
+          <Link href="/search_settings/add">
+            <Button type="primary" size="small">
+              NUEVA CONFIGURACIÓN
+            </Button>
+          </Link>
+        </Col>
+      </Row>
+
+      <TableSystem columns={columns} data={searchSettings}/>
+    </App>
+  );
+};
+
+export default CategoryList;
