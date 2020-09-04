@@ -1,9 +1,10 @@
-import { Layout, Menu, Avatar  } from 'antd';
+import { Layout, Menu, Avatar } from 'antd';
 import Link from "next/link";
-import { 
-	HomeOutlined, 
-	DesktopOutlined, 
-	TeamOutlined } from '@ant-design/icons';
+import {
+	HomeOutlined,
+	DesktopOutlined,
+	TeamOutlined
+} from '@ant-design/icons';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -12,59 +13,46 @@ const sidebarApp = () => {
 
 	return (
 		<Sider
-      breakpoint="sm"
-      collapsedWidth="0"
-      onBreakpoint={broken => {
-        // console.log(broken);
-      }}
-      onCollapse={(collapsed, type) => {
-        // console.log(collapsed, type);
-      }}
-    >
+			breakpoint="sm"
+			collapsedWidth="0"
+			onBreakpoint={broken => {
+				// console.log(broken);
+			}}
+			onCollapse={(collapsed, type) => {
+				// console.log(collapsed, type);
+			}}
+		>
 			<div className="logo" />
-
 			<Menu theme="dark" defaultSelectedKeys={['0']} mode="inline">
 				<Menu.Item key="0" icon={<HomeOutlined />}>
-					<Link href="/">
+					<Link href="/tenders/" title="Licitaciones">
 						<a>Inicio</a>
 					</Link>
 				</Menu.Item>
-				<SubMenu key="sub1" icon={<DesktopOutlined />} title="Licitaciones">
-					<Menu.Item key="11">
-						<Link href="/tenders/">
-							<a>Gestión de Licitaciones</a>
+				<SubMenu key="sub1" icon={<DesktopOutlined />} title="Gestión de Búsqueda">
+					<Menu.Item key="4">
+						<Link href="/categories">
+							<a>Categorias</a>
 						</Link>
 					</Menu.Item>
 					<Menu.Item key="12">
 						<Link href="/searchSettings/">
-							<a>Configurar Busquedad</a>
+							<a>Configuraciones de Busquedad</a>
 						</Link>
 					</Menu.Item>
 				</SubMenu>
 				<Menu.Item key="3" icon={<DesktopOutlined />}>
 					<Link href="/countries">
-						<a>Paises</a>
+						<a>Gestión de Paises</a>
 					</Link>
 				</Menu.Item>
-				<Menu.Item key="4" icon={<HomeOutlined />}>
-					<Link href="/categories">
-						<a>Categorias</a>
+				<Menu.Item key="21" icon={<TeamOutlined />}>
+					<Link href="/users/">
+						<a>Gestión de Usuarios</a>
 					</Link>
 				</Menu.Item>
-				<SubMenu key="sub2" icon={<TeamOutlined />} title="Usuarios">
-					<Menu.Item key="21">
-						<Link href="/users/">
-              <a>Gestión de Usuarios</a>
-						</Link>
-					</Menu.Item>
-					<Menu.Item key="22">
-						<Link href="/profiles/">
-              <a>Gestión de Perfil</a>
-            </Link>
-					</Menu.Item>
-				</SubMenu>
 			</Menu>
-    </Sider>
+		</Sider>
 	);
 }
 
