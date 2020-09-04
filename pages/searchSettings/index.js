@@ -161,7 +161,7 @@ const CategoryList = () => {
     <App routes={routes}>
       <Row gutter={[8, 16]} justify="end">
         <Col>
-          <Link href="/search_settings/add">
+          <Link href="/searchSettings/add">
             <Button type="primary" size="small">
               NUEVA CONFIGURACIÓN
             </Button>
