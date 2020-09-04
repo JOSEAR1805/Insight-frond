@@ -26,16 +26,14 @@ const CategoryList = () => {
   const columns = [
     {
       title: "Pais",
-      dataIndex: "country.name",
-      key: "country.name",
-      render: (text, record) => <p>{record.country.name}</p>,
+      dataIndex: "country",
+      key: "country",
       search: true,
     },
     {
       title: "Categoría",
-      dataIndex: "category.name",
-      key: "category.name",
-      render: (text, record) => <p>{record.category.name}</p>,
+      dataIndex: "category",
+      key: "category",
       search: true,
     },
     {
@@ -103,20 +101,12 @@ const CategoryList = () => {
     const payload = await axios
       .get("https://api-insight.tk/countries/")
       .catch((err) => console.log(err));
-
-    if (payload && payload.data) {
-      setCountries(payload.data);
-    }
   };
 
   const getCategory = async () => {
     const payload = await axios
       .get("https://api-insight.tk/categories")
       .catch((err) => console.log(err));
-
-    if (payload && payload.data) {
-      setcategories(payload.data);
-    }
   };
 
   const getSearchSettings = async () => {
@@ -139,6 +129,8 @@ const CategoryList = () => {
   };
 
   useEffect(() => {
+    getCountry();
+    getCategory();
     getSearchSettings();
   }, []);
 
