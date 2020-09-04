@@ -11,7 +11,7 @@ const FormSystem = (props) => {
     console.log("Success:", values);
 
     const payload = await axios
-      .post("http://127.0.0.1:8000/users/", values)
+      .post("https://api-insight.tk/users/", values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

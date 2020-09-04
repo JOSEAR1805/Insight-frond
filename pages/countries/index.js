@@ -79,7 +79,7 @@ const CountryList = () => {
     // At request level
 
     const payload = await axios
-      .get("http://127.0.0.1:8000/countries/")
+      .get("https://api-insight.tk/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -89,7 +89,7 @@ const CountryList = () => {
 
   const deleteCountry = async (id) => {
     const payload = await axios
-      .delete(`http://127.0.0.1:8000/countries/${id}/`)
+      .delete(`https://api-insight.tk/countries/${id}/`)
       .catch((err) => console.log(err));
 
     router.reload();

@@ -101,7 +101,7 @@ const CategoryList = () => {
 
   const getCountry = async () => {
     const payload = await axios
-      .get("http://127.0.0.1:8000/countries/")
+      .get("https://api-insight.tk/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -111,7 +111,7 @@ const CategoryList = () => {
 
   const getCategory = async () => {
     const payload = await axios
-      .get("http://127.0.0.1:8000/categories")
+      .get("https://api-insight.tk/categories")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -122,7 +122,7 @@ const CategoryList = () => {
   const getSearchSettings = async () => {
     // At request level
     let payload = await axios
-      .get("http://127.0.0.1:8000/search_settings/")
+      .get("https://api-insight.tk/search_settings/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -132,7 +132,7 @@ const CategoryList = () => {
 
   const deleteCategory = async (id) => {
     const payload = await axios
-      .delete(`http://127.0.0.1:8000/categories/${id}/`)
+      .delete(`https://api-insight.tk/categories/${id}/`)
       .catch((err) => console.log(err));
 
     router.reload();

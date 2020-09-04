@@ -124,7 +124,7 @@ const UserList = () => {
     // At request level
 
     const payload = await axios
-      .get("http://127.0.0.1:8000/users")
+      .get("https://api-insight.tk/users")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -134,7 +134,7 @@ const UserList = () => {
 
   const deleteUser = async (id) => {
     const payload = await axios
-      .delete(`http://127.0.0.1:8000/users/${id}/`)
+      .delete(`https://api-insight.tk/users/${id}/`)
       .catch((err) => console.log(err));
 
     router.reload();

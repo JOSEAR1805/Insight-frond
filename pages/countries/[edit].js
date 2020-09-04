@@ -28,7 +28,7 @@ const UserForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .put(`http://127.0.0.1:8000/countries/${edit}/`, values)
+      .put(`https://api-insight.tk/countries/${edit}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -40,7 +40,7 @@ const UserForm = () => {
 
   const getData = async (id) => {
     const payload = await axios
-      .get(`http://127.0.0.1:8000/countries/${id}/`)
+      .get(`https://api-insight.tk/countries/${id}/`)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

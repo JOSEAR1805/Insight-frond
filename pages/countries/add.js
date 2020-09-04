@@ -34,7 +34,7 @@ const CountryForm = () => {
     console.log("Success:", values);
 
     const payload = await axios
-      .post("http://127.0.0.1:8000/countries/", values)
+      .post("https://api-insight.tk/countries/", values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
