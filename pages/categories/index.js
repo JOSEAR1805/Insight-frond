@@ -13,7 +13,7 @@ const CategoryList = () => {
   const router = useRouter();
   const [countries, setCountries] = useState([]);
   const [data, setData] = useState([]);
-  const [ total, setTotal ] = useState([]);
+  const [total, setTotal] = useState([]);
   const routes = [
     {
       key: "1",
@@ -46,7 +46,10 @@ const CategoryList = () => {
             <Col>
               <Link href="#">
                 <Tooltip title="Editar" color={"orange"}>
-                  <Link href="/categories/[edit]" as={`/categories/${record.id}`}>
+                  <Link
+                    href="/categories/[edit]"
+                    as={`/categories/${record.id}`}
+                  >
                     <a>
                       <EditTwoTone
                         twoToneColor="#fa8c16"
@@ -77,45 +80,41 @@ const CategoryList = () => {
   const getCountry = async () => {
     // At request level
     const payload = await axios
-      .get("https://api-insight.tk/countries/")
+      .get("http://127.0.0.1:8000/countries/")
       .catch((err) => console.log(err));
 
     // console.log(payload.data);
 
     if (payload && payload.data) {
       setCountries(payload.data);
-      getCategory(payload.data)
+      getCategory(payload.data);
     }
   };
 
   const getCategory = async (aux) => {
     let payload = await axios
-      .get("https://api-insight.tk/categories")
+      .get("http://127.0.0.1:8000/categories")
       .catch((err) => console.log(err));
 
-      
     if (payload && payload.data) {
-
-      console.log(aux, '------')
+      console.log(aux, "------");
       payload.data.map((resp) => {
         aux.map((resp1) => {
-          console.log(resp, resp1)
+          console.log(resp, resp1);
 
           if (resp1.id === resp.country) {
             resp.country = String(resp1.name);
           }
-        })
-      })
-        setData(payload.data)
+        });
+      });
+      setData(payload.data);
     }
   };
-  
+
   const deleteCategory = async (id) => {
-    
-      const payload = await axios
-      .delete(`https://api-insight.tk/categories/${id}/`)
+    const payload = await axios
+      .delete(`http://127.0.0.1:8000/categories/${id}/`)
       .catch((err) => console.log(err));
-    
 
     router.reload();
   };
@@ -136,7 +135,7 @@ const CategoryList = () => {
         </Col>
       </Row>
 
-      <TableSystem columns={columns} data={data}/>
+      <TableSystem columns={columns} data={data} />
     </App>
   );
 };

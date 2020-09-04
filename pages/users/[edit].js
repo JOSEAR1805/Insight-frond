@@ -66,7 +66,7 @@ const UserForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .put(`https://api-insight.tk/users/${edit}/`, values)
+      .put(`http://127.0.0.1:8000/users/${edit}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -78,7 +78,7 @@ const UserForm = () => {
 
   const getData = async (id) => {
     const payload = await axios
-      .get(`https://api-insight.tk/users/${id}/`)
+      .get(`http://127.0.0.1:8000/users/${id}/`)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

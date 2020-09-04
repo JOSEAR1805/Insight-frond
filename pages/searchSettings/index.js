@@ -13,30 +13,32 @@ const CategoryList = () => {
   const router = useRouter();
   const [countries, setCountries] = useState([]);
   const [categories, setcategories] = useState([]);
-	const [searchSettings, setSearchSettings ] = useState([]);
-	
+  const [searchSettings, setSearchSettings] = useState([]);
+
   const routes = [
     {
       key: "1",
       path: "/searchSettings/",
       breadcrumbName: "Configuración de Búsqueda",
     },
-	];
-	
+  ];
+
   const columns = [
-		{
+    {
       title: "Pais",
-      dataIndex: "country",
-      key: "country",
+      dataIndex: "country.name",
+      key: "country.name",
+      render: (text, record) => <p>{record.country.name}</p>,
       search: true,
     },
     {
       title: "Categoría",
-      dataIndex: "category",
-      key: "category",
+      dataIndex: "category.name",
+      key: "category.name",
+      render: (text, record) => <p>{record.category.name}</p>,
       search: true,
-		},
-		{
+    },
+    {
       title: "Titulo",
       dataIndex: "name",
       key: "name",
@@ -47,8 +49,8 @@ const CategoryList = () => {
       dataIndex: "description",
       key: "description",
       search: true,
-		},
-		{
+    },
+    {
       title: "Url web",
       dataIndex: "url",
       key: "url",
@@ -66,7 +68,10 @@ const CategoryList = () => {
             <Col>
               <Link href="#">
                 <Tooltip title="Editar" color={"orange"}>
-                  <Link href="/categories/[edit]" as={`/categories/${record.id}`}>
+                  <Link
+                    href="/categories/[edit]"
+                    as={`/categories/${record.id}`}
+                  >
                     <a>
                       <EditTwoTone
                         twoToneColor="#fa8c16"
@@ -93,10 +98,10 @@ const CategoryList = () => {
       },
     },
   ];
-  
+
   const getCountry = async () => {
     const payload = await axios
-      .get("https://api-insight.tk/countries/")
+      .get("http://127.0.0.1:8000/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -106,49 +111,29 @@ const CategoryList = () => {
 
   const getCategory = async () => {
     const payload = await axios
-      .get("https://api-insight.tk/categories")
-      .catch((err) => console.log(err));
-      
-    if (payload && payload.data) {
-      setcategories(payload.data)
-    }
-	};
-	
-	const getSearchSettings = async () => {
-    // At request level
-    let payload = await axios
-      .get("https://api-insight.tk/search_settings/")
+      .get("http://127.0.0.1:8000/categories")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
-			console.log(payload.data)
-
-			// getCountry();
-			// getCategory();
-
-			// console.log('---', countries, categories)
-			// payload.data.map((resp) => {
-      //   // console.log(resp);
-
-      //   // countries.map((res_coun)=> {
-      //   //   if (res_coun.id === resp.country) {
-      //   //     console.log(res_coun);
-			// 	// 	}
-      //   // })
-      //   // categories.map(()=>{
-
-      //   // })
-			// })
-			setSearchSettings(payload.data);
+      setcategories(payload.data);
     }
   };
-  
-  const deleteCategory = async (id) => {
-    
-      const payload = await axios
-      .delete(`https://api-insight.tk/categories/${id}/`)
+
+  const getSearchSettings = async () => {
+    // At request level
+    let payload = await axios
+      .get("http://127.0.0.1:8000/search_settings/")
       .catch((err) => console.log(err));
-    
+
+    if (payload && payload.data) {
+      setSearchSettings(payload.data);
+    }
+  };
+
+  const deleteCategory = async (id) => {
+    const payload = await axios
+      .delete(`http://127.0.0.1:8000/categories/${id}/`)
+      .catch((err) => console.log(err));
 
     router.reload();
   };
@@ -169,7 +154,7 @@ const CategoryList = () => {
         </Col>
       </Row>
 
-      <TableSystem columns={columns} data={searchSettings}/>
+      <TableSystem columns={columns} data={searchSettings} />
     </App>
   );
 };

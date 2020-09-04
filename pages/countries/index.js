@@ -39,8 +39,13 @@ const CountryList = () => {
           <Row gutter={[8, 0]} justify="center">
             <Col>
               <Link href="#">
-                <Tooltip >
-                  <Link href="/countries/[edit]" as={`/countries/${record.id}`} title="Editar!" color={"orange"}>
+                <Tooltip>
+                  <Link
+                    href="/countries/[edit]"
+                    as={`/countries/${record.id}`}
+                    title="Editar!"
+                    color={"orange"}
+                  >
                     <a>
                       <EditTwoTone
                         twoToneColor="#fa8c16"
@@ -74,7 +79,7 @@ const CountryList = () => {
     // At request level
 
     const payload = await axios
-      .get("https://api-insight.tk/countries/")
+      .get("http://127.0.0.1:8000/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -84,7 +89,7 @@ const CountryList = () => {
 
   const deleteCountry = async (id) => {
     const payload = await axios
-      .delete(`https://api-insight.tk/countries/${id}/`)
+      .delete(`http://127.0.0.1:8000/countries/${id}/`)
       .catch((err) => console.log(err));
 
     router.reload();
