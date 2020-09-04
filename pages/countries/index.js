@@ -39,8 +39,13 @@ const CountryList = () => {
           <Row gutter={[8, 0]} justify="center">
             <Col>
               <Link href="#">
-                <Tooltip >
-                  <Link href="/countries/[edit]" as={`/countries/${record.id}`} title="Editar!" color={"orange"}>
+                <Tooltip>
+                  <Link
+                    href="/countries/[edit]"
+                    as={`/countries/${record.id}`}
+                    title="Editar!"
+                    color={"orange"}
+                  >
                     <a>
                       <EditTwoTone
                         twoToneColor="#fa8c16"

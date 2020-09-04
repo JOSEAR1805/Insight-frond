@@ -10,7 +10,7 @@ const { Option } = Select;
 const CategoryForm = () => {
   const router = useRouter();
   const [countries, setCountries] = useState([]);
-  const [routes, setRoutes] = useState([ 
+  const [routes, setRoutes] = useState([
     {
       key: "1",
       path: "/categories",
@@ -20,12 +20,12 @@ const CategoryForm = () => {
       key: "2",
       path: "/categories/add",
       breadcrumbName: "Agregar Categoría",
-    }
+    },
   ]);
   const [form] = Form.useForm();
- 
+
   // OBTENEMOS PAISES
-  const onGenderChange = value => {
+  const onGenderChange = (value) => {
     form.setFieldsValue({ country: value });
   };
 
@@ -35,7 +35,7 @@ const CategoryForm = () => {
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
-      setCountries(payload.data)
+      setCountries(payload.data);
     }
   };
 
@@ -56,7 +56,7 @@ const CategoryForm = () => {
   useEffect(() => {
     getCountry();
     console.log(countries);
-  }, [])
+  }, []);
 
   return (
     <App routes={routes}>
@@ -78,13 +78,10 @@ const CategoryForm = () => {
                   rules={[
                     {
                       required: true,
-                    }
+                    },
                   ]}
                 >
-                  <Input
-                    placeholder="escribir nombre"
-                    size="small"
-                  />
+                  <Input placeholder="escribir nombre" size="small" />
                 </Form.Item>
               </Col>
 
@@ -95,19 +92,17 @@ const CategoryForm = () => {
                   rules={[
                     {
                       required: true,
-                    }
+                    },
                   ]}
                 >
-                    <Select 
-                      size="small"
-                      onChange={onGenderChange}
-                      placeholder="seleccionar país"
-                    >
+                  <Select
+                    size="small"
+                    onChange={onGenderChange}
+                    placeholder="seleccionar país"
+                  >
                     {countries.map((resp) => {
-                      return (
-                        <Option value={resp.id}>{resp.name}</Option>
-                      );
-                    })} 
+                      return <Option value={resp.id}>{resp.name}</Option>;
+                    })}
                   </Select>
                 </Form.Item>
               </Col>
