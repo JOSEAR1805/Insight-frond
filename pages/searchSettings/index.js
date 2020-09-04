@@ -63,7 +63,7 @@ const CategoryList = () => {
       render: (text, record) => {
         return (
           <Row gutter={[8, 0]} justify="center">
-            <Col>
+            {/* <Col>
               <Link href="#">
                 <Tooltip title="Editar" color={"orange"}>
                   <Link
@@ -79,7 +79,7 @@ const CategoryList = () => {
                   </Link>
                 </Tooltip>
               </Link>
-            </Col>
+            </Col> */}
             <Col>
               <Link href="#">
                 <Tooltip title="Eliminar!" color={"red"}>
@@ -122,7 +122,7 @@ const CategoryList = () => {
 
   const deleteCategory = async (id) => {
     const payload = await axios
-      .delete(`https://api-insight.tk/categories/${id}/`)
+      .delete(`https://api-insight.tk/search_settings/${id}/`)
       .catch((err) => console.log(err));
 
     router.reload();
