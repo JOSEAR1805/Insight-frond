@@ -12,38 +12,11 @@ import axios from "axios";
 const UserList = () => {
   const router = useRouter();
 
-  const routes = [
+  const navigation = [
     {
       key: "1",
       path: "/users/",
       breadcrumbName: "Usuarios",
-    },
-  ];
-
-  const data1 = [
-    {
-      key: "1",
-      name: "Alejandro",
-      last_name: "Sanchez",
-      phone: "+56 53453453",
-      email: "alejandrosanchez@test.com",
-      address: "Chile",
-    },
-    {
-      key: "2",
-      name: "Elver",
-      last_name: "Valderrama",
-      phone: "+56 942342342",
-      email: "elvervalderrama@test.com",
-      address: "Chile",
-    },
-    {
-      key: "3",
-      name: "José",
-      last_name: "Artigas",
-      phone: "+58 534534534",
-      email: "joseartigas@test.com",
-      address: "Venezuela",
     },
   ];
 
@@ -60,12 +33,6 @@ const UserList = () => {
       key: "last_name",
       search: true,
     },
-    // {
-    //   title: "Teléfono",
-    //   dataIndex: "phone",
-    //   key: "phone",
-    //   search: true,
-    // },
     {
       title: "Correo E.",
       dataIndex: "email",
@@ -88,17 +55,13 @@ const UserList = () => {
         return (
           <Row gutter={[8, 0]} justify="center">
             <Col>
-              <Link href="#">
-                <Tooltip title="Editar" color={"orange"}>
-                  <Link href="/users/[edit]" as={`/users/${record.id}`}>
-                    <a>
-                      <EditTwoTone
-                        twoToneColor="#fa8c16"
-                        style={{ fontSize: "16px" }}
-                      />
-                    </a>
-                  </Link>
-                </Tooltip>
+              <Link href="/users/[edit]" as={`/users/${record.id}`}>
+                <a>
+                  <Tooltip title="Ver Detalle!" color={'cyan'}>
+										<EyeTwoTone twoToneColor="#13c2c2" style={{ fontSize: '16px'}}/>
+									</Tooltip>
+                 
+                </a>
               </Link>
             </Col>
             <Col>
@@ -145,7 +108,7 @@ const UserList = () => {
   }, []);
 
   return (
-    <App routes={routes}>
+    <App navigation={navigation}>
       <Row gutter={[8, 16]} justify="end">
         <Col>
           <Link href="/users/add">

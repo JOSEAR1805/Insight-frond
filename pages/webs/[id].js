@@ -1,34 +1,88 @@
-import { Form, Input, Row, Col, Button } from "antd";
 import App from "../../src/components/layout/app";
+import { Form, Input, Row, Col, Button, Select } from "antd";
 import axios from "axios";
 import { useRouter } from "next/router";
+import TextArea from "antd/lib/input/TextArea";
+import { useState, useEffect } from "react";
 
-const UserForm = () => {
+const { Option } = Select;
+
+const WebForm = () => {
+  const [countries, setCountries] = useState([]);
   const router = useRouter();
+  const { id } = router.query;
+  const [form] = Form.useForm();
   const navigation = [
     {
       key: "1",
-      path: "/users",
-      breadcrumbName: "Usuarios",
+      path: "/webs",
+      breadcrumbName: "Webs",
     },
     {
       key: "2",
-      path: "/users/add",
-      breadcrumbName: "Nuevo Usuario",
+      path: `/webs/${id}`,
+      breadcrumbName: "Detallles de Web",
     },
   ];
 
-  const onFinish = async (values) => {
+  const getCountry = async () => {
     const payload = await axios
-      .post("https://api-insight.tk/users/", values)
+      .get("https://api-insight.tk/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
-      router.push("/users");
+      setCountries(payload.data);
+      getData();
+    }
+  };
+
+  const onGenderChange = (value) => {
+    form.setFieldsValue({ country: value });
+  };
+
+  const onFinish = async (values) => {
+    const payload = await axios
+      .put(`https://api-insight.tk/webs/${id}/`, values)
+      .catch((err) => console.log(err));
+
+    if (payload && payload.data) {
+      router.push("/webs");
     } else {
       alert("Error guardando");
     }
   };
+
+  const getData = async () => {
+    console.log('id recibe', id)
+    const payload = await axios
+      .get(`https://api-insight.tk/webs/${id}/`)
+      .catch((err) => console.log(err));
+
+    if (payload && payload.data) {
+      form.setFields([
+        {
+          name: "name",
+          value: payload.data?.name,
+        },
+        {
+          name: "country",
+          value: payload.data?.country,
+        },
+        {
+          name: "url",
+          value: payload.data?.url,
+        },
+        {
+          name: "comments",
+          value: payload.data?.comments,
+        },
+      ]);
+    }
+  };
+
+  useEffect(() => {
+    getCountry(); 
+  }, []);
 
   return (
     <App navigation={navigation}>
@@ -41,13 +95,14 @@ const UserForm = () => {
               remember: true,
             }}
             onFinish={onFinish}
+            form={form}
           >
             <Row gutter={[16, 16]}>
 
               <Col xs={24} sm={12} md={12}>
                 <Form.Item
-                  label={'Nombre'}
-                  name={'first_name'}
+                  label={'Nombre de Intitución'}
+                  name={'name'}
                   rules={[
                     {
                       required: true,
@@ -56,16 +111,40 @@ const UserForm = () => {
                   ]}
                 >
                   <Input
-                    placeholder={'Nombre'}
+                    placeholder={'Nombre de Institución'}
                     type={'text'}
                     size="small"
                   />
                 </Form.Item>
               </Col>
+              
               <Col xs={24} sm={12} md={12}>
                 <Form.Item
-                  label={'Apellido'}
-                  name={'last_name'}
+                  label={'Pais'}
+                  name={'country'}
+                  rules={[
+                    {
+                      required: true,
+                      // message: "Por favor ingrese un nombre!",
+                    },
+                  ]}
+                >
+                  <Select
+                    size="small"
+                    onChange={onGenderChange}
+                    placeholder="seleccionar país"
+                  >
+                    {countries.map((resp) => {
+                      return <Option value={resp.id}>{resp.name}</Option>;
+                    })}
+                  </Select>
+                </Form.Item>
+              </Col>
+
+              <Col span={24}>
+                <Form.Item
+                  label={'Url Web'}
+                  name={'url'}
                   rules={[
                     {
                       required: true,
@@ -74,16 +153,17 @@ const UserForm = () => {
                   ]}
                 >
                   <Input
-                    placeholder={'Apellido'}
+                    placeholder={'Introduzca la url'}
                     type={'text'}
                     size="small"
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={12}>
+
+              <Col span={24}>
                 <Form.Item
-                  label={'Usuario'}
-                  name={'username'}
+                  label={'Comentario'}
+                  name={'comments'}
                   rules={[
                     {
                       required: true,
@@ -91,47 +171,11 @@ const UserForm = () => {
                     },
                   ]}
                 >
-                  <Input
-                    placeholder={'Usuario'}
-                    type={'text'}
-                    size="small"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={12} md={12}>
-                <Form.Item
-                  label={'Contraseña'}
-                  name={'password'}
-                  rules={[
-                    {
-                      required: true,
-                      // message: "Por favor ingrese un nombre!",
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder={'**********'}
-                    type={'password'}
-                    size="small"
-                  />
-                </Form.Item>
-              </Col>
-              <Col xs={24} sm={12} md={12}>
-                <Form.Item
-                  label={'Correo Electronico'}
-                  name={'email'}
-                  rules={[
-                    {
-                      required: true,
-                      // message: "Por favor ingrese un nombre!",
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder={'example@apreciasoft.com'}
-                    type={'email'}
-                    size="small"
-                  />
+                  <TextArea
+										rows={1}
+										size="small"
+										placeholder={"Introduzca Comentarío"}
+									/>
                 </Form.Item>
               </Col>
 
@@ -144,16 +188,15 @@ const UserForm = () => {
                   htmlType="buttom"
                   size="small"
                 >
-                  Guardar
+                  Editar
                 </Button>
               </Col>
             </Row>
           </Form>
         </Col>
       </Row>
-      {/* <FormSystem items={data} /> */}
     </App>
   );
 };
 
-export default UserForm;
+export default WebForm;

@@ -7,7 +7,7 @@ import ContentApp from "./content";
 import FooterApp from "./footer";
 
 const SiderDemo = (props) => {
-  const { children, routes } = props;
+  const { children, navigation } = props;
 
   return (
     <Layout>
@@ -23,7 +23,7 @@ const SiderDemo = (props) => {
       <Layout style={{ minHeight: "100vh" }}>
         <HeaderApp />
         <Layout>
-          <ContentApp routes={routes && routes.length >= 1 ? routes : []}>
+          <ContentApp navigation={navigation && navigation.length >= 1 ? navigation : []}>
             {children}
           </ContentApp>
         </Layout>

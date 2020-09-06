@@ -3,15 +3,14 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 import App from "../../src/components/layout/app";
-import FormSystem from "../../src/components/form";
-import { Form, Input, Row, Col, Button, Space } from "antd";
+import { Form, Input, Row, Col, Button } from "antd";
 
-const UserForm = () => {
+const CountryForm = () => {
   const [form] = Form.useForm();
-
   const router = useRouter();
+  const { id } = router.query;
 
-  const routes = [
+  const navigation = [
     {
       key: "1",
       path: "/countries",
@@ -19,16 +18,14 @@ const UserForm = () => {
     },
     {
       key: "2",
-      path: "/countries/add",
-      breadcrumbName: "Editar Pais",
+      path: `/countries/${id}`,
+      breadcrumbName: "Detalles de Pais",
     },
   ];
 
-  const { edit } = router.query;
-
   const onFinish = async (values) => {
     const payload = await axios
-      .put(`https://api-insight.tk/countries/${edit}/`, values)
+      .put(`https://api-insight.tk/countries/${id}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -38,7 +35,7 @@ const UserForm = () => {
     }
   };
 
-  const getData = async (id) => {
+  const getData = async () => {
     const payload = await axios
       .get(`https://api-insight.tk/countries/${id}/`)
       .catch((err) => console.log(err));
@@ -54,11 +51,11 @@ const UserForm = () => {
   };
 
   useEffect(() => {
-    getData(edit);
+    getData();
   }, []);
 
   return (
-    <App routes={routes}>
+    <App navigation={navigation}>
       <Row justify="center" style={{ "padding-top": "15px" }}>
         <Col md={24} lg={16}>
           <Form
@@ -71,7 +68,7 @@ const UserForm = () => {
             form={form}
           >
             <Row gutter={[16, 16]}>
-              <Col xs={24} sm={12} md={12}>
+              <Col span={24}>
                 <Form.Item
                   label="Pais"
                   name="name"
@@ -95,7 +92,7 @@ const UserForm = () => {
                   htmlType="buttom"
                   size="small"
                 >
-                  Guardar
+                  Editar
                 </Button>
               </Col>
             </Row>
@@ -106,4 +103,4 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default CountryForm;

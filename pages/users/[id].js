@@ -1,17 +1,16 @@
+import { Form, Input, Row, Col, Button } from "antd";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 
 import App from "../../src/components/layout/app";
-import FormSystem from "../../src/components/form";
-import { Form, Input, Row, Col, Button, Space } from "antd";
 
 const UserForm = () => {
   const [form] = Form.useForm();
-
   const router = useRouter();
+  const { id } = router.query;
 
-  const routes = [
+  const navigation = [
     {
       key: "1",
       path: "/users",
@@ -19,54 +18,14 @@ const UserForm = () => {
     },
     {
       key: "2",
-      path: "/users/add",
-      breadcrumbName: "Nuevo Usuario",
+      path: `/users/${id}`,
+      breadcrumbName: "Detalles de Usuario",
     },
   ];
-
-  const data = [
-    {
-      key: "1",
-      label: "Nombre",
-      name: "first_name",
-      type: "text",
-      placeholder: "Nombre",
-    },
-    {
-      key: "2",
-      label: "Apellido",
-      name: "last_name",
-      type: "text",
-      placeholder: "Apellido",
-    },
-    {
-      key: "3",
-      label: "Usuario",
-      name: "username",
-      type: "text",
-      placeholder: "Usuario",
-    },
-    {
-      key: "4",
-      label: "Contraseña",
-      name: "password",
-      type: "password",
-      placeholder: "**********",
-    },
-    {
-      key: "5",
-      label: "Correo Electronico",
-      name: "email",
-      type: "email",
-      placeholder: "Example@gmail.com",
-    },
-  ];
-
-  const { edit } = router.query;
 
   const onFinish = async (values) => {
     const payload = await axios
-      .put(`https://api-insight.tk/users/${edit}/`, values)
+      .put(`https://api-insight.tk/users/${id}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -76,7 +35,7 @@ const UserForm = () => {
     }
   };
 
-  const getData = async (id) => {
+  const getData = async () => {
     const payload = await axios
       .get(`https://api-insight.tk/users/${id}/`)
       .catch((err) => console.log(err));
@@ -104,11 +63,11 @@ const UserForm = () => {
   };
 
   useEffect(() => {
-    getData(edit);
+    getData();
   }, []);
 
   return (
-    <App routes={routes}>
+    <App navigation={navigation}>
       <Row justify="center" style={{ "padding-top": "15px" }}>
         <Col md={24} lg={16}>
           <Form
@@ -200,7 +159,7 @@ const UserForm = () => {
                   htmlType="buttom"
                   size="small"
                 >
-                  Guardar
+                  Editar
                 </Button>
               </Col>
             </Row>

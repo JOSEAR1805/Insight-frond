@@ -1,37 +1,74 @@
 import { Form, Input, Row, Col, Button } from "antd";
+import { useEffect } from "react";
 import App from "../../src/components/layout/app";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-const UserForm = () => {
-  const router = useRouter();
-  const navigation = [
-    {
-      key: "1",
-      path: "/users",
-      breadcrumbName: "Usuarios",
-    },
-    {
-      key: "2",
-      path: "/users/add",
-      breadcrumbName: "Nuevo Usuario",
-    },
-  ];
+const { TextArea } = Input;
 
+const ProfilesForm = () => {
+  const [form] = Form.useForm();
+  const router = useRouter();
+  const { id } = router.query;
+
+	const navigation = [
+		{
+			key: '1',
+			path: '/profiles',
+			breadcrumbName: 'Perfiles',
+		},
+		{
+			key: '2',
+			path: `/profiles/${id}`,
+			breadcrumbName: 'Detalles de Perfil',
+		},
+	];
+	
   const onFinish = async (values) => {
     const payload = await axios
-      .post("https://api-insight.tk/users/", values)
+      .put(`https://api-insight.tk/profiles/${id}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
-      router.push("/users");
+      router.push("/profiles");
     } else {
       alert("Error guardando");
     }
   };
 
-  return (
-    <App navigation={navigation}>
+  const getData = async () => {
+    const payload = await axios
+      .get(`https://api-insight.tk/profiles/${id}/`)
+      .catch((err) => console.log(err));
+
+    if (payload && payload.data) {
+      form.setFields([
+        {
+          name: "name",
+          value: payload.data?.name,
+        },
+        {
+          name: "description",
+          value: payload.data?.description,
+        },
+        {
+          name: "search_parameters",
+          value: payload.data?.search_parameters,
+        },
+        {
+          name: "discard_parameters",
+          value: payload.data?.discard_parameters,
+        },
+      ]);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+	return (
+		<App navigation={navigation}>
       <Row justify="center" style={{ "padding-top": "15px" }}>
         <Col md={24} lg={16}>
           <Form
@@ -41,13 +78,14 @@ const UserForm = () => {
               remember: true,
             }}
             onFinish={onFinish}
+            form={form}
           >
             <Row gutter={[16, 16]}>
 
-              <Col xs={24} sm={12} md={12}>
+              <Col span={24}>
                 <Form.Item
                   label={'Nombre'}
-                  name={'first_name'}
+                  name={'name'}
                   rules={[
                     {
                       required: true,
@@ -62,10 +100,10 @@ const UserForm = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={12}>
+              <Col span={24}>
                 <Form.Item
-                  label={'Apellido'}
-                  name={'last_name'}
+                  label={'Descripción'}
+                  name={'description'}
                   rules={[
                     {
                       required: true,
@@ -73,17 +111,17 @@ const UserForm = () => {
                     },
                   ]}
                 >
-                  <Input
-                    placeholder={'Apellido'}
-                    type={'text'}
+                  <TextArea
+                    rows={1}
                     size="small"
+                    placeholder={"Introduzca una Descripción"}
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={12}>
+              <Col span={24}>
                 <Form.Item
-                  label={'Usuario'}
-                  name={'username'}
+                  label={'Parámetros de Búsqueda'}
+                  name={'search_parameters'}
                   rules={[
                     {
                       required: true,
@@ -91,17 +129,17 @@ const UserForm = () => {
                     },
                   ]}
                 >
-                  <Input
-                    placeholder={'Usuario'}
-                    type={'text'}
+                  <TextArea
+                    rows={2}
                     size="small"
+                    placeholder={"Introduzca Parámetros de Búsqueda"}
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={12}>
+              <Col span={24}>
                 <Form.Item
-                  label={'Contraseña'}
-                  name={'password'}
+                  label={'Parámetros de Descarte'}
+                  name={'discard_parameters'}
                   rules={[
                     {
                       required: true,
@@ -109,32 +147,13 @@ const UserForm = () => {
                     },
                   ]}
                 >
-                  <Input
-                    placeholder={'**********'}
-                    type={'password'}
+                  <TextArea
+                    rows={2}
                     size="small"
+                    placeholder={"Introduzca Parámetros de Descarte"}
                   />
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={12} md={12}>
-                <Form.Item
-                  label={'Correo Electronico'}
-                  name={'email'}
-                  rules={[
-                    {
-                      required: true,
-                      // message: "Por favor ingrese un nombre!",
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder={'example@apreciasoft.com'}
-                    type={'email'}
-                    size="small"
-                  />
-                </Form.Item>
-              </Col>
-
             </Row>
             <Row justify="center">
               <Col xs={24} sm={12} md={6}>
@@ -144,16 +163,15 @@ const UserForm = () => {
                   htmlType="buttom"
                   size="small"
                 >
-                  Guardar
+                  Editar
                 </Button>
               </Col>
             </Row>
           </Form>
         </Col>
       </Row>
-      {/* <FormSystem items={data} /> */}
     </App>
-  );
-};
+	);
+}
 
-export default UserForm;
+export default ProfilesForm;

@@ -5,7 +5,8 @@ import {
 	TeamOutlined,
 	LinkOutlined,
 	AreaChartOutlined,
-	GlobalOutlined
+	GlobalOutlined,
+	ProfileOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -35,26 +36,24 @@ const sidebarApp = () => {
 						<a>Licitaciones</a>
 					</Link>
 				</Menu.Item>
-				<SubMenu key="sub2" icon={<LinkOutlined />} title="Gestión de Búsqueda">
-					<Menu.Item key="21">
-						<Link href="/categories">
-							<a>Categorias</a>
-						</Link>
-					</Menu.Item>
-					<Menu.Item key="22">
-						<Link href="/searchSettings/">
-							<a>Configuraciones de Busquedad</a>
-						</Link>
-					</Menu.Item>
-				</SubMenu>
-				<Menu.Item key="3" icon={<GlobalOutlined />}>
-					<Link href="/countries">
-						<a>Gestión de Paises</a>
+				<Menu.Item key="2" icon={<LinkOutlined />}>
+					<Link href="/webs/" title="Webs">
+						<a>Webs</a>
 					</Link>
 				</Menu.Item>
-				<Menu.Item key="4" icon={<TeamOutlined />}>
+				<Menu.Item key="3" icon={<GlobalOutlined />}>
+					<Link href="/countries">
+						<a>Paises</a>
+					</Link>
+				</Menu.Item>
+				<Menu.Item key="4" icon={<ProfileOutlined />}>
+					<Link href="/profiles/" title="Perfiles">
+						<a>Perfiles</a>
+					</Link>
+				</Menu.Item>
+				<Menu.Item key="5" icon={<TeamOutlined />}>
 					<Link href="/users/">
-						<a>Gestión de Usuarios</a>
+						<a>Usuarios</a>
 					</Link>
 				</Menu.Item>
 			</Menu>

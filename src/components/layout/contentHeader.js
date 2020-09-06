@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const ContentHeaderApp = (props) => {
 	const {
-		routes
+		navigation
 	} = props
 
 	return (
@@ -16,12 +16,12 @@ const ContentHeaderApp = (props) => {
 					</a>
 				</Link>
 			</Breadcrumb.Item>
-				{routes.map((route) => {
+				{navigation.map((item) => {
 					return (
 						<Breadcrumb.Item>
-							<Link href={ route.path }>
+							<Link href={ item.path }>
 								<a>
-									{ route.breadcrumbName }
+									{ item.breadcrumbName }
 								</a>
 							</Link>
 						</Breadcrumb.Item>

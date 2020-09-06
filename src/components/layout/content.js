@@ -11,13 +11,13 @@ const ContentApp = (props) => {
 	
 	const {
 		children,
-		routes,
+		navigation,
 	} = props;
 
 
 	return (
 		<Content>
-			<ContentHeader routes={ routes }/>
+			<ContentHeader navigation={ navigation }/>
 			<div className="div-content" >
 				{ children }
 			</div>
