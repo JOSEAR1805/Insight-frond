@@ -1,5 +1,7 @@
 import { Row, Col, Button, Tooltip } from 'antd';
 import App from "../../src/components/layout/app";
+import { useState, useEffect } from "react";
+
 import TableSystem from '../../src/components/table';
 import Link from "next/link";
 import {
@@ -8,40 +10,22 @@ import {
 	EditTwoTone
 	} from '@ant-design/icons';
 
-const TenderList = () => {
+import axios from "axios";
 
-	const data = [
-		{
-			key: '1',
-			country: 'Venezuela',
-			date: '32/32/4324',
-			description: 'Contratación de consultor para impartir 2 eventos de capacitacion en alianza y enfoque de mercado por 2 meses ',
-			code: '53453453',
-			placeOfExecution: 'sdfsdfsdfs',
-			closingDate: '27/09/20202',
-			awardingEntity: 'GRACCS - Gobierno Regional Autónomo de la Costa Caribe Sur.'
-		},
-		{
-			key: '2',
-			country: 'Venezuela',
-			date: '32/32/4324',
-			description: 'Contratación de consultor para impartir 2 eventos de capacitacion en alianza y enfoque de mercado por 2 meses ',
-			code: '53453453',
-			placeOfExecution: 'sdfsdfsdfs',
-			closingDate: '27/09/20202',
-			awardingEntity: 'GRACCS - Gobierno Regional Autónomo de la Costa Caribe Sur.'
-		},
-		{
-			key: '3',
-			country: 'Venezuela',
-			date: '32/32/4324',
-			description: 'Contratación de consultor para impartir 2 eventos de capacitacion en alianza y enfoque de mercado por 2 meses ',
-			code: '53453453',
-			placeOfExecution: 'sdfsdfsdfs',
-			closingDate: '27/09/20202',
-			awardingEntity: 'GRACCS - Gobierno Regional Autónomo de la Costa Caribe Sur.'
-		},
-	];
+
+const TenderList = () => {
+  const [tenders, setTenders] = useState([]);
+
+	const getUsers = async () => {
+    const payload = await axios
+      .get("https://api-insight.tk/tenders")
+      .catch((err) => console.log(err));
+
+    if (payload && payload.data) {
+			console.log(payload.data)
+      setTenders(payload.data);
+		}
+  };
 
 	const columns = [
 		{
@@ -51,9 +35,9 @@ const TenderList = () => {
 			search: true,
 		},
 		{
-			title: 'Fecha',
-			dataIndex: 'date',
-			key: 'date',
+			title: 'Fecha de Plazo',
+			dataIndex: 'dates',
+			key: 'dates',
 			search: true,
 		},
 		{
@@ -71,59 +55,63 @@ const TenderList = () => {
 		},
 		{
 			title: 'Lugar de Ejecución',
-			dataIndex: 'placeOfExecution',
-			key: 'placeOfExecution',
+			dataIndex: 'place_of_execution',
+			key: 'place_of_execution',
 			search: true,
 		},
-		{
-			title: 'Fin de Plazo',
-			dataIndex: 'closingDate',
-			key: 'closingDate',
-			search: true,
-			width: '10%'
-		},
+		// {
+		// 	title: 'Fin de Plazo',
+		// 	dataIndex: 'closingDate',
+		// 	key: 'closingDate',
+		// 	search: true,
+		// 	width: '10%'
+		// },
 		{
 			title: 'Entidad Adjudicadora',
-			dataIndex: 'awardingEntity',
-			key: 'awardingEntity',
+			dataIndex: 'awarning_authority',
+			key: 'awarning_authority',
 			search: true,
 			width: '20%'
 		},
-		{
-			title: 'Acción',
-			dataIndex: 'key',
-			key: 'key',
-			search: false,
-			width: '10%',
-			render: (key) => {
-				return (
-					<Row gutter={[8, 0]} justify="center">
-						<Col>
-							<Link href="#" >
-								<Tooltip title="Ver Detalle!" color={'cyan'}>
-									<EyeTwoTone twoToneColor="#13c2c2" style={{ fontSize: '16px'}}/>
-								</Tooltip>
-							</Link>
-						</Col>
-						<Col>
-							<Link href="#" >
-								<Tooltip title="Editar!" color={'orange'}>
-									<EditTwoTone twoToneColor="#fa8c16" style={{ fontSize: '16px'}}/>
-								</Tooltip>
-							</Link>
-						</Col>
-						<Col>
-							<Link href="#" >
-								<Tooltip title="Eliminar!" color={'red'}>
-									<DeleteTwoTone twoToneColor="#ff0000" style={{ fontSize: '16px'}}/>
-								</Tooltip>
-							</Link>
-						</Col>
-					</Row>
-				)
-			}
-		},
+		// {
+		// 	title: 'Acción',
+		// 	dataIndex: 'key',
+		// 	key: 'key',
+		// 	search: false,
+		// 	width: '10%',
+		// 	render: (key) => {
+		// 		return (
+		// 			<Row gutter={[8, 0]} justify="center">
+		// 				<Col>
+		// 					<Link href="#" >
+		// 						<Tooltip title="Ver Detalle!" color={'cyan'}>
+		// 							<EyeTwoTone twoToneColor="#13c2c2" style={{ fontSize: '16px'}}/>
+		// 						</Tooltip>
+		// 					</Link>
+		// 				</Col>
+		// 				<Col>
+		// 					<Link href="#" >
+		// 						<Tooltip title="Editar!" color={'orange'}>
+		// 							<EditTwoTone twoToneColor="#fa8c16" style={{ fontSize: '16px'}}/>
+		// 						</Tooltip>
+		// 					</Link>
+		// 				</Col>
+		// 				<Col>
+		// 					<Link href="#" >
+		// 						<Tooltip title="Eliminar!" color={'red'}>
+		// 							<DeleteTwoTone twoToneColor="#ff0000" style={{ fontSize: '16px'}}/>
+		// 						</Tooltip>
+		// 					</Link>
+		// 				</Col>
+		// 			</Row>
+		// 		)
+		// 	}
+		// },
 	];
+
+	useEffect(() => {
+    getUsers();
+  }, []);
 
 	return (
 		<App>
@@ -134,7 +122,7 @@ const TenderList = () => {
 					</Link>
 				</Col>
 			</Row> */}
-			<TableSystem columns={columns} data={data}/>
+			<TableSystem columns={columns} data={tenders}/>
 		</App>
 	);
 
