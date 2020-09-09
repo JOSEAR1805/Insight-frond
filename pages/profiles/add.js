@@ -27,7 +27,7 @@ const ProfilesForm = () => {
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
-      router.push("/users");
+      router.push("/profiles");
     } else {
       alert("Error guardando");
     }
@@ -50,7 +50,7 @@ const ProfilesForm = () => {
 							<Col span={24}>
 								<Form.Item
 									label={'Nombre'}
-									name={'first_name'}
+									name={'name'}
 									rules={[
 										{
 											required: true,
