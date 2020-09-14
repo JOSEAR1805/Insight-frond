@@ -53,7 +53,7 @@ const WebForm = () => {
   };
 
   const getData = async () => {
-    console.log('id recibe', id)
+    console.log("id recibe", id);
     const payload = await axios
       .get(`https://api-insight.tk/webs/${id}/`)
       .catch((err) => console.log(err));
@@ -81,8 +81,8 @@ const WebForm = () => {
   };
 
   useEffect(() => {
-    getCountry(); 
-  }, []);
+    getCountry();
+  }, [getCountry]);
 
   return (
     <App navigation={navigation}>
@@ -98,11 +98,10 @@ const WebForm = () => {
             form={form}
           >
             <Row gutter={[16, 16]}>
-
               <Col xs={24} sm={12} md={12}>
                 <Form.Item
-                  label={'Nombre de Intitución'}
-                  name={'name'}
+                  label={"Nombre de Intitución"}
+                  name={"name"}
                   rules={[
                     {
                       required: true,
@@ -111,17 +110,17 @@ const WebForm = () => {
                   ]}
                 >
                   <Input
-                    placeholder={'Nombre de Institución'}
-                    type={'text'}
+                    placeholder={"Nombre de Institución"}
+                    type={"text"}
                     size="small"
                   />
                 </Form.Item>
               </Col>
-              
+
               <Col xs={24} sm={12} md={12}>
                 <Form.Item
-                  label={'Pais'}
-                  name={'country'}
+                  label={"Pais"}
+                  name={"country"}
                   rules={[
                     {
                       required: true,
@@ -143,8 +142,8 @@ const WebForm = () => {
 
               <Col span={24}>
                 <Form.Item
-                  label={'Url Web'}
-                  name={'url'}
+                  label={"Url Web"}
+                  name={"url"}
                   rules={[
                     {
                       required: true,
@@ -153,8 +152,8 @@ const WebForm = () => {
                   ]}
                 >
                   <Input
-                    placeholder={'Introduzca la url'}
-                    type={'text'}
+                    placeholder={"Introduzca la url"}
+                    type={"text"}
                     size="small"
                   />
                 </Form.Item>
@@ -162,8 +161,8 @@ const WebForm = () => {
 
               <Col span={24}>
                 <Form.Item
-                  label={'Comentario'}
-                  name={'comments'}
+                  label={"Comentario"}
+                  name={"comments"}
                   rules={[
                     {
                       required: true,
@@ -172,13 +171,12 @@ const WebForm = () => {
                   ]}
                 >
                   <TextArea
-										rows={1}
-										size="small"
-										placeholder={"Introduzca Comentarío"}
-									/>
+                    rows={1}
+                    size="small"
+                    placeholder={"Introduzca Comentarío"}
+                  />
                 </Form.Item>
               </Col>
-
             </Row>
             <Row justify="center">
               <Col xs={24} sm={12} md={6}>

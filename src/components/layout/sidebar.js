@@ -34,7 +34,8 @@ const sidebarApp = () => {
         // console.log(collapsed, type);
       }}
     >
-      <div className="logo" />
+      {/* <div className="logo" /> */}
+      <img className="logo" src="/logo.jpeg" alt="my image" />
       <Menu theme="dark" defaultSelectedKeys={["0"]} mode="inline">
         <Menu.Item key="0" icon={<HomeOutlined />}>
           <Link href="/" title="Inicio">

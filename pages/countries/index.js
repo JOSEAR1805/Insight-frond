@@ -22,6 +22,12 @@ const CountryList = () => {
 
   const columns = [
     {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      search: true,
+    },
+    {
       title: "Pais",
       dataIndex: "name",
       key: "name",
@@ -37,25 +43,28 @@ const CountryList = () => {
         console.log(record);
         return (
           <Row gutter={[8, 0]} justify="center">
-						<Col>
+            <Col>
               <Link href="/countries/[edit]" as={`/countries/${record.id}`}>
-								<a>
-									<Tooltip title="Ver Detalle!" color={'cyan'}>
-										<EyeTwoTone twoToneColor="#13c2c2" style={{ fontSize: '16px'}}/>
-									</Tooltip>
-								</a>
+                <a>
+                  <Tooltip title="Ver Detalle!" color={"cyan"}>
+                    <EyeTwoTone
+                      twoToneColor="#13c2c2"
+                      style={{ fontSize: "16px" }}
+                    />
+                  </Tooltip>
+                </a>
               </Link>
             </Col>
             <Col>
-							<Tooltip title="Eliminar!" color={"red"}>
-								<DeleteTwoTone
-									onClick={() => deleteCountry(record.id)}
-									twoToneColor="#ff0000"
-									style={{ fontSize: "16px" }}
-								/>
-							</Tooltip>
+              <Tooltip title="Eliminar!" color={"red"}>
+                <DeleteTwoTone
+                  onClick={() => deleteCountry(record.id)}
+                  twoToneColor="#ff0000"
+                  style={{ fontSize: "16px" }}
+                />
+              </Tooltip>
             </Col>
-					</Row>
+          </Row>
         );
       },
     },

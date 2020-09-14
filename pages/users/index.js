@@ -40,6 +40,15 @@ const UserList = () => {
       search: true,
     },
     {
+      title: "Tipo de usuario",
+      dataIndex: "is_staff",
+      key: "is_staff",
+      search: true,
+      render: (text, record) => {
+        return text ? "Administrador" : "Usuario";
+      },
+    },
+    {
       title: "Dirección",
       dataIndex: "username",
       key: "address",
@@ -57,10 +66,12 @@ const UserList = () => {
             <Col>
               <Link href="/users/[edit]" as={`/users/${record.id}`}>
                 <a>
-                  <Tooltip title="Ver Detalle!" color={'cyan'}>
-										<EyeTwoTone twoToneColor="#13c2c2" style={{ fontSize: '16px'}}/>
-									</Tooltip>
-                 
+                  <Tooltip title="Ver Detalle!" color={"cyan"}>
+                    <EyeTwoTone
+                      twoToneColor="#13c2c2"
+                      style={{ fontSize: "16px" }}
+                    />
+                  </Tooltip>
                 </a>
               </Link>
             </Col>

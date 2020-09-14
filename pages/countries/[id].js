@@ -52,7 +52,7 @@ const CountryForm = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
 
   return (
     <App navigation={navigation}>

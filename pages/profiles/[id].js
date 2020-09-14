@@ -11,19 +11,19 @@ const ProfilesForm = () => {
   const router = useRouter();
   const { id } = router.query;
 
-	const navigation = [
-		{
-			key: '1',
-			path: '/profiles',
-			breadcrumbName: 'Perfiles',
-		},
-		{
-			key: '2',
-			path: `/profiles/${id}`,
-			breadcrumbName: 'Detalles de Perfil',
-		},
-	];
-	
+  const navigation = [
+    {
+      key: "1",
+      path: "/profiles",
+      breadcrumbName: "Perfiles",
+    },
+    {
+      key: "2",
+      path: `/profiles/${id}`,
+      breadcrumbName: "Detalles de Perfil",
+    },
+  ];
+
   const onFinish = async (values) => {
     const payload = await axios
       .put(`https://api-insight.tk/profiles/${id}/`, values)
@@ -65,10 +65,10 @@ const ProfilesForm = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
 
-	return (
-		<App navigation={navigation}>
+  return (
+    <App navigation={navigation}>
       <Row justify="center" style={{ "padding-top": "15px" }}>
         <Col md={24} lg={16}>
           <Form
@@ -81,11 +81,10 @@ const ProfilesForm = () => {
             form={form}
           >
             <Row gutter={[16, 16]}>
-
               <Col span={24}>
                 <Form.Item
-                  label={'Nombre'}
-                  name={'name'}
+                  label={"Nombre"}
+                  name={"name"}
                   rules={[
                     {
                       required: true,
@@ -93,17 +92,13 @@ const ProfilesForm = () => {
                     },
                   ]}
                 >
-                  <Input
-                    placeholder={'Nombre'}
-                    type={'text'}
-                    size="small"
-                  />
+                  <Input placeholder={"Nombre"} type={"text"} size="small" />
                 </Form.Item>
               </Col>
               <Col span={24}>
                 <Form.Item
-                  label={'Descripción'}
-                  name={'description'}
+                  label={"Descripción"}
+                  name={"description"}
                   rules={[
                     {
                       required: true,
@@ -120,8 +115,8 @@ const ProfilesForm = () => {
               </Col>
               <Col span={24}>
                 <Form.Item
-                  label={'Parámetros de Búsqueda'}
-                  name={'search_parameters'}
+                  label={"Parámetros de Búsqueda"}
+                  name={"search_parameters"}
                   rules={[
                     {
                       required: true,
@@ -138,8 +133,8 @@ const ProfilesForm = () => {
               </Col>
               <Col span={24}>
                 <Form.Item
-                  label={'Parámetros de Descarte'}
-                  name={'discard_parameters'}
+                  label={"Parámetros de Descarte"}
+                  name={"discard_parameters"}
                   rules={[
                     {
                       required: true,
@@ -171,7 +166,7 @@ const ProfilesForm = () => {
         </Col>
       </Row>
     </App>
-	);
-}
+  );
+};
 
 export default ProfilesForm;
