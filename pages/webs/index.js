@@ -49,25 +49,27 @@ const WebList = () => {
       render: (key, record) => {
         return (
           <Row gutter={[8, 0]} justify="center">
-						<Col>
-              <Link href="/webs/[edit]" as={`/webs/${record.id}`}>
-								<a>
-									<Tooltip title="Ver Detalle!" color={'cyan'}>
-										<EyeTwoTone twoToneColor="#13c2c2" style={{ fontSize: '16px'}}/>
-									</Tooltip>
-								</a>
-              </Link>
+            <Col>
+              <Tooltip title="Ver Detalle!" color={"cyan"}>
+                <EyeTwoTone
+                  twoToneColor="#13c2c2"
+                  style={{ fontSize: "16px" }}
+                  onClick={() => {
+                    router.push("/webs/[edit]", `/webs/${record.id}`);
+                  }}
+                />
+              </Tooltip>
             </Col>
             <Col>
-							<Tooltip title="Eliminar!" color={"red"}>
-								<DeleteTwoTone
-									onClick={() => deleteWebs(record.id)}
-									twoToneColor="#ff0000"
-									style={{ fontSize: "16px" }}
-								/>
-							</Tooltip>
+              <Tooltip title="Eliminar!" color={"red"}>
+                <DeleteTwoTone
+                  onClick={() => deleteWebs(record.id)}
+                  twoToneColor="#ff0000"
+                  style={{ fontSize: "16px" }}
+                />
+              </Tooltip>
             </Col>
-					</Row>
+          </Row>
         );
       },
     },
