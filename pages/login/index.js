@@ -12,7 +12,7 @@ const Signin = () => {
     console.log(values);
 
     const payload = await axios
-      .post("http://127.0.0.1:8000/users/login/", values)
+      .post("https://api-insight.tk/users/login/", values)
       .catch((err) => alert("Error con los datos"));
 
     if (payload.status == "200") {
