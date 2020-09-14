@@ -53,6 +53,13 @@ const TenderList = () => {
       dataIndex: "link",
       key: "link",
       search: false,
+      render: (text, record) => {
+        return (
+          <a href={text} target="_blank">
+            Ver licitación
+          </a>
+        );
+      },
     },
     {
       title: "Lugar de Ejecución",
@@ -60,13 +67,6 @@ const TenderList = () => {
       key: "place_of_execution",
       search: true,
     },
-    // {
-    // 	title: 'Fin de Plazo',
-    // 	dataIndex: 'closingDate',
-    // 	key: 'closingDate',
-    // 	search: true,
-    // 	width: '10%'
-    // },
     {
       title: "Entidad Adjudicadora",
       dataIndex: "awarning_authority",
@@ -74,40 +74,6 @@ const TenderList = () => {
       search: true,
       width: "20%",
     },
-    // {
-    // 	title: 'Acción',
-    // 	dataIndex: 'key',
-    // 	key: 'key',
-    // 	search: false,
-    // 	width: '10%',
-    // 	render: (key) => {
-    // 		return (
-    // 			<Row gutter={[8, 0]} justify="center">
-    // 				<Col>
-    // 					<Link href="#" >
-    // 						<Tooltip title="Ver Detalle!" color={'cyan'}>
-    // 							<EyeTwoTone twoToneColor="#13c2c2" style={{ fontSize: '16px'}}/>
-    // 						</Tooltip>
-    // 					</Link>
-    // 				</Col>
-    // 				<Col>
-    // 					<Link href="#" >
-    // 						<Tooltip title="Editar!" color={'orange'}>
-    // 							<EditTwoTone twoToneColor="#fa8c16" style={{ fontSize: '16px'}}/>
-    // 						</Tooltip>
-    // 					</Link>
-    // 				</Col>
-    // 				<Col>
-    // 					<Link href="#" >
-    // 						<Tooltip title="Eliminar!" color={'red'}>
-    // 							<DeleteTwoTone twoToneColor="#ff0000" style={{ fontSize: '16px'}}/>
-    // 						</Tooltip>
-    // 					</Link>
-    // 				</Col>
-    // 			</Row>
-    // 		)
-    // 	}
-    // },
   ];
 
   useEffect(() => {
