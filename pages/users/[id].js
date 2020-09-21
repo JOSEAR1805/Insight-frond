@@ -124,13 +124,13 @@ const UserForm = () => {
   };
 
   const saveSearchSettings = async (values) => {
-    values.user = parseInt(id);
+    values.user = parseInt(idUser);
     const payload = await axios
       .post(`https://api-insight.tk/search_settings/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
-      getSearchSettings();
+      getSearchSettings(idUser);
       alert("Guardado con exito");
     } else {
       alert("Error guardando");

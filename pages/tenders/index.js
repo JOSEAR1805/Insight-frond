@@ -30,9 +30,15 @@ const TenderList = () => {
       search: true,
     },
     {
-      title: "Fecha de Plazo",
-      dataIndex: "dates",
-      key: "dates",
+      title: "F. publicación",
+      dataIndex: "publication_date",
+      key: "publication_date",
+      search: false,
+    },
+    {
+      title: "F. recepción",
+      dataIndex: "closing_date",
+      key: "closing_date",
       search: false,
     },
     {
