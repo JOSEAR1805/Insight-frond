@@ -66,7 +66,7 @@ const UserForm = () => {
 
       getCountries();
       getProfiles();
-      getSearchSettings();
+      getSearchSettings(userId);
     }
   };
 
@@ -90,14 +90,13 @@ const UserForm = () => {
     }
   };
 
-  const getSearchSettings = async () => {
+  const getSearchSettings = async (getIdeUser) => {
     const payload = await axios
       .get("https://api-insight.tk/search_settings/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
-      setSearchSettings(payload.data);
-      console.log(searchSettings);
+      setSearchSettings(payload.data.filter((resp) => resp.user == getIdeUser));
     }
   };
 
