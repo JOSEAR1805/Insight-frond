@@ -67,7 +67,7 @@ const Signin = () => {
                       {
                         required: true,
                         message: "¡Por favor, ingrese su contraseña!",
-                        min: 6,
+                        min: 4,
                       },
                     ]}
                   >
