@@ -13,16 +13,15 @@ import {
   List,
   Tooltip,
 } from "antd";
-import { DeleteOutlined, DeleteTwoTone } from "@ant-design/icons";
-import Link from "next/link";
+import { DeleteTwoTone } from "@ant-design/icons";
 
 const { Option } = Select;
 
 const UserForm = () => {
   const [form] = Form.useForm();
   const router = useRouter();
-  const { id } = router.query;
   const [countries, setCountries] = useState([]);
+  const [idUser, setIdUser] = useState(null);
   const [profiles, setProfiles] = useState([]);
   const [searchSettings, setSearchSettings] = useState([]);
 
@@ -34,15 +33,15 @@ const UserForm = () => {
     },
     {
       key: "2",
-      path: `/users/${id}`,
+      path: `/users/${idUser}`,
       breadcrumbName: "Detalles de Usuario",
     },
   ];
 
-  const getDataUser = async () => {
+  const getDataUser = async (userId) => {
     console.log("getDataUser");
     const payload = await axios
-      .get(`https://api-insight.tk/users/${id}/`)
+      .get(`https://api-insight.tk/users/${userId}/`)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -72,8 +71,6 @@ const UserForm = () => {
   };
 
   const getCountries = async () => {
-    console.log("getCountries");
-
     const payload = await axios
       .get("https://api-insight.tk/countries/")
       .catch((err) => console.log(err));
@@ -84,8 +81,6 @@ const UserForm = () => {
   };
 
   const getProfiles = async () => {
-    console.log("getProfiles");
-
     const payload = await axios
       .get("https://api-insight.tk/profiles/")
       .catch((err) => console.log(err));
@@ -96,8 +91,6 @@ const UserForm = () => {
   };
 
   const getSearchSettings = async () => {
-    console.log("getSearchSettings");
-
     const payload = await axios
       .get("https://api-insight.tk/search_settings/")
       .catch((err) => console.log(err));
@@ -133,7 +126,6 @@ const UserForm = () => {
 
   const saveSearchSettings = async (values) => {
     values.user = parseInt(id);
-    console.log("values", values);
     const payload = await axios
       .post(`https://api-insight.tk/search_settings/`, values)
       .catch((err) => console.log(err));
@@ -147,8 +139,9 @@ const UserForm = () => {
   };
 
   useEffect(() => {
-    getDataUser();
-  }, [getDataUser]);
+    setIdUser(router.query?.id);
+    getDataUser(router.query?.id);
+  }, [router]);
 
   return (
     <App navigation={navigation}>
@@ -340,14 +333,14 @@ const UserForm = () => {
                       {
                         countries.filter(
                           (resp) => resp.id === searchSetting.country
-                        )[0].name
+                        )[0]?.name
                       }
                     </Col>
                     <Col>
                       {
                         profiles.filter(
                           (resp) => resp.id === searchSetting.profile
-                        )[0].name
+                        )[0]?.name
                       }
                     </Col>
                   </List.Item>
