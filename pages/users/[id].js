@@ -113,7 +113,7 @@ const UserForm = () => {
 
   const updateUser = async (values) => {
     const payload = await axios
-      .put(`https://api-insight.tk/users/${id}/`, values)
+      .put(`https://api-insight.tk/users/${idUser}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -124,7 +124,7 @@ const UserForm = () => {
   };
 
   const saveSearchSettings = async (values) => {
-    values.user = parseInt(id);
+    values.user = parseInt(idUser);
     const payload = await axios
       .post(`https://api-insight.tk/search_settings/`, values)
       .catch((err) => console.log(err));
