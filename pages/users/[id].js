@@ -113,7 +113,7 @@ const UserForm = () => {
 
   const updateUser = async (values) => {
     const payload = await axios
-      .put(`https://api-insight.tk/users/${id}/`, values)
+      .put(`https://api-insight.tk/users/${idUser}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
