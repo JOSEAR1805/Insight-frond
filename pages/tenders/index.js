@@ -12,13 +12,20 @@ const TenderList = () => {
   const [tenders, setTenders] = useState([]);
 
   const getUsers = async () => {
+    let userLocal = JSON.parse(localStorage.getItem("user"));
+
     const payload = await axios
-      .get("https://api-insight.tk/tenders")
+      .get("https://api-insight.tk/users/tender-users/", {
+        headers: {
+          Authorization: `Token ${userLocal.token}`,
+        },
+      })
       .catch((err) => console.log(err));
 
-    if (payload && payload.data) {
-      console.log(payload.data);
-      setTenders(payload.data);
+    console.log(payload, "**");
+
+    if (payload && payload.data?.tenders) {
+      setTenders(payload.data?.tenders);
     }
   };
 
