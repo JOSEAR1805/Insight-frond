@@ -24,6 +24,7 @@ const UserForm = () => {
   const [idUser, setIdUser] = useState(null);
   const [profiles, setProfiles] = useState([]);
   const [searchSettings, setSearchSettings] = useState([]);
+  const [isStaff, setIsStaff] = useState(true);
 
   const navigation = [
     {
@@ -45,6 +46,8 @@ const UserForm = () => {
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
+      setIsStaff(payload.data.is_staff);
+
       form.setFields([
         {
           name: "username",
@@ -235,120 +238,124 @@ const UserForm = () => {
         </Col>
       </Row>
 
-      <Row justify="center" style={{ "padding-top": "15px" }}>
-        <Col md={24} lg={16}>
-          <Row style={{ padding: "15px", border: "1px solid #bfbfbf" }}>
-            <Divider orientation="left" plain>
-              Configuración de Búsqueda
-            </Divider>
+      {!isStaff && (
 
-            <Col span={24}>
-              <Form
-                layout="vertical"
-                name="basic"
-                initialValues={{
-                  remember: true,
-                }}
-                onFinish={saveSearchSettings}
-              >
-                <Row gutter={[16, 16]}>
-                  <Col xs={24} sm={10}>
-                    <Form.Item
-                      label="Pais"
-                      name="country"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Por favor seleccione un Pais!",
-                        },
+        <Row justify="center" style={{ "padding-top": "15px" }}>
+          <Col md={24} lg={16}>
+            <Row style={{ padding: "15px", border: "1px solid #bfbfbf" }}>
+              <Divider orientation="left" plain>
+                Configuración de Búsqueda
+              </Divider>
+
+              <Col span={24}>
+                <Form
+                  layout="vertical"
+                  name="basic"
+                  initialValues={{
+                    remember: true,
+                  }}
+                  onFinish={saveSearchSettings}
+                >
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={10}>
+                      <Form.Item
+                        label="Pais"
+                        name="country"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Por favor seleccione un Pais!",
+                          },
+                        ]}
+                      >
+                        <Select
+                          size="small"
+                          // onChange={onGenderChange}
+                          placeholder="Seleccione un País"
+                        >
+                          {countries.map((resp) => {
+                            return <Option value={resp.id}>{resp.name}</Option>;
+                          })}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={10}>
+                      <Form.Item
+                        label="Perfil"
+                        name="profile"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Por favor seleccione un Perfil!",
+                          },
+                        ]}
+                      >
+                        <Select
+                          size="small"
+                          // onChange={onGenderChange}
+                          placeholder="Seleccione un Perfil"
+                        >
+                          {profiles.map((resp) => {
+                            return <Option value={resp.id}>{resp.name}</Option>;
+                          })}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={4}>
+                      <Button
+                        type="primary"
+                        block="true"
+                        htmlType="buttom"
+                        size="small"
+                        style={{ "margin-top": "20px" }}
+                      >
+                        Agregar
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form>
+              </Col>
+
+              <Col span={24}>
+                <List
+                  size="small"
+                  bordered
+                  dataSource={searchSettings}
+                  renderItem={(searchSetting) => (
+                    <List.Item
+                      actions={[
+                        <Tooltip title="Eliminar!" color={"red"}>
+                          <DeleteTwoTone
+                            onClick={() => deleteSearchSettings(searchSetting.id)}
+                            twoToneColor="#ff0000"
+                            style={{ fontSize: "16px" }}
+                          />
+                        </Tooltip>,
                       ]}
                     >
-                      <Select
-                        size="small"
-                        // onChange={onGenderChange}
-                        placeholder="Seleccione un País"
-                      >
-                        {countries.map((resp) => {
-                          return <Option value={resp.id}>{resp.name}</Option>;
-                        })}
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col xs={24} sm={10}>
-                    <Form.Item
-                      label="Perfil"
-                      name="profile"
-                      rules={[
+                      <Col>
                         {
-                          required: true,
-                          message: "Por favor seleccione un Perfil!",
-                        },
-                      ]}
-                    >
-                      <Select
-                        size="small"
-                        // onChange={onGenderChange}
-                        placeholder="Seleccione un Perfil"
-                      >
-                        {profiles.map((resp) => {
-                          return <Option value={resp.id}>{resp.name}</Option>;
-                        })}
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col xs={24} sm={4}>
-                    <Button
-                      type="primary"
-                      block="true"
-                      htmlType="buttom"
-                      size="small"
-                      style={{ "margin-top": "20px" }}
-                    >
-                      Agregar
-                    </Button>
-                  </Col>
-                </Row>
-              </Form>
-            </Col>
+                          countries.filter(
+                            (resp) => resp.id === searchSetting.country
+                          )[0]?.name
+                        }
+                      </Col>
+                      <Col>
+                        {
+                          profiles.filter(
+                            (resp) => resp.id === searchSetting.profile
+                          )[0]?.name
+                        }
+                      </Col>
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      )}
 
-            <Col span={24}>
-              <List
-                size="small"
-                bordered
-                dataSource={searchSettings}
-                renderItem={(searchSetting) => (
-                  <List.Item
-                    actions={[
-                      <Tooltip title="Eliminar!" color={"red"}>
-                        <DeleteTwoTone
-                          onClick={() => deleteSearchSettings(searchSetting.id)}
-                          twoToneColor="#ff0000"
-                          style={{ fontSize: "16px" }}
-                        />
-                      </Tooltip>,
-                    ]}
-                  >
-                    <Col>
-                      {
-                        countries.filter(
-                          (resp) => resp.id === searchSetting.country
-                        )[0]?.name
-                      }
-                    </Col>
-                    <Col>
-                      {
-                        profiles.filter(
-                          (resp) => resp.id === searchSetting.profile
-                        )[0]?.name
-                      }
-                    </Col>
-                  </List.Item>
-                )}
-              />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
     </App>
   );
 };

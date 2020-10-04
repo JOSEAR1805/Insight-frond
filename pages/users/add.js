@@ -21,15 +21,16 @@ const UserForm = () => {
   ];
 
   const onFinish = async (values) => {
-    const payload = await axios
+    await axios
       .post("https://api-insight.tk/users/", values)
-      .catch((err) => console.log(err));
-
-    if (payload && payload.data) {
-      router.push("/users");
-    } else {
-      alert("Error guardando");
-    }
+      .then( resp => {
+        if (resp && resp.data) {
+          router.push("/users");
+        } 
+      })
+      .catch((err) => {
+        alert("Error guardando");
+      });
   };
 
   return (
@@ -136,7 +137,7 @@ const UserForm = () => {
                 >
                   <Select size="small" placeholder="seleccionar país">
                     <Option value={true}>Administrador</Option>;
-                    <Option value={false}>Usuario</Option>;
+                    <Option value={false}>Estándar</Option>;
                   </Select>
                 </Form.Item>
               </Col>

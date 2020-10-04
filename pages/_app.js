@@ -13,7 +13,7 @@ const MyApp = (props) => {
       const user = JSON.parse(localStorage.getItem("user"));
       if (user && user.token) {
         if (router.pathname === "/login") {
-          router.push("/");
+          router.push("/tenders/");
         }
       } else {
         router.push("/login");

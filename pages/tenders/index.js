@@ -14,19 +14,18 @@ const TenderList = () => {
   const getUsers = async () => {
     let userLocal = JSON.parse(localStorage.getItem("user"));
 
-    const payload = await axios
+    await axios
       .get("https://api-insight.tk/users/tender-users/", {
         headers: {
           Authorization: `Token ${userLocal.token}`,
         },
       })
+      .then( response => {
+        if (response && response.data?.tenders) {
+          setTenders(response.data?.tenders);
+        }
+      })
       .catch((err) => console.log(err));
-
-    console.log(payload, "**");
-
-    if (payload && payload.data?.tenders) {
-      setTenders(payload.data?.tenders);
-    }
   };
 
   const columns = [
@@ -87,21 +86,49 @@ const TenderList = () => {
       search: true,
       width: "20%",
     },
+    // {
+    //   title: "Acción",
+    //   dataIndex: "key",
+    //   key: "key",
+    //   search: false,
+    //   width: "5%",
+    //   render: (text, record) => {
+    //     return (
+    //       <Row gutter={[8, 0]} justify="center">
+    //         <Col>
+    //           <Tooltip title="Eliminar!" color={"red"}>
+    //             <DeleteTwoTone
+    //               onClick={() => deleteTender(record.id)}
+    //               twoToneColor="#ff0000"
+    //               style={{ fontSize: "16px" }}
+    //             />
+    //           </Tooltip>
+    //         </Col>
+    //       </Row>
+    //     );
+    //   },
+    // },
   ];
 
   useEffect(() => {
     getUsers();
   }, []);
 
+  // const deleteTender = async (id) => {
+  //   await axios
+  //     .delete(`https://api-insight.tk/tenders/${id}/`)
+  //     .then( res => {
+  //       if (res) {
+  //         getUsers();
+  //         alert("Liquidación Eliminada con Exito!");
+  //       }
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+
+
   return (
     <App>
-      {/* <Row gutter={[8, 16]}>
-				<Col justify="end">
-					<Link href="/users/add">
-						<Button type="primary" size="small">NUEVO USUARIO</Button>
-					</Link>
-				</Col>
-			</Row> */}
       <TableSystem columns={columns} data={tenders} />
     </App>
   );

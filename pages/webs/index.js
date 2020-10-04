@@ -11,7 +11,7 @@ import axios from "axios";
 
 const WebList = () => {
   const router = useRouter();
-  const [countries, setCountries] = useState([]);
+  const [data, setData] = useState([]);
 
   const navigation = [
     {
@@ -55,7 +55,7 @@ const WebList = () => {
                   twoToneColor="#13c2c2"
                   style={{ fontSize: "16px" }}
                   onClick={() => {
-                    router.push("/webs/[edit]", `/webs/${record.id}`);
+                    router.push("/webs/[id]", `/webs/${record.id}`);
                   }}
                 />
               </Tooltip>
@@ -75,45 +75,45 @@ const WebList = () => {
     },
   ];
 
-  const [data, setData] = useState([]);
-
   const getCountries = async () => {
-    const payload = await axios
-      .get("https://api-insight.tk/countries/")
+    await axios.get("https://api-insight.tk/countries/")
+      .then( response => {
+        if (response && response.data) {
+          getWebs(response.data);
+        }
+      })
       .catch((err) => console.log(err));
-
-    if (payload && payload.data) {
-      setCountries(payload.data);
-      getWebs();
-    }
   };
 
-  const getWebs = async () => {
-    const payload = await axios
-      .get("https://api-insight.tk/webs")
+  const getWebs = async (countries) => {
+    await axios.get("https://api-insight.tk/webs")
+      .then( response => {
+        if (response && response.data) {
+          response.data.map((web) => {
+            countries.map((country) => {
+              if (web.country == country.id ) {
+                web.country = String(country.name);
+              }
+            });
+          });
+          setData(response.data);
+        }
+      })
       .catch((err) => console.log(err));
-
-    if (payload && payload.data) {
-      payload.data.map((item) => {
-        countries.map((country) => {
-          if (country.id === item.country) {
-            item.country = String(country.name);
-          }
-        });
-      });
-      setData(payload.data);
-    }
   };
 
   const deleteWebs = async (id) => {
-    const payload = await axios
-      .delete(`https://api-insight.tk/webs/${id}/`)
+    await axios.delete(`https://api-insight.tk/webs/${id}/`)
+      .then( res => {
+        if (res) {
+          getCountries();
+          alert("Web eliminada con Exito!");
+        }
+      })
       .catch((err) => console.log(err));
-
-    router.reload();
   };
 
-  useEffect(() => {
+  useEffect( () => {
     getCountries();
   }, []);
 

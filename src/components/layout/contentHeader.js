@@ -9,7 +9,7 @@ const ContentHeaderApp = (props) => {
 
 	return (
 		<Breadcrumb>
-			<Breadcrumb.Item>
+			<Breadcrumb.Item key='001'>
 				<Link href="/tenders">
 					<a>
 						<HomeOutlined />
@@ -18,7 +18,7 @@ const ContentHeaderApp = (props) => {
 			</Breadcrumb.Item>
 				{navigation.map((item) => {
 					return (
-						<Breadcrumb.Item>
+						<Breadcrumb.Item key={ item.key }>
 							<Link href={ item.path }>
 								<a>
 									{ item.breadcrumbName }

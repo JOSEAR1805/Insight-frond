@@ -11,16 +11,17 @@ const Signin = () => {
   const onFinish = async (values) => {
     console.log(values);
 
-    const payload = await axios
+    await axios
       .post("https://api-insight.tk/users/login/", values)
+      .then( response => {
+        if (response.status == "200") {
+          if (process.browser) {
+            localStorage.setItem("user", JSON.stringify(response.data));
+            router.push("/tenders/");
+          }
+        }
+      })
       .catch((err) => alert("Error con los datos"));
-
-    if (payload.status == "200") {
-      if (process.browser) {
-        localStorage.setItem("user", JSON.stringify(payload.data));
-        router.push("/");
-      }
-    }
   };
 
   return (

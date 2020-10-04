@@ -80,11 +80,15 @@ const ProfileList = () => {
   };
 
   const deleteProfile = async (id) => {
-    const payload = await axios
+    await axios
       .delete(`https://api-insight.tk/profiles/${id}/`)
+      .then(resp => {
+        if (resp) {
+          getProfile();
+          alert("Perfil eliminado con Exito!");
+        }
+      })
       .catch((err) => console.log(err));
-
-    router.reload();
   };
 
   useEffect(() => {

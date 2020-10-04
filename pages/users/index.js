@@ -45,15 +45,15 @@ const UserList = () => {
       key: "is_staff",
       search: true,
       render: (text, record) => {
-        return text ? "Administrador" : "Usuario";
+        return text ? "Administrador" : "Estándar";
       },
     },
-    {
-      title: "Dirección",
-      dataIndex: "username",
-      key: "address",
-      search: true,
-    },
+    // {
+    //   title: "Dirección",
+    //   dataIndex: "username",
+    //   key: "address",
+    //   search: true,
+    // },
     {
       title: "Acción",
       dataIndex: "key",
@@ -76,15 +76,13 @@ const UserList = () => {
               </Link>
             </Col>
             <Col>
-              <Link href="#">
-                <Tooltip title="Eliminar!" color={"red"}>
-                  <DeleteTwoTone
-                    onClick={() => deleteUser(record.id)}
-                    twoToneColor="#ff0000"
-                    style={{ fontSize: "16px" }}
-                  />
-                </Tooltip>
-              </Link>
+              <Tooltip title="Eliminar!" color={"red"}>
+                <DeleteTwoTone
+                  onClick={() => deleteUser(record.id)}
+                  twoToneColor="#ff0000"
+                  style={{ fontSize: "16px" }}
+                />
+              </Tooltip>
             </Col>
           </Row>
         );
@@ -107,11 +105,15 @@ const UserList = () => {
   };
 
   const deleteUser = async (id) => {
-    const payload = await axios
+    await axios
       .delete(`https://api-insight.tk/users/${id}/`)
+      .then( res => {
+        if (res) {
+          getUsers();
+          alert("Usuario Eliminado con Exito!");
+        }
+      })
       .catch((err) => console.log(err));
-
-    router.reload();
   };
 
   useEffect(() => {

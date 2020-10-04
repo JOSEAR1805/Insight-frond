@@ -38,30 +38,20 @@ const sidebarApp = () => {
       <img className="logo" src="/logo.jpeg" alt="my image" />
       <Menu theme="dark" defaultSelectedKeys={["0"]} mode="inline">
         <Menu.Item key="0" icon={<HomeOutlined />}>
-          <Link href="/" title="Inicio">
+          <Link href="/">
             <a>Inicio</a>
           </Link>
         </Menu.Item>
 
-        {!user?.is_staff && (
-          <Menu.Item key="1" icon={<AreaChartOutlined />}>
-            <Link href="/tenders/" title="Licitaciones">
-              <a>Licitaciones</a>
-            </Link>
-          </Menu.Item>
-        )}
-
-        {user?.is_staff && (
-          <Menu.Item key="1" icon={<AreaChartOutlined />}>
-            <Link href="/tenders/" title="Licitaciones">
-              <a>Licitaciones</a>
-            </Link>
-          </Menu.Item>
-        )}
+        <Menu.Item key="1" icon={<AreaChartOutlined />}>
+          <Link href="/tenders/">
+            <a>Licitaciones</a>
+          </Link>
+        </Menu.Item>
 
         {user?.is_staff && (
           <Menu.Item key="2" icon={<LinkOutlined />}>
-            <Link href="/webs/" title="Webs">
+            <Link href="/webs/">
               <a>Webs</a>
             </Link>
           </Menu.Item>
@@ -77,7 +67,7 @@ const sidebarApp = () => {
 
         {user?.is_staff && (
           <Menu.Item key="4" icon={<ProfileOutlined />}>
-            <Link href="/profiles/" title="Perfiles">
+            <Link href="/profiles/">
               <a>Perfiles</a>
             </Link>
           </Menu.Item>

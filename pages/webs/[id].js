@@ -9,8 +9,9 @@ const { Option } = Select;
 
 const WebForm = () => {
   const [countries, setCountries] = useState([]);
+  const [webId, setWebId] = useState(null);
   const router = useRouter();
-  const { id } = router.query;
+  
   const [form] = Form.useForm();
   const navigation = [
     {
@@ -20,19 +21,20 @@ const WebForm = () => {
     },
     {
       key: "2",
-      path: `/webs/${id}`,
+      path: `/webs/${webId}`,
       breadcrumbName: "Detallles de Web",
     },
   ];
 
-  const getCountry = async () => {
+  const getCountry = async (id) => {
     const payload = await axios
       .get("https://api-insight.tk/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
+      console.log(payload.data)
       setCountries(payload.data);
-      getData();
+      getData(id);
     }
   };
 
@@ -42,7 +44,7 @@ const WebForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .put(`https://api-insight.tk/webs/${id}/`, values)
+      .put(`https://api-insight.tk/webs/${webId}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -52,7 +54,7 @@ const WebForm = () => {
     }
   };
 
-  const getData = async () => {
+  const getData = async (id) => {
     console.log("id recibe", id);
     const payload = await axios
       .get(`https://api-insight.tk/webs/${id}/`)
@@ -81,8 +83,11 @@ const WebForm = () => {
   };
 
   useEffect(() => {
-    getCountry();
-  }, [getCountry]);
+    const { id } = router.query;
+    setWebId(id)
+    getCountry(id);
+
+  }, [router]);
 
   return (
     <App navigation={navigation}>

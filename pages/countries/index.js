@@ -11,6 +11,7 @@ import axios from "axios";
 
 const CountryList = () => {
   const router = useRouter();
+  const [data, setData] = useState([]);
 
   const navigation = [
     {
@@ -21,12 +22,6 @@ const CountryList = () => {
   ];
 
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      search: true,
-    },
     {
       title: "Pais",
       dataIndex: "name",
@@ -40,7 +35,6 @@ const CountryList = () => {
       search: false,
       width: "10%",
       render: (text, record) => {
-        console.log(record);
         return (
           <Row gutter={[8, 0]} justify="center">
             <Col>
@@ -70,29 +64,30 @@ const CountryList = () => {
     },
   ];
 
-  const [data, setData] = useState([]);
-
   const getCountry = async () => {
-    const payload = await axios
+    await axios
       .get("https://api-insight.tk/countries/")
+      .then(res => {
+        if (res && res.data) {
+          setData(res.data);
+        }
+      })
       .catch((err) => console.log(err));
-
-    if (payload && payload.data) {
-      setData(payload.data);
-    }
-  };
-
-  const deleteCountry = async (id) => {
-    const payload = await axios
-      .delete(`https://api-insight.tk/countries/${id}/`)
-      .catch((err) => console.log(err));
-
-    router.reload();
   };
 
   useEffect(() => {
     getCountry();
   }, []);
+
+  const deleteCountry = async (id) => {
+    await axios
+      .delete(`https://api-insight.tk/countries/${id}/`)
+      .then(() => {
+        getCountry();
+        alert("Pais eliminado con Exito!");
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <App navigation={navigation}>

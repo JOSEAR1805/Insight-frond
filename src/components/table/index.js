@@ -63,7 +63,7 @@ const TableSystem = (props) => {
 	return (
 		<Row>
 			<Col span={24}>
-				<Table dataSource={data} columns={sourceColumns} size="small" scroll={{x: 'auto'}} pagination={{ position: [ 'bottomCenter']  }} className="text-color-secondary" />;
+				<Table dataSource={data} columns={sourceColumns} size="small" scroll={{x: 'auto'}} pagination={{ position: [ 'bottomCenter']  }} className="text-color-secondary" />
 			</Col>
 		</Row>
 	);
