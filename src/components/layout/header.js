@@ -19,14 +19,16 @@ const HeaderApp = () => {
   return (
     <Header>
       <Row justify="end" gutter={[16, 0]}>
-        <Col>
+        {/* <Col>
           <Tooltip title="Notificaciones!" color={"gold"}>
             <BellOutlined
               twoToneColor="#ff0000"
               style={{ fontSize: "18px", paddingTop: "12px" }}
             />
           </Tooltip>
-        </Col>
+        </Col> */}
+        <Col>{`${user?.first_name} ${user?.last_name}`}</Col>
+
         <Col>
           <Tooltip title="Cerrar sesión" color={"gold"}>
             <LoginOutlined
@@ -41,7 +43,6 @@ const HeaderApp = () => {
             />
           </Tooltip>
         </Col>
-        <Col>{`${user?.first_name} ${user?.last_name}`}</Col>
       </Row>
     </Header>
   );
