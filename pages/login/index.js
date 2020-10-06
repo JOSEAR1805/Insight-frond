@@ -30,7 +30,7 @@ const Signin = () => {
       <Row justify="center" style={{ height: "100%" }}>
         <Col sm={24} md={8} className="colForm">
           <Card hoverable bordered={false} className="cardForm">
-            <img width="100%" height="250px" src="/logo.jpeg" alt="my image" />
+            <img width="100%" height="250px" src="/image/logo.jpeg" alt="my image" />
             <Form
               name="normal_login"
               className="login-form"
