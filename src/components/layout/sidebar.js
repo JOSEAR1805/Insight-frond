@@ -35,7 +35,7 @@ const sidebarApp = () => {
       }}
     >
       {/* <div className="logo" /> */}
-      <img className="logo" src="/image/logo2.jpeg" alt="my image" />
+      <img className="logo" src="/image/logo_2.png" alt="my image" />
       <Menu theme="dark" defaultSelectedKeys={["0"]} mode="inline">
         <Menu.Item key="0" icon={<HomeOutlined />}>
           <Link href="/">
