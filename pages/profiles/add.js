@@ -23,7 +23,7 @@ const ProfilesForm = () => {
 	
 	const onFinish = async (values) => {
     const payload = await axios
-      .post("https://api-insight.tk/profiles/", values)
+      .post("https://insightcron.com/profiles/", values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

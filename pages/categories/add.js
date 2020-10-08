@@ -31,7 +31,7 @@ const CategoryForm = () => {
 
   const getCountry = async () => {
     const payload = await axios
-      .get("https://api-insight.tk/countries/")
+      .get("https://insightcron.com/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -43,7 +43,7 @@ const CategoryForm = () => {
     console.log("Success:", values);
 
     const payload = await axios
-      .post("https://api-insight.tk/categories/", values)
+      .post("https://insightcron.com/categories/", values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

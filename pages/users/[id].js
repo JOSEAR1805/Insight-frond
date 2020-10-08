@@ -42,7 +42,7 @@ const UserForm = () => {
   const getDataUser = async (userId) => {
     console.log("getDataUser");
     const payload = await axios
-      .get(`https://api-insight.tk/users/${userId}/`)
+      .get(`https://insightcron.com/users/${userId}/`)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -75,7 +75,7 @@ const UserForm = () => {
 
   const getCountries = async () => {
     const payload = await axios
-      .get("https://api-insight.tk/countries/")
+      .get("https://insightcron.com/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -85,7 +85,7 @@ const UserForm = () => {
 
   const getProfiles = async () => {
     const payload = await axios
-      .get("https://api-insight.tk/profiles/")
+      .get("https://insightcron.com/profiles/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -95,7 +95,7 @@ const UserForm = () => {
 
   const getSearchSettings = async (getIdeUser) => {
     const payload = await axios
-      .get("https://api-insight.tk/search_settings/")
+      .get("https://insightcron.com/search_settings/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -105,7 +105,7 @@ const UserForm = () => {
 
   const deleteSearchSettings = async (id) => {
     const payload = await axios
-      .delete(`https://api-insight.tk/search_settings/${id}/`)
+      .delete(`https://insightcron.com/search_settings/${id}/`)
       .catch((err) => console.log(err));
 
     setSearchSettings(payload.data);
@@ -116,7 +116,7 @@ const UserForm = () => {
 
   const updateUser = async (values) => {
     const payload = await axios
-      .put(`https://api-insight.tk/users/${idUser}/`, values)
+      .put(`https://insightcron.com/users/${idUser}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -129,7 +129,7 @@ const UserForm = () => {
   const saveSearchSettings = async (values) => {
     values.user = parseInt(idUser);
     const payload = await axios
-      .post(`https://api-insight.tk/search_settings/`, values)
+      .post(`https://insightcron.com/search_settings/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

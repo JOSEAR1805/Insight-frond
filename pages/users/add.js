@@ -22,7 +22,7 @@ const UserForm = () => {
 
   const onFinish = async (values) => {
     await axios
-      .post("https://api-insight.tk/users/", values)
+      .post("https://insightcron.com/users/", values)
       .then( resp => {
         if (resp && resp.data) {
           router.push("/users");

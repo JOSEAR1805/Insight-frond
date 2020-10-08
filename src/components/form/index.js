@@ -11,7 +11,7 @@ const FormSystem = (props) => {
     console.log("Success:", values);
 
     const payload = await axios
-      .post("https://api-insight.tk/users/", values)
+      .post("https://insightcron.com/users/", values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

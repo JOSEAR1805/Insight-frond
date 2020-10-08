@@ -71,7 +71,7 @@ const ProfileList = () => {
 
   const getProfile = async () => {
     const payload = await axios
-      .get("https://api-insight.tk/profiles/")
+      .get("https://insightcron.com/profiles/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -81,7 +81,7 @@ const ProfileList = () => {
 
   const deleteProfile = async (id) => {
     await axios
-      .delete(`https://api-insight.tk/profiles/${id}/`)
+      .delete(`https://insightcron.com/profiles/${id}/`)
       .then(resp => {
         if (resp) {
           getProfile();

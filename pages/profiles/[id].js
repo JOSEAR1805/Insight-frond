@@ -26,7 +26,7 @@ const ProfilesForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .put(`https://api-insight.tk/profiles/${id}/`, values)
+      .put(`https://insightcron.com/profiles/${id}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -38,7 +38,7 @@ const ProfilesForm = () => {
 
   const getData = async () => {
     const payload = await axios
-      .get(`https://api-insight.tk/profiles/${id}/`)
+      .get(`https://insightcron.com/profiles/${id}/`)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

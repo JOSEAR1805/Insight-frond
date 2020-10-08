@@ -28,7 +28,7 @@ const WebForm = () => {
 
   const getCountry = async (id) => {
     const payload = await axios
-      .get("https://api-insight.tk/countries/")
+      .get("https://insightcron.com/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -44,7 +44,7 @@ const WebForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .put(`https://api-insight.tk/webs/${webId}/`, values)
+      .put(`https://insightcron.com/webs/${webId}/`, values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -57,7 +57,7 @@ const WebForm = () => {
   const getData = async (id) => {
     console.log("id recibe", id);
     const payload = await axios
-      .get(`https://api-insight.tk/webs/${id}/`)
+      .get(`https://insightcron.com/webs/${id}/`)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

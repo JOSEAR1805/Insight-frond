@@ -96,7 +96,7 @@ const UserList = () => {
     // At request level
 
     const payload = await axios
-      .get("https://api-insight.tk/users")
+      .get("https://insightcron.com/users")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -106,7 +106,7 @@ const UserList = () => {
 
   const deleteUser = async (id) => {
     await axios
-      .delete(`https://api-insight.tk/users/${id}/`)
+      .delete(`https://insightcron.com/users/${id}/`)
       .then( res => {
         if (res) {
           getUsers();

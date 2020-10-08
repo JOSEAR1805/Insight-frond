@@ -22,7 +22,7 @@ const CountryForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .post("https://api-insight.tk/countries/", values)
+      .post("https://insightcron.com/countries/", values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

@@ -76,7 +76,7 @@ const WebList = () => {
   ];
 
   const getCountries = async () => {
-    await axios.get("https://api-insight.tk/countries/")
+    await axios.get("https://insightcron.com/countries/")
       .then( response => {
         if (response && response.data) {
           getWebs(response.data);
@@ -86,7 +86,7 @@ const WebList = () => {
   };
 
   const getWebs = async (countries) => {
-    await axios.get("https://api-insight.tk/webs")
+    await axios.get("https://insightcron.com/webs")
       .then( response => {
         if (response && response.data) {
           response.data.map((web) => {
@@ -103,7 +103,7 @@ const WebList = () => {
   };
 
   const deleteWebs = async (id) => {
-    await axios.delete(`https://api-insight.tk/webs/${id}/`)
+    await axios.delete(`https://insightcron.com/webs/${id}/`)
       .then( res => {
         if (res) {
           getCountries();

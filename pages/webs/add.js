@@ -26,7 +26,7 @@ const WebForm = () => {
 
   const getCountry = async () => {
     const payload = await axios
-      .get("https://api-insight.tk/countries/")
+      .get("https://insightcron.com/countries/")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -40,7 +40,7 @@ const WebForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .post("https://api-insight.tk/webs/", values)
+      .post("https://insightcron.com/webs/", values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

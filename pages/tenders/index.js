@@ -15,7 +15,7 @@ const TenderList = () => {
     let userLocal = JSON.parse(localStorage.getItem("user"));
 
     await axios
-      .get("https://api-insight.tk/users/tender-users/", {
+      .get("https://insightcron.com/users/tender-users/", {
         headers: {
           Authorization: `Token ${userLocal.token}`,
         },
@@ -116,7 +116,7 @@ const TenderList = () => {
 
   // const deleteTender = async (id) => {
   //   await axios
-  //     .delete(`https://api-insight.tk/tenders/${id}/`)
+  //     .delete(`https://insightcron.com/tenders/${id}/`)
   //     .then( res => {
   //       if (res) {
   //         getUsers();

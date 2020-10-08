@@ -25,14 +25,14 @@ const CountryForm = () => {
 
   const onFinish = async (values) => {
     await axios
-      .put(`https://api-insight.tk/countries/${id}/`, values)
+      .put(`https://insightcron.com/countries/${id}/`, values)
       .then(router.push("/countries"))
       .catch((err) => alert("Error al Editar"));
   };
 
   const getData = async () => {
     const payload = await axios
-      .get(`https://api-insight.tk/countries/${id}/`)
+      .get(`https://insightcron.com/countries/${id}/`)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {

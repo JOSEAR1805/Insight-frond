@@ -80,7 +80,7 @@ const CategoryList = () => {
   const getCountry = async () => {
     // At request level
     const payload = await axios
-      .get("https://api-insight.tk/countries/")
+      .get("https://insightcron.com/countries/")
       .catch((err) => console.log(err));
 
     // console.log(payload.data);
@@ -93,7 +93,7 @@ const CategoryList = () => {
 
   const getCategory = async (aux) => {
     let payload = await axios
-      .get("https://api-insight.tk/categories")
+      .get("https://insightcron.com/categories")
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
@@ -113,7 +113,7 @@ const CategoryList = () => {
 
   const deleteCategory = async (id) => {
     const payload = await axios
-      .delete(`https://api-insight.tk/categories/${id}/`)
+      .delete(`https://insightcron.com/categories/${id}/`)
       .catch((err) => console.log(err));
 
     router.reload();

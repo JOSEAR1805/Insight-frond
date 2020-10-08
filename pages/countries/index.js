@@ -66,7 +66,7 @@ const CountryList = () => {
 
   const getCountry = async () => {
     await axios
-      .get("https://api-insight.tk/countries/")
+      .get("https://insightcron.com/countries/")
       .then(res => {
         if (res && res.data) {
           setData(res.data);
@@ -81,7 +81,7 @@ const CountryList = () => {
 
   const deleteCountry = async (id) => {
     await axios
-      .delete(`https://api-insight.tk/countries/${id}/`)
+      .delete(`https://insightcron.com/countries/${id}/`)
       .then(() => {
         getCountry();
         alert("Pais eliminado con Exito!");

@@ -12,7 +12,7 @@ const Signin = () => {
     console.log(values);
 
     await axios
-      .post("https://api-insight.tk/users/login/", values)
+      .post("https://insightcron.com/users/login/", values)
       .then( response => {
         if (response.status == "200") {
           if (process.browser) {

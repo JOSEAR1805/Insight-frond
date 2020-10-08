@@ -70,7 +70,7 @@ const searchSettingsForm = () => {
 
   const getCountry = async () => {
     const payload = await axios
-      .get("https://api-insight.tk/countries/")
+      .get("https://insightcron.com/countries/")
       .catch((err) => console.log(err));
 
     setCountries(payload.data);
@@ -78,7 +78,7 @@ const searchSettingsForm = () => {
 
   const getCategory = async () => {
     const payload = await axios
-      .get("https://api-insight.tk/categories")
+      .get("https://insightcron.com/categories")
       .catch((err) => console.log(err));
 
     setCategories(payload.data);
@@ -105,7 +105,7 @@ const searchSettingsForm = () => {
 
   const onFinish = async (values) => {
     const payload = await axios
-      .post("https://api-insight.tk/search_settings/", values)
+      .post("https://insightcron.com/search_settings/", values)
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
