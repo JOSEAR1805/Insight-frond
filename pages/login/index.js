@@ -3,6 +3,7 @@ import { Row, Col, Card, Form, Input, Button, Layout } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const { Header, Footer } = Layout;
 
@@ -26,6 +27,9 @@ const Signin = () => {
 
   return (
     <Layout style={{ height: "100vh" }}>
+      <Head>
+        <title>Insight Intranet</title>
+      </Head>
       <Header></Header>
       <Row justify="center" style={{ height: "100%" }}>
         <Col sm={24} md={8} className="colForm">

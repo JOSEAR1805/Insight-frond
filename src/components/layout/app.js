@@ -17,6 +17,7 @@ const SiderDemo = (props) => {
           httpEquiv="Content-Security-Policy: default-src *://66.97.36.222"
           content="upgrade-insecure-requests"
         />
+        <title>Insight Intranet</title>
       </Head>
 
       <SiderbarApp />
