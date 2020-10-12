@@ -1,14 +1,15 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 
 import App from "../../src/components/layout/app";
-import { Form, Input, Row, Col, Button } from "antd";
+import { Form, Input, Row, Col, Button, notification, Spin } from "antd";
 
 const CountryForm = () => {
   const [form] = Form.useForm();
   const router = useRouter();
-  const { id } = router.query;
+  const [loading, setLoading] = useState(false);
+  const [idUser, setIdUser] = useState();
 
   const navigation = [
     {
@@ -18,40 +19,61 @@ const CountryForm = () => {
     },
     {
       key: "2",
-      path: `/countries/${id}`,
+      path: `/countries/${idUser}`,
       breadcrumbName: "Detalles de Pais",
     },
   ];
 
   const onFinish = async (values) => {
+    setLoading(true);
     await axios
-      .put(`https://insightcron.com/countries/${id}/`, values)
-      .then(router.push("/countries"))
-      .catch((err) => alert("Error al Editar"));
+      .put(`https://insightcron.com/countries/${idUser}/`, values)
+      .then(() => {
+        notification.success({
+          message: 'Pais editado con exito!!',
+          placement: 'bottomRight',
+        });
+        setTimeout(() => { 
+          setLoading(false) 
+          router.push("/countries");
+        }, 100);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err)
+      });
   };
 
-  const getData = async () => {
-    const payload = await axios
+  const getData = async (id) => {
+    setLoading(true);
+    await axios
       .get(`https://insightcron.com/countries/${id}/`)
-      .catch((err) => console.log(err));
-
-    if (payload && payload.data) {
-      form.setFields([
-        {
-          name: "name",
-          value: payload.data?.name,
-        },
-      ]);
-    }
+      .then(resp => {
+        if (resp && resp.data) {
+          form.setFields([
+            {
+              name: "name",
+              value: resp.data?.name,
+            },
+          ]);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err)
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
-    getData();
-  }, [getData]);
+    setIdUser(router.query?.id);
+    getData(router.query?.id);
+  }, [router]);
 
   return (
     <App navigation={navigation}>
-      <Row justify="center" style={{ "padding-top": "15px" }}>
+      <Spin tip="Cargando..." spinning={loading}>
+        <Row justify="center" style={{ paddingTop: "15px" }}>
         <Col md={24} lg={16}>
           <Form
             layout="vertical"
@@ -94,6 +116,7 @@ const CountryForm = () => {
           </Form>
         </Col>
       </Row>
+      </Spin>
     </App>
   );
 };

@@ -1,32 +1,15 @@
-import { Row, Col, Button, Tooltip } from "antd";
+import { Row, Col, Tooltip, notification, Spin } from "antd";
 import App from "../../src/components/layout/app";
 import { useState, useEffect } from "react";
 
 import TableSystem from "../../src/components/table";
-import Link from "next/link";
-import { DeleteTwoTone, EyeTwoTone, EditTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone } from "@ant-design/icons";
 
 import axios from "axios";
 
 const TenderList = () => {
   const [tenders, setTenders] = useState([]);
-
-  const getUsers = async () => {
-    let userLocal = JSON.parse(localStorage.getItem("user"));
-
-    await axios
-      .get("https://insightcron.com/users/tender-users/", {
-        headers: {
-          Authorization: `Token ${userLocal.token}`,
-        },
-      })
-      .then( response => {
-        if (response && response.data?.tenders) {
-          setTenders(response.data?.tenders);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+  const [loading, setLoading] = useState(false);
 
   const columns = [
     {
@@ -86,50 +69,76 @@ const TenderList = () => {
       search: true,
       width: "20%",
     },
-    // {
-    //   title: "Acción",
-    //   dataIndex: "key",
-    //   key: "key",
-    //   search: false,
-    //   width: "5%",
-    //   render: (text, record) => {
-    //     return (
-    //       <Row gutter={[8, 0]} justify="center">
-    //         <Col>
-    //           <Tooltip title="Eliminar!" color={"red"}>
-    //             <DeleteTwoTone
-    //               onClick={() => deleteTender(record.id)}
-    //               twoToneColor="#ff0000"
-    //               style={{ fontSize: "16px" }}
-    //             />
-    //           </Tooltip>
-    //         </Col>
-    //       </Row>
-    //     );
-    //   },
-    // },
+    {
+      title: "Acción",
+      dataIndex: "key",
+      key: "key",
+      search: false,
+      width: "5%",
+      render: (text, record) => {
+        return (
+          <Row gutter={[8, 0]} justify="center">
+            <Col>
+              <Tooltip title="Eliminar!" color={"red"}>
+                <DeleteTwoTone
+                  onClick={() => deleteTender(record.id)}
+                  twoToneColor="#ff0000"
+                  style={{ fontSize: "16px" }}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
+        );
+      },
+    },
   ];
+
+  const getUsers = async () => {
+    setLoading(true);
+    let userLocal = JSON.parse(localStorage.getItem("user"));
+
+    await axios
+      .get("https://insightcron.com/users/tender-users/", {
+        headers: {
+          Authorization: `Token ${userLocal.token}`,
+        },
+      })
+      .then( response => {
+        if (response && response.data?.tenders) {
+          setTenders(response.data?.tenders);
+        }
+        setLoading(false)
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err)
+      });
+  };
+
+  const deleteTender = async (id) => {
+    await axios
+      .delete(`https://insightcron.com/tenders/${id}/`)
+      .then( res => {
+        if (res) {
+          getUsers();
+          notification.success({
+            message: 'Liquidación eliminada con exito!!',
+            placement: 'bottomRight',
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     getUsers();
   }, []);
 
-  // const deleteTender = async (id) => {
-  //   await axios
-  //     .delete(`https://insightcron.com/tenders/${id}/`)
-  //     .then( res => {
-  //       if (res) {
-  //         getUsers();
-  //         alert("Liquidación Eliminada con Exito!");
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
-
   return (
     <App>
-      <TableSystem columns={columns} data={tenders} />
+      <Spin tip="Cargando..." spinning={loading}>
+        <TableSystem columns={columns} data={tenders} />
+      </Spin>
     </App>
   );
 };

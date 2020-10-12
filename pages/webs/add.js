@@ -1,5 +1,5 @@
 import App from "../../src/components/layout/app";
-import { Form, Input, Row, Col, Button, Select } from "antd";
+import { Form, Input, Row, Col, Button, Select, notification, Spin, } from "antd";
 import axios from "axios";
 import { useRouter } from "next/router";
 import TextArea from "antd/lib/input/TextArea";
@@ -11,6 +11,8 @@ const WebForm = () => {
   const router = useRouter();
   const [form] = Form.useForm();
   const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const navigation = [
     {
       key: "1",
@@ -39,15 +41,29 @@ const WebForm = () => {
   };
 
   const onFinish = async (values) => {
-    const payload = await axios
+    setLoading(true)
+    await axios
       .post("https://insightcron.com/webs/", values)
-      .catch((err) => console.log(err));
-
-    if (payload && payload.data) {
-      router.push("/webs");
-    } else {
-      alert("Error guardando");
-    }
+      .then( resp => {
+        if (resp && resp.data) {
+          notification.success({
+            message: 'Web creada con exito!!',
+            placement: 'bottomRight',
+          });
+          setTimeout(() => { 
+            setLoading(false) 
+            router.push("/webs");
+          }, 100);
+        } 
+      })
+      .catch((err) => {
+        console.log(err)
+        notification.error({
+          message: 'Error al guardar Web!!',
+          placement: 'bottomRight',
+        });
+        setTimeout(() => { setLoading(false) }, 100);
+      });
   };
 
   useEffect(() => {
@@ -56,114 +72,117 @@ const WebForm = () => {
 
   return (
     <App navigation={navigation}>
-      <Row justify="center" style={{ "padding-top": "15px" }}>
-        <Col md={24} lg={16}>
-          <Form
-            layout="vertical"
-            name="basic"
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-          >
-            <Row gutter={[16, 16]}>
+      <Spin tip="Cargando..." spinning={loading}>
 
-              <Col xs={24} sm={12} md={12}>
-                <Form.Item
-                  label={'Nombre de Intitución'}
-                  name={'name'}
-                  rules={[
-                    {
-                      required: true,
-                      // message: "Por favor ingrese un nombre!",
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder={'Nombre de Institución'}
-                    type={'text'}
-                    size="small"
-                  />
-                </Form.Item>
-              </Col>
-              
-              <Col xs={24} sm={12} md={12}>
-                <Form.Item
-                  label={'Pais'}
-                  name={'country'}
-                  rules={[
-                    {
-                      required: true,
-                      // message: "Por favor ingrese un nombre!",
-                    },
-                  ]}
-                >
-                  <Select
-                    size="small"
-                    onChange={onGenderChange}
-                    placeholder="seleccionar país"
+        <Row justify="center" style={{ paddingTop: "15px" }}>
+          <Col md={24} lg={16}>
+            <Form
+              layout="vertical"
+              name="basic"
+              initialValues={{
+                remember: true,
+              }}
+              onFinish={onFinish}
+            >
+              <Row gutter={[16, 16]}>
+
+                <Col xs={24} sm={12} md={12}>
+                  <Form.Item
+                    label={'Nombre de Intitución'}
+                    name={'name'}
+                    rules={[
+                      {
+                        required: true,
+                        // message: "Por favor ingrese un nombre!",
+                      },
+                    ]}
                   >
-                    {countries.map((resp) => {
-                      return <Option value={resp.id}>{resp.name}</Option>;
-                    })}
-                  </Select>
-                </Form.Item>
-              </Col>
+                    <Input
+                      placeholder={'Nombre de Institución'}
+                      type={'text'}
+                      size="small"
+                    />
+                  </Form.Item>
+                </Col>
+                
+                <Col xs={24} sm={12} md={12}>
+                  <Form.Item
+                    label={'Pais'}
+                    name={'country'}
+                    rules={[
+                      {
+                        required: true,
+                        // message: "Por favor ingrese un nombre!",
+                      },
+                    ]}
+                  >
+                    <Select
+                      size="small"
+                      onChange={onGenderChange}
+                      placeholder="seleccionar país"
+                    >
+                      {countries.map((resp) => {
+                        return <Option value={resp.id}>{resp.name}</Option>;
+                      })}
+                    </Select>
+                  </Form.Item>
+                </Col>
 
-              <Col span={24}>
-                <Form.Item
-                  label={'Url Web'}
-                  name={'url'}
-                  rules={[
-                    {
-                      required: true,
-                      // message: "Por favor ingrese un nombre!",
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder={'Introduzca la url'}
-                    type={'text'}
+                <Col span={24}>
+                  <Form.Item
+                    label={'Url Web'}
+                    name={'url'}
+                    rules={[
+                      {
+                        required: true,
+                        // message: "Por favor ingrese un nombre!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      placeholder={'Introduzca la url'}
+                      type={'text'}
+                      size="small"
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col span={24}>
+                  <Form.Item
+                    label={'Comentario'}
+                    name={'comments'}
+                    rules={[
+                      {
+                        required: true,
+                        // message: "Por favor ingrese un nombre!",
+                      },
+                    ]}
+                  >
+                    <TextArea
+                      rows={1}
+                      size="small"
+                      placeholder={"Introduzca Comentarío"}
+                    />
+                  </Form.Item>
+                </Col>
+
+              </Row>
+              <Row justify="center">
+                <Col xs={24} sm={12} md={6}>
+                  <Button
+                    type="primary"
+                    block="true"
+                    htmlType="buttom"
                     size="small"
-                  />
-                </Form.Item>
-              </Col>
-
-              <Col span={24}>
-                <Form.Item
-                  label={'Comentario'}
-                  name={'comments'}
-                  rules={[
-                    {
-                      required: true,
-                      // message: "Por favor ingrese un nombre!",
-                    },
-                  ]}
-                >
-                  <TextArea
-										rows={1}
-										size="small"
-										placeholder={"Introduzca Comentarío"}
-									/>
-                </Form.Item>
-              </Col>
-
-            </Row>
-            <Row justify="center">
-              <Col xs={24} sm={12} md={6}>
-                <Button
-                  type="primary"
-                  block="true"
-                  htmlType="buttom"
-                  size="small"
-                >
-                  Guardar
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
+                  >
+                    Guardar
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          </Col>
+        </Row>
+      </Spin>
     </App>
   );
 };

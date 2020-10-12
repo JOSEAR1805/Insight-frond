@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Button, Tooltip } from "antd";
-import { useRouter } from "next/router";
+import { Row, Col, Button, Tooltip, notification, Spin } from "antd";
 
 import App from "../../src/components/layout/app";
 import TableSystem from "../../src/components/table";
 import Link from "next/link";
-import { DeleteTwoTone, EyeTwoTone, EditTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone, EyeTwoTone } from "@ant-design/icons";
 
 import axios from "axios";
 
 const UserList = () => {
-  const router = useRouter();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const navigation = [
     {
@@ -64,7 +64,7 @@ const UserList = () => {
         return (
           <Row gutter={[8, 0]} justify="center">
             <Col>
-              <Link href="/users/[edit]" as={`/users/${record.id}`}>
+              <Link href="/users/[id]" as={`/users/${record.id}`}>
                 <a>
                   <Tooltip title="Ver Detalle!" color={"cyan"}>
                     <EyeTwoTone
@@ -90,18 +90,14 @@ const UserList = () => {
     },
   ];
 
-  const [data, setData] = useState([]);
-
   const getUsers = async () => {
-    // At request level
-
-    const payload = await axios
+    setLoading(true);
+    await axios
       .get("https://insightcron.com/users")
+      .then(resp => setData(resp.data))
       .catch((err) => console.log(err));
 
-    if (payload && payload.data) {
-      setData(payload.data);
-    }
+    setLoading(false);
   };
 
   const deleteUser = async (id) => {
@@ -110,7 +106,10 @@ const UserList = () => {
       .then( res => {
         if (res) {
           getUsers();
-          alert("Usuario Eliminado con Exito!");
+          notification.success({
+            message: 'usuario eliminado con exito!!',
+            placement: 'bottomRight',
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -122,17 +121,19 @@ const UserList = () => {
 
   return (
     <App navigation={navigation}>
-      <Row gutter={[8, 16]} justify="end">
-        <Col>
-          <Link href="/users/add">
-            <Button type="primary" size="small">
-              NUEVO USUARIO
-            </Button>
-          </Link>
-        </Col>
-      </Row>
+      <Spin tip="Cargando..." spinning={loading}>
+        <Row gutter={[8, 16]} justify="end">
+          <Col>
+            <Link href="/users/add">
+              <Button type="primary" size="small">
+                NUEVO USUARIO
+              </Button>
+            </Link>
+          </Col>
+        </Row>
 
-      <TableSystem columns={columns} data={data} />
+        <TableSystem columns={columns} data={data} />
+      </Spin>
     </App>
   );
 };

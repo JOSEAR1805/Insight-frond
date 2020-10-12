@@ -1,5 +1,5 @@
-import React from "react";
-import { Row, Col, Card, Form, Input, Button, Layout } from "antd";
+import { useState } from "react";
+import { Row, Col, Card, Form, Input, Button, Layout, notification, Spin } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -9,20 +9,34 @@ const { Header, Footer } = Layout;
 
 const Signin = () => {
   const router = useRouter();
-  const onFinish = async (values) => {
-    console.log(values);
+  const [loading, setLoading] = useState(false);
 
+  const onFinish = async (values) => {
+    setLoading(true);
     await axios
       .post("https://insightcron.com/users/login/", values)
       .then( response => {
         if (response.status == "200") {
           if (process.browser) {
             localStorage.setItem("user", JSON.stringify(response.data));
-            router.push("/tenders/");
+            notification.success({
+              message: 'Inicio de Sesión Exitoso!!',
+              placement: 'bottomRight',
+            });
           }
+          setTimeout(() => { 
+            setLoading(false) 
+            router.push("/tenders/");
+          }, 100);
         }
       })
-      .catch((err) => alert("Error con los datos"));
+      .catch((err) => {
+        notification.error({
+          message: 'Error con los datos Ingresados!!',
+          placement: 'bottomRight',
+        });
+        setTimeout(() => { setLoading(false) }, 100);
+      });
   };
 
   return (
@@ -33,7 +47,8 @@ const Signin = () => {
       <Header></Header>
       <Row justify="center" style={{ height: "100%" }}>
         <Col sm={24} md={8} className="colForm">
-          <Card hoverable bordered={false} className="cardForm">
+          <Spin tip="Cargando..." spinning={loading}>
+            <Card hoverable bordered={false} className="cardForm">
             <img width="100%" height="250px" src="/image/logo.png" alt="my image" />
             <Form
               name="normal_login"
@@ -100,6 +115,7 @@ const Signin = () => {
               </Row>
             </Form>
           </Card>
+          </Spin>
         </Col>
       </Row>
       <Footer>Insight 2020</Footer>

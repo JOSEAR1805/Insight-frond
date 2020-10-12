@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Button, Tooltip } from "antd";
+import { Row, Col, Button, Tooltip, notification, Spin } from "antd";
 import { useRouter } from "next/router";
 
 import App from "../../src/components/layout/app";
 import TableSystem from "../../src/components/table";
 import Link from "next/link";
-import { DeleteTwoTone, EyeTwoTone, EditTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone, EyeTwoTone } from "@ant-design/icons";
 
 import axios from "axios";
 
 const WebList = () => {
   const router = useRouter();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const navigation = [
     {
@@ -82,10 +83,13 @@ const WebList = () => {
           getWebs(response.data);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err)
+      });
   };
 
   const getWebs = async (countries) => {
+    setLoading(true);
     await axios.get("https://insightcron.com/webs")
       .then( response => {
         if (response && response.data) {
@@ -97,6 +101,7 @@ const WebList = () => {
             });
           });
           setData(response.data);
+          setLoading(false);
         }
       })
       .catch((err) => console.log(err));
@@ -107,7 +112,10 @@ const WebList = () => {
       .then( res => {
         if (res) {
           getCountries();
-          alert("Web eliminada con Exito!");
+          notification.success({
+            message: 'Web  eliminada con exito!!',
+            placement: 'bottomRight',
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -119,19 +127,30 @@ const WebList = () => {
 
   return (
     <App navigation={navigation}>
-      <Row gutter={[8, 16]} justify="end">
-        <Col>
-          <Link href="/webs/add">
-            <a>
-              <Button type="primary" size="small">
-                NUEVA WEB
-              </Button>
-            </a>
-          </Link>
-        </Col>
-      </Row>
-
-      <TableSystem columns={columns} data={data} />
+      <Spin tip="Cargando..." spinning={loading}>
+        <Row gutter={[8, 16]} justify="end">
+          <Col>
+            <Link href="/webs/add">
+              <a>
+                <Button type="primary" size="small">
+                  NUEVA WEB
+                </Button>
+              </a>
+            </Link>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <p>
+              <strong>IMPORTANTE: </strong> 
+              En esta pantalla usted podrá visualizar y crear las WEBS que fueron configuradas para realizar SCRAPING diariamente.
+              <br/>
+              La activación de una Nueva WEB creada puede llevar hasta 72 hs.
+            </p>
+          </Col>
+        </Row>
+        <TableSystem columns={columns} data={data} />
+      </Spin>
     </App>
   );
 };

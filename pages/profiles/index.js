@@ -1,16 +1,15 @@
-import { Row, Col, Button, Tooltip } from "antd";
+import { Row, Col, Button, Tooltip, notification, Spin } from "antd";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 
 import App from "../../src/components/layout/app";
 import TableSystem from "../../src/components/table";
 import Link from "next/link";
-import { DeleteTwoTone, EyeTwoTone, EditTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone, EyeTwoTone } from "@ant-design/icons";
 import axios from "axios";
 
 const ProfileList = () => {
-  const router = useRouter();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const navigation = [
     {
@@ -43,7 +42,7 @@ const ProfileList = () => {
         return (
           <Row gutter={[8, 0]} justify="center">
             <Col>
-              <Link href="/profiles/[edit]" as={`/profiles/${record.id}`}>
+              <Link href="/profiles/[id]" as={`/profiles/${record.id}`}>
                 <a>
                   <Tooltip title="Ver Detalle!" color={"cyan"}>
                     <EyeTwoTone
@@ -70,6 +69,8 @@ const ProfileList = () => {
   ];
 
   const getProfile = async () => {
+    setLoading(true);
+
     const payload = await axios
       .get("https://insightcron.com/profiles/")
       .catch((err) => console.log(err));
@@ -77,6 +78,8 @@ const ProfileList = () => {
     if (payload && payload.data) {
       setData(payload.data);
     }
+    setLoading(false)
+
   };
 
   const deleteProfile = async (id) => {
@@ -85,7 +88,10 @@ const ProfileList = () => {
       .then(resp => {
         if (resp) {
           getProfile();
-          alert("Perfil eliminado con Exito!");
+          notification.success({
+            message: 'Perfil eliminado con exito!!',
+            placement: 'bottomRight',
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -97,18 +103,28 @@ const ProfileList = () => {
 
   return (
     <App navigation={navigation}>
-      <Row gutter={[8, 16]} justify="end">
-        <Col>
-          <Link href="/profiles/add">
-            <a>
-              <Button type="primary" size="small">
-                NUEVO PERFIL
-              </Button>
-            </a>
-          </Link>
-        </Col>
-      </Row>
-      <TableSystem columns={columns} data={data} />
+      <Spin tip="Cargando..." spinning={loading}>
+        <Row gutter={[8, 16]} justify="end">
+          <Col>
+            <Link href="/profiles/add">
+              <a>
+                <Button type="primary" size="small">
+                  NUEVO PERFIL
+                </Button>
+              </a>
+            </Link>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <p>
+              <strong>IMPORTANTE: </strong>
+              Aquí podrá crear el PERFIL de BUSQUEDAS programado. Este perfil luego sera asociado a las URL (WEBS) seleccionadas para las búsquedas automatizadas diarias.
+            </p>
+          </Col>
+        </Row>
+        <TableSystem columns={columns} data={data} />
+      </Spin>
     </App>
   );
 };

@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Button, Tooltip } from "antd";
-import { useRouter } from "next/router";
+import { Row, Col, Button, Tooltip, notification, Spin } from "antd";
 
 import App from "../../src/components/layout/app";
 import TableSystem from "../../src/components/table";
 import Link from "next/link";
-import { DeleteTwoTone, EyeTwoTone, EditTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone, EyeTwoTone } from "@ant-design/icons";
 
 import axios from "axios";
 
 const CountryList = () => {
-  const router = useRouter();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const navigation = [
     {
@@ -38,7 +37,7 @@ const CountryList = () => {
         return (
           <Row gutter={[8, 0]} justify="center">
             <Col>
-              <Link href="/countries/[edit]" as={`/countries/${record.id}`}>
+              <Link href="/countries/[id]" as={`/countries/${record.id}`}>
                 <a>
                   <Tooltip title="Ver Detalle!" color={"cyan"}>
                     <EyeTwoTone
@@ -65,14 +64,19 @@ const CountryList = () => {
   ];
 
   const getCountry = async () => {
+    setLoading(true);
     await axios
       .get("https://insightcron.com/countries/")
       .then(res => {
         if (res && res.data) {
           setData(res.data);
+          setLoading(false);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err)
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -83,25 +87,30 @@ const CountryList = () => {
     await axios
       .delete(`https://insightcron.com/countries/${id}/`)
       .then(() => {
+        notification.success({
+          message: 'Pais eliminado con exito!!',
+          placement: 'bottomRight',
+        });
         getCountry();
-        alert("Pais eliminado con Exito!");
       })
       .catch((err) => console.log(err));
   };
 
   return (
     <App navigation={navigation}>
-      <Row gutter={[8, 16]} justify="end">
-        <Col>
-          <Link href="/countries/add">
-            <Button type="primary" size="small">
-              AGREGAR PAIS
-            </Button>
-          </Link>
-        </Col>
-      </Row>
+      <Spin tip="Cargando..." spinning={loading}>
+        <Row gutter={[8, 16]} justify="end">
+          <Col>
+            <Link href="/countries/add">
+              <Button type="primary" size="small">
+                AGREGAR PAIS
+              </Button>
+            </Link>
+          </Col>
+        </Row>
 
-      <TableSystem columns={columns} data={data} />
+        <TableSystem columns={columns} data={data} />
+      </Spin>
     </App>
   );
 };
