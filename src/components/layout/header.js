@@ -1,4 +1,4 @@
-import { Layout, Row, Col, Avatar, Tooltip,  Drawer, Card, Alert, notification } from "antd";
+import { Layout, Row, Col, Avatar, Tooltip,  Drawer, Card, Alert, notification, Badge } from "antd";
 import { UserOutlined, BellOutlined, LoginOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -9,6 +9,7 @@ const { Header } = Layout;
 const HeaderApp = () => {
   const [user, setUser] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [count, setCount] = useState(0);
 
   const router = useRouter();
   
@@ -32,6 +33,7 @@ const HeaderApp = () => {
     .then( response => {
       console.log(response)
       if (response && response.data?.tenders) {
+        setCount(response.data?.tenders.length)
         setNotifications(response.data?.tenders);
       }
     })
@@ -73,10 +75,14 @@ const HeaderApp = () => {
       <Row justify="end" gutter={[16, 0]}>
         <Col>
           <Tooltip title="Notificaciones!" color={"gold"} onClick={showDrawer}>
-            <BellOutlined
+            
+             <Badge count={count} overflowCount={9}>
+             <BellOutlined
               twoToneColor="#ff0000"
               style={{ fontSize: "18px", paddingTop: "12px" }}
             />
+              </Badge>
+
           </Tooltip>
         </Col>
         <Col>{`${user?.first_name} ${user?.last_name}`}</Col>
