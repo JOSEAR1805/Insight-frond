@@ -1,32 +1,84 @@
-import { Layout, Row, Col, Avatar, Tooltip } from "antd";
+import { Layout, Row, Col, Avatar, Tooltip,  Drawer, Card, Alert, notification } from "antd";
 import { UserOutlined, BellOutlined, LoginOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const { Header } = Layout;
 
 const HeaderApp = () => {
   const [user, setUser] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+
   const router = useRouter();
+  
+  const [visible, setVisible] = useState(false);
+  const showDrawer = () => {
+    setVisible(true);
+
+    
+  };
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  const getNotifications = async () => {
+    await axios
+    .get("https://insightcron.com/users/tender-users/", {
+      headers: {
+        Authorization: `Token ${JSON.parse(localStorage.getItem("user")).token}`,
+      },
+    })
+    .then( response => {
+      console.log(response)
+      if (response && response.data?.tenders) {
+        setNotifications(response.data?.tenders);
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    });
+  }
+
+  const handleClose = async (tender) => {
+    tender.tender_viewed = true;
+    // console.log('***************', tender)
+
+    let data = {
+      tender_viewed: 1,
+    }
+    await axios
+      .put(`https://insightcron.com/tenders/${tender.id}/`, data)
+      .then((resp) => {
+        console.log('resp', resp)
+      })
+      .catch((err) => {
+        console.log(err)
+        // notification.error({
+        //   message: 'Error al editar Usuario!!',
+        //   placement: 'bottomRight',
+        // });
+      });
+  }
 
   useEffect(() => {
     if (process.browser) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      setUser(user);
+      setUser(JSON.parse(localStorage.getItem("user")));
+      getNotifications();
     }
   }, []);
 
   return (
     <Header>
       <Row justify="end" gutter={[16, 0]}>
-        {/* <Col>
-          <Tooltip title="Notificaciones!" color={"gold"}>
+        <Col>
+          <Tooltip title="Notificaciones!" color={"gold"} onClick={showDrawer}>
             <BellOutlined
               twoToneColor="#ff0000"
               style={{ fontSize: "18px", paddingTop: "12px" }}
             />
           </Tooltip>
-        </Col> */}
+        </Col>
         <Col>{`${user?.first_name} ${user?.last_name}`}</Col>
 
         <Col>
@@ -44,6 +96,26 @@ const HeaderApp = () => {
           </Tooltip>
         </Col>
       </Row>
+      <Drawer
+        title="¡Notificaciones!"
+        placement="right"
+        closable={false}
+        onClose={onClose}
+        visible={visible}
+      >
+        {
+          notifications.map((item) => {
+            if (item.tender_viewed == false) {
+              return (
+                <Alert message="Licitación" description={item.description} type="success" afterClose={ () => handleClose(item)} closable style={{ marginBottom: '5px' }}/>
+              )
+            }
+          })
+        }
+        
+        {/* afterClose={handleClose} */}
+
+      </Drawer>
     </Header>
   );
 };

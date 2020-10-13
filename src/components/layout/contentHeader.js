@@ -10,7 +10,7 @@ const ContentHeaderApp = (props) => {
 	return (
 		<Breadcrumb>
 			<Breadcrumb.Item key='001'>
-				<Link href="/tenders">
+				<Link href="/">
 					<a>
 						<HomeOutlined />
 					</a>

@@ -42,6 +42,22 @@ const WebList = () => {
       search: true,
     },
     {
+      title: "Estado",
+      dataIndex: "status",
+      key: "status",
+      search: true,
+      render: (key, record) => {
+        switch (record.status) {
+          case 0:
+            return (<span style={{ color: '#ffc107' }}> Pendiente! </span>)
+          case 1:
+            return (<span style={{ color: '#4CAF50' }}> Habilitada! </span>)
+          default:
+            return (<span style={{ color: '#FF5722' }}> Url no aceptable! </span>)
+        }
+      }
+    },
+    {
       title: "Acción",
       dataIndex: "key",
       key: "key",
@@ -93,6 +109,7 @@ const WebList = () => {
     await axios.get("https://insightcron.com/webs")
       .then( response => {
         if (response && response.data) {
+          console.log(response)
           response.data.map((web) => {
             countries.map((country) => {
               if (web.country == country.id ) {

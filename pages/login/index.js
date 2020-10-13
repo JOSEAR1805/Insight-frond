@@ -26,7 +26,7 @@ const Signin = () => {
           }
           setTimeout(() => { 
             setLoading(false) 
-            router.push("/tenders/");
+            router.push("/");
           }, 100);
         }
       })

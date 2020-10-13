@@ -109,6 +109,7 @@ const UserForm = () => {
   };
 
   const updateUser = async (values) => {
+    console.log(values);
     setLoading(true);
     await axios
       .put(`https://insightcron.com/users/${idUser}/`, values)
