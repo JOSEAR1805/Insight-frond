@@ -57,13 +57,13 @@ const sidebarApp = () => {
           </Menu.Item>
         )}
 
-        {user?.is_staff && (
+        {/* {user?.is_staff && (
           <Menu.Item key="3" icon={<GlobalOutlined />}>
             <Link href="/countries">
               <a>Paises</a>
             </Link>
           </Menu.Item>
-        )}
+        )} */}
 
         {user?.is_staff && (
           <Menu.Item key="4" icon={<ProfileOutlined />}>
