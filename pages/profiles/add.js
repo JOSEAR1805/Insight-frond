@@ -116,6 +116,7 @@ const ProfilesForm = () => {
 											placeholder={"Introduzca Parámetros de Búsqueda"}
 										/>
 									</Form.Item>
+									<p><strong>NOTA:</strong> Se guardará solo una licitación de conincidir con el parámetro principal o con el sub parámetro </p>
 								</Col>
 								<Col span={24}>
 									<Form.Item
