@@ -14,6 +14,7 @@ import {
   Tooltip,
   notification,
   Spin,
+  Checkbox,
 } from "antd";
 import { DeleteTwoTone } from "@ant-design/icons";
 
@@ -23,6 +24,7 @@ const UserForm = () => {
   const [form] = Form.useForm();
   const router = useRouter();
   const [idUser, setIdUser] = useState(null);
+  const [idPrivilegeEdit, setPrivilegeEdit] = useState(null);
   const [isStaff, setIsStaff] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -51,6 +53,11 @@ const UserForm = () => {
 
     if (payload && payload.data) {
       setIsStaff(payload.data.is_staff);
+      const privilege = await axios
+        .get(`https://insightcron.com/privileges/privilege-user/${userId}`)
+        .catch((err) => console.log(err));
+
+      setPrivilegeEdit(privilege?.data?.id)
 
       form.setFields([
         {
@@ -68,6 +75,22 @@ const UserForm = () => {
         {
           name: "email",
           value: payload.data?.email,
+        },
+        {
+          name: "privilege_tenders",
+          value: privilege?.data?.tenders,
+        },
+        {
+          name: "privilege_webs",
+          value: privilege?.data?.webs,
+        },
+        {
+          name: "privilege_profiles",
+          value: privilege?.data?.profiles,
+        },
+        {
+          name: "privilege_users",
+          value: privilege?.data?.users,
         },
       ]);
 
@@ -114,6 +137,7 @@ const UserForm = () => {
     await axios
       .put(`https://insightcron.com/users/${idUser}/`, values)
       .then((resp) => {
+        editPrivileges(values, idUser)
         notification.success({
           message: 'Usuario editado con exito!!',
           placement: 'bottomRight',
@@ -166,6 +190,26 @@ const UserForm = () => {
       })
       .catch((err) => console.log(err));
     setTimeout(() => { setLoading(false) }, 100);
+  };
+
+  const editPrivileges = async (values) => {
+    let values_privileges = {
+      profiles: values.privilege_profiles? true: false,
+      tenders: values.privilege_tenders? true: false,
+      webs: values.privilege_webs? true: false,
+      users: values.privilege_users? true: false,
+      user: parseInt(idUser),
+    }
+
+    if (idPrivilegeEdit) {
+      await axios.put(`https://insightcron.com/privileges/${idPrivilegeEdit}/`, values_privileges)
+        .then(console.log())
+        .catch((err) => console.log(err));
+    } else {
+      await axios.post(`https://insightcron.com/privileges/`, values_privileges)
+        .then(console.log())
+        .catch((err) => console.log(err));
+    }
   };
 
   const deleteSearchSettings = async (id) => {
@@ -265,6 +309,39 @@ const UserForm = () => {
                   </Form.Item>
                 </Col>
               </Row>
+
+              {!isStaff && (
+              <Row>
+                <Col span={24}>
+                  <Row style={{ padding: "15px", border: "1px solid #bfbfbf", marginBottom: "15px" }}>
+                    <Divider orientation="left" plain style={{ margin: "0px"}}>
+                      Privilegios para gestionar
+                    </Divider>
+
+                    <Col xs={24} sm={12} md={6}>
+                      <Form.Item  name="privilege_tenders" valuePropName="checked">
+                        <Checkbox>Licitaciones</Checkbox>
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                      <Form.Item  name="privilege_webs" valuePropName="checked">
+                        <Checkbox>Webs</Checkbox>
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                      <Form.Item  name="privilege_profiles" valuePropName="checked">
+                        <Checkbox>Perfiles</Checkbox>
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                      <Form.Item  name="privilege_users" valuePropName="checked">
+                        <Checkbox>Usuarios</Checkbox>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              )}
 
               <Row justify="center">
                 <Col xs={24} sm={12} md={6}>

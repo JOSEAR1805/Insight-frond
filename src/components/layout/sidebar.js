@@ -43,13 +43,15 @@ const sidebarApp = () => {
           </Link>
         </Menu.Item>
 
-        <Menu.Item key="1" icon={<AreaChartOutlined />}>
-          <Link href="/tenders/">
-            <a>Licitaciones</a>
-          </Link>
-        </Menu.Item>
+        {(user?.is_staff || user?.privilege_tenders) && (
+          <Menu.Item key="1" icon={<AreaChartOutlined />}>
+            <Link href="/tenders/">
+              <a>Licitaciones</a>
+            </Link>
+          </Menu.Item>
+        )}
 
-        {user?.is_staff && (
+        {(user?.is_staff || user?.privilege_webs) && (
           <Menu.Item key="2" icon={<LinkOutlined />}>
             <Link href="/webs/">
               <a>Webs</a>
@@ -57,7 +59,7 @@ const sidebarApp = () => {
           </Menu.Item>
         )}
 
-        {/* {user?.is_staff && (
+        {/* {user?.is_staff || user?.is_staff && (
           <Menu.Item key="3" icon={<GlobalOutlined />}>
             <Link href="/countries">
               <a>Paises</a>
@@ -65,7 +67,7 @@ const sidebarApp = () => {
           </Menu.Item>
         )} */}
 
-        {user?.is_staff && (
+        {(user?.is_staff || user?.privilege_profiles) && (
           <Menu.Item key="4" icon={<ProfileOutlined />}>
             <Link href="/profiles/">
               <a>Perfiles</a>
@@ -73,7 +75,7 @@ const sidebarApp = () => {
           </Menu.Item>
         )}
 
-        {user?.is_staff && (
+        {(user?.is_staff || user?.privilege_users) && (
           <Menu.Item key="5" icon={<TeamOutlined />}>
             <Link href="/users/">
               <a>Usuarios</a>
