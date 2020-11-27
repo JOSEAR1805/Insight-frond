@@ -36,10 +36,6 @@ const WebForm = () => {
     }
   };
 
-  const onGenderChange = (value) => {
-    form.setFieldsValue({ country: value });
-  };
-
   const onFinish = async (values) => {
     setLoading(true)
     await axios
@@ -117,12 +113,14 @@ const WebForm = () => {
                     ]}
                   >
                     <Select
+                      showSearch
+                      allowClear
                       size="small"
-                      onChange={onGenderChange}
                       placeholder="seleccionar país"
+                      filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
                     >
                       {countries.map((resp) => {
-                        return <Option value={resp.id}>{resp.name}</Option>;
+                        return <Option key={resp.id} value={resp.id}>{resp.name}</Option>;
                       })}
                     </Select>
                   </Form.Item>

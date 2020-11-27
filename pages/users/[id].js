@@ -389,9 +389,12 @@ const UserForm = () => {
                           ]}
                         >
                           <Select
+                            showSearch
+                            allowClear
                             size="small"
                             // onChange={onGenderChange}
                             placeholder="Seleccione un País"
+                            filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
                           >
                             {countries.map((resp) => {
                               return <Option value={resp.id}>{resp.name}</Option>;
