@@ -85,9 +85,9 @@ const Signin = () => {
                     hasFeedback
                     rules={[
                       {
-                        required: true,
+                        // required: true,
                         message: "¡Por favor, ingrese su contraseña!",
-                        min: 4,
+                        // min: 4,
                       },
                     ]}
                   >

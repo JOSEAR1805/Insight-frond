@@ -1,4 +1,4 @@
-import { Layout, Row, Col, Avatar, Tooltip,  Drawer, Card, Alert, notification, Badge } from "antd";
+import { Layout, Row, Col, Avatar, Tooltip,  Drawer, Card, Alert, notification, Badge, } from "antd";
 import { UserOutlined, BellOutlined, LoginOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -8,6 +8,7 @@ const { Header } = Layout;
 
 const HeaderApp = () => {
   const [user, setUser] = useState(null);
+  const [image, setImage] = useState();
   const [notifications, setNotifications] = useState([]);
   const [count, setCount] = useState(0);
 
@@ -85,8 +86,13 @@ const HeaderApp = () => {
 
           </Tooltip>
         </Col>
-        <Col>{`${user?.first_name} ${user?.last_name}`}</Col>
-
+        <Col>
+          {`${user?.first_name} ${user?.last_name}`}
+        
+        </Col>
+        <Col>
+          { user?.image? <Avatar src={atob(user?.image).replace(" ", /\+/g)}/> : <Avatar icon={<UserOutlined />} />}
+        </Col>
         <Col>
           <Tooltip title="Cerrar sesión" color={"gold"}>
             <LoginOutlined

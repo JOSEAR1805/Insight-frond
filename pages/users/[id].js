@@ -15,10 +15,30 @@ import {
   notification,
   Spin,
   Checkbox,
+  Upload, 
+  message,
 } from "antd";
-import { DeleteTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
+
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener("load", () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+
+function beforeUpload(file) {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    message.error("Sólo puedes subir un archivo JPG/PNG!");
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error("La imagen debe ser menor de 2MB!");
+  }
+  return isJpgOrPng && isLt2M;
+}
 
 const UserForm = () => {
   const [form] = Form.useForm();
@@ -31,6 +51,9 @@ const UserForm = () => {
   const [countries, setCountries] = useState([]);
   const [profiles, setProfiles] = useState([]);
   const [searchSettings, setSearchSettings] = useState([]);
+
+  const [loadingImg, setLoadingImg] = useState(false);
+  const [imageUrl, setImageUrl] = useState();
 
   const navigation = [
     {
@@ -56,7 +79,10 @@ const UserForm = () => {
       const privilege = await axios
         .get(`https://insightcron.com/privileges/privilege-user/${userId}`)
         .catch((err) => console.log(err));
-
+      // console.log('dasd', atob(privilege.data.image).replace(/\+/g, " "))
+      if (privilege?.data) {
+        setImageUrl(atob(privilege?.data?.image).replace(" ", /\+/g))
+      }
       setPrivilegeEdit(privilege?.data?.id)
 
       form.setFields([
@@ -198,6 +224,7 @@ const UserForm = () => {
       tenders: values.privilege_tenders? true: false,
       webs: values.privilege_webs? true: false,
       users: values.privilege_users? true: false,
+      image: imageUrl? btoa(imageUrl).replace(/\+/g, " "): '',
       user: parseInt(idUser),
     }
 
@@ -226,6 +253,26 @@ const UserForm = () => {
       .catch((err) => console.log(err));
     setTimeout(() => { setLoading(false) }, 100);
   };
+
+  const handleChange = (info) => {
+    if (info.file.status === "uploading") {
+      setLoadingImg(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      getBase64(info.file.originFileObj, (imageUrl) => {
+        setLoadingImg(false);
+        setImageUrl(imageUrl);
+      });
+    }
+  };
+
+  const uploadButton = (
+    <div>
+      {loadingImg ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Subir Image</div>
+    </div>
+  );
 
   useEffect(() => {
     setIdUser(router.query?.id);
@@ -307,6 +354,28 @@ const UserForm = () => {
                   >
                     <Input type="email" size="small" />
                   </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    label={"Foto"}
+                    name={"image"}
+                  >
+                  <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    beforeUpload={beforeUpload}
+                    onChange={handleChange}
+                  >
+                    {imageUrl ? (
+                      <img src={imageUrl} alt="avatar" style={{ width: "100%" }} />
+                    ) : (
+                      uploadButton
+                    )}
+                  </Upload>
+                  </Form.Item>
+
                 </Col>
               </Row>
 
