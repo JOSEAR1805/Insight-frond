@@ -129,7 +129,7 @@ const ProfilesForm = () => {
                     />
                   </Form.Item>
                 </Col>
-                <Col span={24}>
+                {/* <Col span={24}>
                   <Form.Item
                     label={"Parámetros de Búsqueda"}
                     name={"search_parameters"}
@@ -165,7 +165,7 @@ const ProfilesForm = () => {
                       placeholder={"Introduzca Parámetros de Descarte"}
                     />
                   </Form.Item>
-                </Col>
+                </Col> */}
               </Row>
               <Row justify="center">
                 <Col xs={24} sm={12} md={6}>

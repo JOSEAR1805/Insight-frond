@@ -1,15 +1,20 @@
-import { Row, Col, Tooltip, notification, Spin } from "antd";
+import { Row, Col, Tooltip, notification, Spin, Select, Modal, Button } from "antd";
 import App from "../../src/components/layout/app";
 import { useState, useEffect } from "react";
 
 import TableSystem from "../../src/components/table";
-import { DeleteTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 
 import axios from "axios";
+
+const { Option } = Select;
 
 const TenderList = () => {
   const [tenders, setTenders] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [statusTender, setStatusTender] = useState({id: '', status: ''});
 
   const columns = [
     {
@@ -70,14 +75,29 @@ const TenderList = () => {
       width: "20%",
     },
     {
+      title: "Estado",
+      dataIndex: "status",
+      key: "status",
+      search: true,
+    },
+    {
       title: "Acción",
       dataIndex: "key",
       key: "key",
       search: false,
-      width: "5%",
+      width: "8%",
       render: (text, record) => {
         return (
           <Row gutter={[8, 0]} justify="center">
+            <Col>
+              <Tooltip title="Editar Estado de Licitación!" color={"orange"}>
+                <EditTwoTone
+                  onClick={() => modalEditStatus(record.id)}
+                  twoToneColor="#fa8c16"
+                  style={{ fontSize: "16px" }}
+                />
+              </Tooltip>
+            </Col>
             <Col>
               <Tooltip title="Eliminar!" color={"red"}>
                 <DeleteTwoTone
@@ -130,6 +150,41 @@ const TenderList = () => {
       .catch((err) => console.log(err));
   };
 
+  //MODAL EDITAR STATUS
+  const modalEditStatus = (idTender) => {
+    statusTender.id = idTender;
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setStatusTender({id: '', status: ''});
+    setIsModalVisible(false);
+  };
+
+  const updateStatusTender = async () => {
+    if (statusTender.id != '' && statusTender.status != '') {
+      console.log(statusTender)
+      await axios.post("https://insightcron.com/tenders/update-status/", statusTender)
+        .then(() => {
+          notification.success({
+            message: 'Estado de Licitación Actualizada con exito!!',
+            placement: 'bottomRight',
+          });
+          setStatusTender({id: '', status: ''})
+          getUsers();
+          setIsModalVisible(false);
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+    } else {
+      notification.error({
+        message: 'Seleccione un Estado para esta Licitación!!',
+        placement: 'bottomRight',
+      });
+    }
+  }
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -139,6 +194,24 @@ const TenderList = () => {
       <Spin tip="Cargando..." spinning={loading}>
         <TableSystem columns={columns} data={tenders} />
       </Spin>
+      <Modal
+        title="Editar Estado de Licitación"
+        visible={isModalVisible}
+        onCancel={closeModal}
+        footer={
+          [
+            <Button key="submit" type="primary" loading={loading} onClick={updateStatusTender}>
+              Editar
+            </Button>
+          ]
+        }
+      >
+        <Select defaultValue={statusTender.status} onChange={(values) => statusTender.status = values}>
+          <Option value="">Seleccione Estado</Option>
+          <Option value="Presentada">Presentada</Option>
+          <Option value="No Presentada">No Presentada</Option>
+        </Select>
+      </Modal>
     </App>
   );
 };

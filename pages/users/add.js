@@ -144,7 +144,6 @@ const UserForm = () => {
       image: imageUrl? btoa(imageUrl).replace(/\+/g, " "): '',
       user: parseInt(idUser),
     }
-    console.log('privilege', values_privileges)
     axios.post(`https://insightcron.com/privileges/`, values_privileges)
       .then(console.log())
       .catch((err) => console.log(err));
