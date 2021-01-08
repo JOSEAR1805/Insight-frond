@@ -509,7 +509,12 @@ CREATE TABLE `webs_web` (
 
 LOCK TABLES `webs_web` WRITE;
 /*!40000 ALTER TABLE `webs_web` DISABLE KEYS */;
-INSERT INTO `webs_web` VALUES (3,'UNDP','https://procurement-notices.undp.org/','Nada','2020-09-14 16:05:17.069497','2020-11-27 01:21:03.058492',13,1),(5,'Rds Empleos','https://rds-empleos.hn/plazas/category/17','nada','2020-09-14 17:23:23.197495','2020-09-14 17:23:23.197517',4,1),(6,'acnur','https://www.acnur.org/search','dsadas','2020-09-21 02:37:04.299789','2020-09-21 02:37:04.299811',5,1),(7,'bcie','https://adquisiciones.bcie.org/avisos-de-adquisicion','dasdas','2020-09-21 02:40:14.622018','2020-09-21 02:40:14.622042',6,1),(8,'globaltenders','https://www.globaltenders.com/government-tenders-latin-america.php','dsadsad','2020-09-21 02:40:47.245799','2020-09-21 02:40:47.245820',3,1),(9,'iom','https://www.iom.int/procurement-opportunities','ddsdf fsdfsddasd','2020-09-21 02:42:56.897796','2020-10-12 16:10:38.477303',3,1);
+INSERT INTO `webs_web` VALUES (3,'UNDP','https://procurement-notices.undp.org/','Nada','2020-09-14 16:05:17.069497','2020-11-27 01:21:03.058492',13,1),
+(5,'Rds Empleos','https://rds-empleos.hn/plazas/category/17','nada','2020-09-14 17:23:23.197495','2020-09-14 17:23:23.197517',4,1),
+(6,'acnur','https://www.acnur.org/search','dsadas','2020-09-21 02:37:04.299789','2020-09-21 02:37:04.299811',5,1),
+(7,'bcie','https://adquisiciones.bcie.org/avisos-de-adquisicion','dasdas','2020-09-21 02:40:14.622018','2020-09-21 02:40:14.622042',6,1),
+(8,'globaltenders','https://www.globaltenders.com/government-tenders-latin-america.php','dsadsad','2020-09-21 02:40:47.245799','2020-09-21 02:40:47.245820',3,1),
+(9,'iom','https://www.iom.int/procurement-opportunities','ddsdf fsdfsddasd','2020-09-21 02:42:56.897796','2020-10-12 16:10:38.477303',3,1);
 /*!40000 ALTER TABLE `webs_web` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
