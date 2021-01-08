@@ -93,16 +93,16 @@ const UserForm = () => {
 
   const saveUser = async (values) => {
     console.log('enviar', values)
-    console.log('enviar', imageUrl)
+    // console.log('enviar', imageUrl)
     // const decodedData = atob(imageUrl); // decode the string
-
     // console.log('dasda', btoa(imageUrl).replace(/\+/g, " "))
+
     setLoading(true);
     await axios
       .post("https://insightcron.com/users/", values)
       .then( resp => {
         if (resp && resp.data) {
-          saveSearchSettings(resp.data.id);
+          // saveSearchSettings(resp.data.id);
           savePrivileges(values, resp.data.id)
           notification.success({
             message: 'usuario creado con exito!!',
@@ -124,16 +124,16 @@ const UserForm = () => {
       });
   };
 
-  const saveSearchSettings = async (idUser) => {
-    if (searchSettings.length >= 1) {
-      searchSettings.map( item => {
-        item.user = parseInt(idUser);
-        axios.post(`https://insightcron.com/search_settings/`, item)
-          .then(console.log())
-          .catch((err) => console.log(err));
-      })
-    }
-  };
+  // const saveSearchSettings = async (idUser) => {
+  //   if (searchSettings.length >= 1) {
+  //     searchSettings.map( item => {
+  //       item.user = parseInt(idUser);
+  //       axios.post(`https://insightcron.com/search_settings/`, item)
+  //         .then(console.log())
+  //         .catch((err) => console.log(err));
+  //     })
+  //   }
+  // };
 
   const savePrivileges = async (values, idUser) => {
     let values_privileges = {
@@ -142,59 +142,62 @@ const UserForm = () => {
       webs: values.is_staff? true: values.privilege_webs? true: false,
       users: values.is_staff? true: values.privilege_users? true: false,
       image: imageUrl? btoa(imageUrl).replace(/\+/g, " "): '',
+      profile_id: values.is_staff? '' : values.profile,
+      countries_ids: values.is_staff? '' : values.country.join(', '),
       user: parseInt(idUser),
+
     }
     axios.post(`https://insightcron.com/privileges/`, values_privileges)
       .then(console.log())
       .catch((err) => console.log(err));
   };
 
-  const addSearchSettings = () => {
-    setLoading(true)
-    let value = {
-      'profile': selectProfile,
-      'country': selectCountry,
-    }
+  // const addSearchSettings = () => {
+  //   setLoading(true)
+  //   let value = {
+  //     'profile': selectProfile,
+  //     'country': selectCountry,
+  //   }
     
-    if (searchSettings.length == 0) {
-      setSearchSettings([value]);
-      notification.success({
-        message: 'Configuración Agregada con exito!!',
-        placement: 'bottomRight',
-      });
-    } else {
-      let exists = false; 
-      searchSettings.map( item => {
-        if (item.country == value.country && item.profile == value.profile) {
-          exists = true
-        }
-      })
+  //   if (searchSettings.length == 0) {
+  //     setSearchSettings([value]);
+  //     notification.success({
+  //       message: 'Configuración Agregada con exito!!',
+  //       placement: 'bottomRight',
+  //     });
+  //   } else {
+  //     let exists = false; 
+  //     searchSettings.map( item => {
+  //       if (item.country == value.country && item.profile == value.profile) {
+  //         exists = true
+  //       }
+  //     })
 
-      if (exists) {
-        notification.error({
-          message: 'Configuración ya se encuentra agregada!!',
-          description: 'Debe seleccionar otros parametros.',
-          placement: 'bottomRight',
-        });
-      } else {
-        searchSettings.push(value);
-        // setSearchSettings(list)
+  //     if (exists) {
+  //       notification.error({
+  //         message: 'Configuración ya se encuentra agregada!!',
+  //         description: 'Debe seleccionar otros parametros.',
+  //         placement: 'bottomRight',
+  //       });
+  //     } else {
+  //       searchSettings.push(value);
+  //       // setSearchSettings(list)
 
-        notification.success({
-          message: 'Configuración Agregada con exito!!',
-          placement: 'bottomRight',
-        });
-      }
-    }
+  //       notification.success({
+  //         message: 'Configuración Agregada con exito!!',
+  //         placement: 'bottomRight',
+  //       });
+  //     }
+  //   }
     
-    setTimeout(() => { setLoading(false) }, 250);
-  };
+  //   setTimeout(() => { setLoading(false) }, 250);
+  // };
 
-  const deleteSearchSettings = (value) => {
-    setLoading(true);
-    searchSettings.splice(searchSettings.indexOf(value), 1)
-    setTimeout(() => { setLoading(false) }, 250);
-  };
+  // const deleteSearchSettings = (value) => {
+  //   setLoading(true);
+  //   searchSettings.splice(searchSettings.indexOf(value), 1)
+  //   setTimeout(() => { setLoading(false) }, 250);
+  // };
 
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
@@ -329,9 +332,63 @@ const UserForm = () => {
                       <Option value={false}>Estándar</Option>;
                     </Select>
                   </Form.Item>
-                
-                
                 </Col>
+
+                {rol != undefined && !rol && (
+                  <Col span={24}>
+                    <Form.Item
+                      label="Pais(es)"
+                      name="country"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Por favor seleccione un Pais!",
+                        },
+                      ]}
+                    >
+                      <Select
+                        mode="multiple"
+                        showSearch
+                        allowClear
+                        size="small"
+                        onChange={value => {console.log(value); setSelectCountry(value)}}
+                        value={selectCountry}
+                        placeholder="Seleccione un País"
+                        filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
+                      >
+                        {countries.map((resp) => {
+                          return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;
+                        })}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                )}
+                {rol != undefined && !rol && (
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      label="Perfil"
+                      name="profile"
+                      // rules={[
+                      //   {
+                      //     required: true,
+                      //     message: "Por favor seleccione un Perfil!",
+                      //   },
+                      // ]}
+                    >
+                      <Select
+                        size="small"
+                        onChange={value => setSelectProfile(value)}
+                        value={selectProfile}
+                        placeholder="Seleccione un Perfil"
+                      >
+                        {profiles.map((resp) => {
+                          return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;
+                        })}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                )}
+
                 <Col span={24}>
                   <Form.Item
                     label={"Foto"}
@@ -386,7 +443,7 @@ const UserForm = () => {
                     </Col>
                   </Row>
                 </Col>
-                <Col span={24}>
+                {/* <Col span={24}>
                   <Row style={{ padding: "15px", border: "1px solid #bfbfbf", marginBottom: "15px" }}>
                     <Divider orientation="left" plain style={{ margin: "0px"}}>
                       Configuración de Búsqueda
@@ -493,7 +550,7 @@ const UserForm = () => {
                       />
                     </Col>
                   </Row>
-                </Col>
+                </Col> */}
               </Row>
               )}
 

@@ -147,19 +147,19 @@ const WebForm = () => {
 
                 <Col span={24}>
                   <Form.Item
-                    label={'Comentario'}
-                    name={'comments'}
+                    label={'Parametros de Búsquedad del cron'}
+                    name={'search_parameters'}
                     rules={[
                       {
                         required: true,
-                        // message: "Por favor ingrese un nombre!",
+                        message: "Por favor ingrese al menos una palabra",
                       },
                     ]}
                   >
                     <TextArea
-                      rows={1}
+                      rows={2}
                       size="small"
-                      placeholder={"Introduzca Comentarío"}
+                      placeholder={"Introduzca Parametros de Búsquedad del cron separado por comas (,)"}
                     />
                   </Form.Item>
                 </Col>

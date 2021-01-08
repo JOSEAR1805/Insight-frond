@@ -18,7 +18,7 @@ import {
   Upload, 
   message,
 } from "antd";
-import { DeleteTwoTone, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { ConsoleSqlOutlined, DeleteTwoTone, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -54,6 +54,7 @@ const UserForm = () => {
 
   const [loadingImg, setLoadingImg] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+  
 
   const navigation = [
     {
@@ -75,11 +76,13 @@ const UserForm = () => {
       .catch((err) => console.log(err));
 
     if (payload && payload.data) {
+      // console.log('ususrida', payload.data)
       setIsStaff(payload.data.is_staff);
       const privilege = await axios
         .get(`https://insightcron.com/privileges/privilege-user/${userId}`)
         .catch((err) => console.log(err));
-      // console.log('dasd', atob(privilege.data.image).replace(/\+/g, " "))
+        // console.log('dasd', privilege.data)
+
       if (privilege?.data) {
         setImageUrl(atob(privilege?.data?.image).replace(" ", /\+/g))
       }
@@ -118,11 +121,17 @@ const UserForm = () => {
           name: "privilege_users",
           value: privilege?.data?.users,
         },
+        {
+          name: "profile",
+          value: parseInt(privilege?.data?.profile_id),
+        },
+        {
+          name: "countries_ids",
+          value: privilege?.data?.countries_ids.split(', ').map(Number),
+        }
       ]);
-
-      getCountries();
-      getProfiles();
-      getSearchSettings(userId);
+      
+      // getSearchSettings(userIdgetSearchSettings);
     }
     setTimeout(() => { setLoading(false) }, 100);
   };
@@ -147,18 +156,18 @@ const UserForm = () => {
     }
   };
 
-  const getSearchSettings = async (getIdeUser) => {
-    const payload = await axios
-      .get("https://insightcron.com/search_settings/")
-      .catch((err) => console.log(err));
+  // const getSearchSettings = async (getIdeUser) => {
+  //   const payload = await axios
+  //     .get("https://insightcron.com/search_settings/")
+  //     .catch((err) => console.log(err));
 
-    if (payload && payload.data) {
-      setSearchSettings(payload.data.filter((resp) => resp.user == getIdeUser));
-    }
-  };
+  //   if (payload && payload.data) {
+  //     setSearchSettings(payload.data.filter((resp) => resp.user == getIdeUser));
+  //   }
+  // };
 
   const updateUser = async (values) => {
-    console.log(values);
+    // console.log('editar', values);
     setLoading(true);
     await axios
       .put(`https://insightcron.com/users/${idUser}/`, values)
@@ -182,49 +191,53 @@ const UserForm = () => {
       });
   };
 
-  const saveSearchSettings = async (values) => {
-    setLoading(true);
-    values.user = parseInt(idUser);
+  // const saveSearchSettings = async (values) => {
+  //   setLoading(true);
+  //   values.user = parseInt(idUser);
 
-    if (searchSettings.length >= 1) {
-      let exists = false; 
-      searchSettings.map( item => {
-        if (item.country == values.country && item.profile == values.profile) {
-          exists = true
-        }
-      })
+  //   if (searchSettings.length >= 1) {
+  //     let exists = false; 
+  //     searchSettings.map( item => {
+  //       if (item.country == values.country && item.profile == values.profile) {
+  //         exists = true
+  //       }
+  //     })
 
-      if (exists) {
-        notification.error({
-          message: 'Configuración ya se encuentra agregada!!',
-          description: 'Debe seleccionar otros parametros.',
-          placement: 'bottomRight',
-        });
-        setTimeout(() => { setLoading(false) }, 100);
-        return;
-      } 
-    }
+  //     if (exists) {
+  //       notification.error({
+  //         message: 'Configuración ya se encuentra agregada!!',
+  //         description: 'Debe seleccionar otros parametros.',
+  //         placement: 'bottomRight',
+  //       });
+  //       setTimeout(() => { setLoading(false) }, 100);
+  //       return;
+  //     } 
+  //   }
 
-    await axios
-      .post(`https://insightcron.com/search_settings/`, values)
-      .then(() => {
-        getSearchSettings(idUser);
-        notification.success({
-          message: 'Configuración Agregada con exito!!',
-          placement: 'bottomRight',
-        });
-      })
-      .catch((err) => console.log(err));
-    setTimeout(() => { setLoading(false) }, 100);
-  };
+  //   await axios
+  //     .post(`https://insightcron.com/search_settings/`, values)
+  //     .then(() => {
+  //       getSearchSettings(idUser);
+  //       notification.success({
+  //         message: 'Configuración Agregada con exito!!',
+  //         placement: 'bottomRight',
+  //       });
+  //     })
+  //     .catch((err) => console.log(err));
+  //   setTimeout(() => { setLoading(false) }, 100);
+  // };
 
   const editPrivileges = async (values) => {
+    console.log()
+
     let values_privileges = {
       profiles: values.privilege_profiles? true: false,
       tenders: values.privilege_tenders? true: false,
       webs: values.privilege_webs? true: false,
       users: values.privilege_users? true: false,
       image: imageUrl? btoa(imageUrl).replace(/\+/g, " "): '',
+      profile_id: isStaff? '' :values.profile_id,
+      countries_ids: isStaff? '' :values.countries_ids.join(', '),
       user: parseInt(idUser),
     }
 
@@ -239,20 +252,20 @@ const UserForm = () => {
     }
   };
 
-  const deleteSearchSettings = async (id) => {
-    setLoading(true);
-    await axios
-      .delete(`https://insightcron.com/search_settings/${id}/`)
-      .then(() => {
-        getSearchSettings(idUser);
-        notification.success({
-          message: 'Configuración de Búsqueda eliminado con exito!!',
-          placement: 'bottomRight',
-        });
-      })
-      .catch((err) => console.log(err));
-    setTimeout(() => { setLoading(false) }, 100);
-  };
+  // const deleteSearchSettings = async (id) => {
+  //   setLoading(true);
+  //   await axios
+  //     .delete(`https://insightcron.com/search_settings/${id}/`)
+  //     .then(() => {
+  //       getSearchSettings(idUser);
+  //       notification.success({
+  //         message: 'Configuración de Búsqueda eliminado con exito!!',
+  //         placement: 'bottomRight',
+  //       });
+  //     })
+  //     .catch((err) => console.log(err));
+  //   setTimeout(() => { setLoading(false) }, 100);
+  // };
 
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
@@ -277,6 +290,8 @@ const UserForm = () => {
   useEffect(() => {
     setIdUser(router.query?.id);
     getDataUser(router.query?.id);
+    getProfiles();
+    getCountries();
   }, [router]);
 
   return (
@@ -355,6 +370,58 @@ const UserForm = () => {
                     <Input type="email" size="small" />
                   </Form.Item>
                 </Col>
+
+                {!isStaff &&
+                  <Col span={24}>
+                    <Form.Item
+                      label="Pais(es)"
+                      name="countries_ids"
+                      rules={[
+                        {
+                          required: !isStaff ? true : false,
+                          message: "Por favor seleccione un Pais!",
+                        },
+                      ]}
+                    >
+                      <Select
+                        mode="multiple"
+                        showSearch
+                        allowClear
+                        size="small"
+                        placeholder="Seleccione un País"
+                        filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
+                      >
+                        {countries.map((resp) => {
+                          return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;
+                        })}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                }
+                {!isStaff &&
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      label="Perfil"
+                      name="profile"
+                      rules={[
+                        {
+                          required: !isStaff ? true : false,
+                          message: "Por favor seleccione un Perfil!",
+                        },
+                      ]}
+                    >
+                      <Select
+                        size="small"
+                        placeholder="Seleccione un Perfil"
+                      >
+                        {profiles.map((resp) => {
+                          return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;
+                        })}
+                      </Select>
+                    </Form.Item>
+                  </Col> 
+                }
+
                 <Col span={24}>
                   <Form.Item
                     label={"Foto"}
@@ -428,7 +495,7 @@ const UserForm = () => {
           </Col>
         </Row>
 
-        {!isStaff && (
+        {/* {!isStaff && (
           <Row justify="center" style={{ "padding-top": "15px" }}>
             <Col md={24} lg={16}>
               <Row style={{ padding: "15px", border: "1px solid #bfbfbf" }}>
@@ -546,7 +613,7 @@ const UserForm = () => {
               </Row>
             </Col>
           </Row>
-        )}
+        )} */}
 
       </App>
     </Spin>

@@ -119,7 +119,7 @@ const ProfileList = () => {
           <Col>
             <p>
               <strong>IMPORTANTE: </strong>
-              Aquí podrá crear el PERFIL de BUSQUEDAS programado. Este perfil luego sera asociado a las URL (WEBS) seleccionadas para las búsquedas automatizadas diarias.
+              Aquí podrá crear el PERFIL los cuales funcionarán como filtro de BUSQUEDA programado a los usuarios asociados.
             </p>
           </Col>
         </Row>

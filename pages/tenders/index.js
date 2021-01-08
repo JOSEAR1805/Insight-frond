@@ -113,7 +113,7 @@ const TenderList = () => {
     },
   ];
 
-  const getUsers = async () => {
+  const getUsers = async (countries) => {
     setLoading(true);
     let userLocal = JSON.parse(localStorage.getItem("user"));
 
@@ -125,6 +125,14 @@ const TenderList = () => {
       })
       .then( response => {
         if (response && response.data?.tenders) {
+          response.data?.tenders.map((tender) => {
+            countries.map((country) => {
+              if (tender.country_id == country.id ) {
+                tender.country = String(country.name);
+              }
+            });
+          });
+          console.log('tenders', response.data?.tenders)
           setTenders(response.data?.tenders);
         }
         setLoading(false)
@@ -148,6 +156,18 @@ const TenderList = () => {
         }
       })
       .catch((err) => console.log(err));
+  };
+
+  const getCountries = async () => {
+    await axios.get("https://insightcron.com/countries/")
+      .then( response => {
+        if (response && response.data) {
+          getUsers(response.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      });
   };
 
   //MODAL EDITAR STATUS
@@ -186,7 +206,7 @@ const TenderList = () => {
   }
 
   useEffect(() => {
-    getUsers();
+    getCountries();
   }, []);
 
   return (
