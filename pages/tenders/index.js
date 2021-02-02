@@ -1,4 +1,14 @@
-import { Row, Col, Tooltip, notification, Spin, Select, Modal, Button } from "antd";
+import {
+  Row,
+  Col,
+  Tooltip,
+  notification,
+  Spin,
+  Select,
+  Modal,
+  Button,
+  Form,
+} from "antd";
 import App from "../../src/components/layout/app";
 import { useState, useEffect } from "react";
 
@@ -13,8 +23,8 @@ const TenderList = () => {
   const [tenders, setTenders] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [idTender, setIdTender] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [statusTender, setStatusTender] = useState({id: '', status: ''});
 
   const columns = [
     {
@@ -92,7 +102,7 @@ const TenderList = () => {
             <Col>
               <Tooltip title="Editar Estado de Licitación!" color={"orange"}>
                 <EditTwoTone
-                  onClick={() => modalEditStatus(record.id)}
+                  onClick={() => { setIdTender(record.id); setIsModalVisible(true); }}
                   twoToneColor="#fa8c16"
                   style={{ fontSize: "16px" }}
                 />
@@ -123,35 +133,34 @@ const TenderList = () => {
           Authorization: `Token ${userLocal.token}`,
         },
       })
-      .then( response => {
+      .then((response) => {
         if (response && response.data?.tenders) {
           response.data?.tenders.map((tender) => {
             countries.map((country) => {
-              if (tender.country_id == country.id ) {
+              if (tender.country_id == country.id) {
                 tender.country = String(country.name);
               }
             });
           });
-          console.log('tenders', response.data?.tenders)
           setTenders(response.data?.tenders);
         }
-        setLoading(false)
+        setLoading(false);
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err)
+        console.log(err);
       });
   };
 
   const deleteTender = async (id) => {
     await axios
       .delete(`https://insightcron.com/tenders/${id}/`)
-      .then( res => {
+      .then((res) => {
         if (res) {
-          getUsers();
+          getCountries();
           notification.success({
-            message: 'Liquidación eliminada con exito!!',
-            placement: 'bottomRight',
+            message: "Liquidación eliminada con exito!!",
+            placement: "bottomRight",
           });
         }
       })
@@ -159,51 +168,41 @@ const TenderList = () => {
   };
 
   const getCountries = async () => {
-    await axios.get("https://insightcron.com/countries/")
-      .then( response => {
+    await axios
+      .get("https://insightcron.com/countries/")
+      .then((response) => {
         if (response && response.data) {
           getUsers(response.data);
         }
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
       });
   };
 
-  //MODAL EDITAR STATUS
-  const modalEditStatus = (idTender) => {
-    statusTender.id = idTender;
-    setIsModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setStatusTender({id: '', status: ''});
-    setIsModalVisible(false);
-  };
-
-  const updateStatusTender = async () => {
-    if (statusTender.id != '' && statusTender.status != '') {
-      console.log(statusTender)
-      await axios.post("https://insightcron.com/tenders/update-status/", statusTender)
+  const updateStatusTender = async (value) => {
+    if (idTender && value.status != "") {
+      value.id= idTender
+      await axios
+        .post("https://insightcron.com/tenders/update-status/", value)
         .then(() => {
+          getCountries();
           notification.success({
-            message: 'Estado de Licitación Actualizada con exito!!',
-            placement: 'bottomRight',
+            message: "Estado de Licitación Actualizada con exito!!",
+            placement: "bottomRight",
           });
-          setStatusTender({id: '', status: ''})
-          getUsers();
           setIsModalVisible(false);
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
         });
     } else {
       notification.error({
-        message: 'Seleccione un Estado para esta Licitación!!',
-        placement: 'bottomRight',
+        message: "Seleccione un Estado para esta Licitación!!",
+        placement: "bottomRight",
       });
     }
-  }
+  };
 
   useEffect(() => {
     getCountries();
@@ -217,20 +216,52 @@ const TenderList = () => {
       <Modal
         title="Editar Estado de Licitación"
         visible={isModalVisible}
-        onCancel={closeModal}
-        footer={
-          [
-            <Button key="submit" type="primary" loading={loading} onClick={updateStatusTender}>
-              Editar
-            </Button>
-          ]
-        }
+        onCancel={ () => setIsModalVisible(false) }
+        footer={null}
       >
-        <Select defaultValue={statusTender.status} onChange={(values) => statusTender.status = values}>
-          <Option value="">Seleccione Estado</Option>
-          <Option value="Presentada">Presentada</Option>
-          <Option value="No Presentada">No Presentada</Option>
-        </Select>
+        <Form
+          layout="vertical"
+          name="basic"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={updateStatusTender}
+        >
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <Form.Item
+                label={"Estado"}
+                name={"status"}
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor Seleccione un Estado!",
+                  },
+                ]}
+              >
+                <Select
+                  placeholder="Seleccionar Estado"
+                >
+                  <Option value="Presentada">Presentada</Option>
+                  <Option value="No Presentada">No Presentada</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row justify="center">
+            <Col xs={24} sm={12} md={6}>
+              <Button
+                type="primary"
+                block="true"
+                htmlType="buttom"
+                size="small"
+                loading={loading}
+              >
+                Guardar
+              </Button>
+            </Col>
+          </Row>
+        </Form>
       </Modal>
     </App>
   );

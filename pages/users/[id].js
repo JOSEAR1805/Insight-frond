@@ -350,7 +350,13 @@ const UserForm = () => {
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12} md={12}>
-                  <Form.Item label="Contraseña" name="password">
+                  <Form.Item label="Contraseña" name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Por favor ingrese una contraseña!",
+                    },
+                  ]}>
                     <Input type="password" size="small" />
                   </Form.Item>
                 </Col>

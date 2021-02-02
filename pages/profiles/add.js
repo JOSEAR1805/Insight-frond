@@ -122,12 +122,6 @@ const ProfilesForm = () => {
 									<Form.Item
 										label={'Parámetros de Descarte'}
 										name={'discard_parameters'}
-										rules={[
-											{
-												required: true,
-												// message: "Por favor ingrese un nombre!",
-											},
-										]}
 									>
 										<TextArea
 											rows={2}
