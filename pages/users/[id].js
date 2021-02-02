@@ -122,8 +122,8 @@ const UserForm = () => {
           value: privilege?.data?.users,
         },
         {
-          name: "profile",
-          value: parseInt(privilege?.data?.profile_id),
+          name: "profiles_ids",
+          value: privilege?.data?.profiles_ids.split(', ').map(Number),
         },
         {
           name: "countries_ids",
@@ -228,15 +228,13 @@ const UserForm = () => {
   // };
 
   const editPrivileges = async (values) => {
-    console.log()
-
     let values_privileges = {
       profiles: values.privilege_profiles? true: false,
       tenders: values.privilege_tenders? true: false,
       webs: values.privilege_webs? true: false,
       users: values.privilege_users? true: false,
       image: imageUrl? btoa(imageUrl).replace(/\+/g, " "): '',
-      profile_id: isStaff? '' :values.profile_id,
+      profiles_ids: isStaff? '' :values.profiles_ids.join(', '),
       countries_ids: isStaff? '' :values.countries_ids.join(', '),
       user: parseInt(idUser),
     }
@@ -399,10 +397,10 @@ const UserForm = () => {
                   </Col>
                 }
                 {!isStaff &&
-                  <Col xs={24} sm={12}>
+                  <Col span={24}>
                     <Form.Item
-                      label="Perfil"
-                      name="profile"
+                      label="Perfil(es)"
+                      name="profiles_ids"
                       rules={[
                         {
                           required: !isStaff ? true : false,
@@ -411,8 +409,12 @@ const UserForm = () => {
                       ]}
                     >
                       <Select
+                        mode="multiple"
+                        showSearch
+                        allowClear
                         size="small"
                         placeholder="Seleccione un Perfil"
+                        filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
                       >
                         {profiles.map((resp) => {
                           return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;

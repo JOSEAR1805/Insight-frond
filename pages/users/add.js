@@ -142,7 +142,7 @@ const UserForm = () => {
       webs: values.is_staff? true: values.privilege_webs? true: false,
       users: values.is_staff? true: values.privilege_users? true: false,
       image: imageUrl? btoa(imageUrl).replace(/\+/g, " "): '',
-      profile_id: values.is_staff? '' : values.profile,
+      profiles_ids: values.is_staff? '' : values.profile.join(', '),
       countries_ids: values.is_staff? '' : values.country.join(', '),
       user: parseInt(idUser),
 
@@ -376,6 +376,20 @@ const UserForm = () => {
                       // ]}
                     >
                       <Select
+                        mode="multiple"
+                        showSearch
+                        allowClear
+                        size="small"
+                        onChange={value => {setSelectProfile(value)}}
+                        value={selectProfile}
+                        placeholder="Seleccione un Perfil"
+                        filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
+                      >
+                        {profiles.map((resp) => {
+                          return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;
+                        })}
+                      </Select>
+                      {/* <Select
                         size="small"
                         onChange={value => setSelectProfile(value)}
                         value={selectProfile}
@@ -384,7 +398,7 @@ const UserForm = () => {
                         {profiles.map((resp) => {
                           return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;
                         })}
-                      </Select>
+                      </Select> */}
                     </Form.Item>
                   </Col>
                 )}

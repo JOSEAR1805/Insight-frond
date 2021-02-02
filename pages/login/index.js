@@ -118,7 +118,7 @@ const Signin = () => {
           </Spin>
         </Col>
       </Row>
-      <Footer>Insight 2020</Footer>
+      <Footer>Insight Latam (R)</Footer>
     </Layout>
   );
 };
