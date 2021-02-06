@@ -48,7 +48,7 @@ const UserForm = () => {
   const [profiles, setProfiles] = useState([]);
   
   const [rol, setRol] = useState();
-  const [selectCountry, setSelectCountry] = useState();
+  const [selectCountry, setSelectCountry] = useState([]);
   const [selectProfile, setSelectProfile] = useState();
   const [searchSettings, setSearchSettings] = useState([]);
 
@@ -92,11 +92,6 @@ const UserForm = () => {
   };
 
   const saveUser = async (values) => {
-    console.log('enviar', values)
-    // console.log('enviar', imageUrl)
-    // const decodedData = atob(imageUrl); // decode the string
-    // console.log('dasda', btoa(imageUrl).replace(/\+/g, " "))
-
     setLoading(true);
     await axios
       .post("https://insightcron.com/users/", values)
@@ -136,14 +131,20 @@ const UserForm = () => {
   // };
 
   const savePrivileges = async (values, idUser) => {
+    values.country.map(item => {
+      if (item === 241) {
+        values.country = [241];
+      }
+    })
+
     let values_privileges = {
       profiles: values.is_staff? true: values.privilege_profiles? true: false,
       tenders: values.is_staff? true: values.privilege_tenders? true: false,
       webs: values.is_staff? true: values.privilege_webs? true: false,
       users: values.is_staff? true: values.privilege_users? true: false,
       image: imageUrl? btoa(imageUrl).replace(/\+/g, " "): '',
-      profiles_ids: values.is_staff? '' : values.profile.join(', '),
-      countries_ids: values.is_staff? '' : values.country.join(', '),
+      profiles_ids: values.is_staff? '' : values.profile.join(','),
+      countries_ids: values.is_staff? '' : values.country.join(','),
       user: parseInt(idUser),
 
     }
@@ -351,8 +352,6 @@ const UserForm = () => {
                         showSearch
                         allowClear
                         size="small"
-                        onChange={value => {console.log(value); setSelectCountry(value)}}
-                        value={selectCountry}
                         placeholder="Seleccione un País"
                         filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
                       >

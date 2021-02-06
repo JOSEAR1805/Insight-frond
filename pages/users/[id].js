@@ -123,11 +123,11 @@ const UserForm = () => {
         },
         {
           name: "profiles_ids",
-          value: privilege?.data?.profiles_ids.split(', ').map(Number),
+          value: privilege?.data?.profiles_ids.split(',').map(Number),
         },
         {
           name: "countries_ids",
-          value: privilege?.data?.countries_ids.split(', ').map(Number),
+          value: privilege?.data?.countries_ids.split(',').map(Number),
         }
       ]);
       
@@ -234,8 +234,8 @@ const UserForm = () => {
       webs: values.privilege_webs? true: false,
       users: values.privilege_users? true: false,
       image: imageUrl? btoa(imageUrl).replace(/\+/g, " "): '',
-      profiles_ids: isStaff? '' :values.profiles_ids.join(', '),
-      countries_ids: isStaff? '' :values.countries_ids.join(', '),
+      profiles_ids: isStaff? '' :values.profiles_ids.join(','),
+      countries_ids: isStaff? '' :values.countries_ids.join(','),
       user: parseInt(idUser),
     }
 

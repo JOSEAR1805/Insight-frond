@@ -32,7 +32,6 @@ const HeaderApp = () => {
       },
     })
     .then( response => {
-      console.log(response)
       if (response && response.data?.tenders) {
         setCount(response.data?.tenders.length)
         setNotifications(response.data?.tenders);

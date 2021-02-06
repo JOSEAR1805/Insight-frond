@@ -24,28 +24,39 @@ const WebList = () => {
 
   const columns = [
     {
-      title: "Pais",
+      title: "Pais(es)",
       dataIndex: "country",
       key: "country",
       search: true,
+      width: "25%",
     },
     {
       title: "Nombre de Institución",
       dataIndex: "name",
       key: "name",
       search: true,
+      width: "35%",
     },
     {
       title: "Url Web",
       dataIndex: "url",
       key: "url",
       search: true,
+      width: "15%",
+      render: (text, record) => {
+        return (
+          <a href={text} target="_blank">
+            Ver Url
+          </a>
+        );
+      },
     },
     {
       title: "Estado",
       dataIndex: "status",
       key: "status",
       search: true,
+      width: "15%",
       render: (key, record) => {
         switch (record.status) {
           case 0:
@@ -105,17 +116,24 @@ const WebList = () => {
   };
 
   const getWebs = async (countries) => {
+
     setLoading(true);
     await axios.get("https://insightcron.com/webs")
       .then( response => {
         if (response && response.data) {
-          console.log(response)
           response.data.map((web) => {
-            countries.map((country) => {
-              if (web.country == country.id ) {
-                web.country = String(country.name);
-              }
+            let aux_countries = '';
+            let countries_ids = web.countries_ids.split(',').map(Number);
+
+            countries_ids.map((country_id) => {
+              countries.map((country) => {
+                if (country_id == country.id ) {
+                  aux_countries += " *" + String(country.name);
+                }
+              });
             });
+
+            web.country = aux_countries;
           });
           setData(response.data);
           setLoading(false);

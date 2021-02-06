@@ -13,6 +13,13 @@ const WebForm = () => {
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [selectCountry, setSelectCountry] = useState();
+
+  const messageRequred = {
+      required: true,
+      message: "Campo requerido!",
+  }
+
   const navigation = [
     {
       key: "1",
@@ -37,6 +44,10 @@ const WebForm = () => {
   };
 
   const onFinish = async (values) => {
+    if (values.countries_ids.length >= 1) {
+      values.countries_ids = values.countries_ids.join(',');
+    }
+    
     setLoading(true)
     await axios
       .post("https://insightcron.com/webs/", values)
@@ -82,16 +93,11 @@ const WebForm = () => {
             >
               <Row gutter={[16, 16]}>
 
-                <Col xs={24} sm={12} md={12}>
+                <Col span={24}>
                   <Form.Item
                     label={'Nombre de Intitución'}
                     name={'name'}
-                    rules={[
-                      {
-                        required: true,
-                        // message: "Por favor ingrese un nombre!",
-                      },
-                    ]}
+                    rules={[messageRequred]}
                   >
                     <Input
                       placeholder={'Nombre de Institución'}
@@ -100,42 +106,35 @@ const WebForm = () => {
                     />
                   </Form.Item>
                 </Col>
-                
-                <Col xs={24} sm={12} md={12}>
+
+                <Col span={24}>
                   <Form.Item
-                    label={'Pais'}
-                    name={'country'}
-                    rules={[
-                      {
-                        required: true,
-                        // message: "Por favor ingrese un nombre!",
-                      },
-                    ]}
+                    label="Pais(es)"
+                    name="countries_ids"
+                    rules={[messageRequred]}
                   >
                     <Select
+                      mode="multiple"
                       showSearch
                       allowClear
                       size="small"
-                      placeholder="seleccionar país"
+                      onChange={value => setSelectCountry(value)}
+                      value={selectCountry}
+                      placeholder="Seleccione un País"
                       filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
                     >
                       {countries.map((resp) => {
-                        return <Option key={resp.id} value={resp.id}>{resp.name}</Option>;
+                        return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;
                       })}
                     </Select>
                   </Form.Item>
                 </Col>
-
+                
                 <Col span={24}>
                   <Form.Item
                     label={'Url Web'}
                     name={'url'}
-                    rules={[
-                      {
-                        required: true,
-                        // message: "Por favor ingrese un nombre!",
-                      },
-                    ]}
+                    rules={[messageRequred]}
                   >
                     <Input
                       placeholder={'Introduzca la url'}
@@ -147,19 +146,13 @@ const WebForm = () => {
 
                 <Col span={24}>
                   <Form.Item
-                    label={'Parametros de Búsquedad del cron'}
-                    name={'search_parameters'}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor ingrese al menos una palabra",
-                      },
-                    ]}
+                    label={'Descripción'}
+                    name={'description'}
                   >
                     <TextArea
                       rows={2}
                       size="small"
-                      placeholder={"Introduzca Parametros de Búsquedad del cron separado por comas (,)"}
+                      placeholder={"Descripción..."}
                     />
                   </Form.Item>
                 </Col>

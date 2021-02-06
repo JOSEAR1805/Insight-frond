@@ -46,7 +46,7 @@ const TenderList = () => {
       search: false,
     },
     {
-      title: "Descripción",
+      title: "Proyecto",
       dataIndex: "description",
       key: "description",
       search: true,
@@ -136,11 +136,17 @@ const TenderList = () => {
       .then((response) => {
         if (response && response.data?.tenders) {
           response.data?.tenders.map((tender) => {
-            countries.map((country) => {
-              if (tender.country_id == country.id) {
-                tender.country = String(country.name);
-              }
+            let aux_countries = '';
+            let countries_ids = tender.countries_ids.split(',').map(Number);
+            
+            countries_ids.map((country_id) => {
+              countries.map((country) => {
+                if (country_id == country.id ) {
+                  aux_countries += " *" + String(country.name);
+                }
+              });
             });
+            tender.country = aux_countries;
           });
           setTenders(response.data?.tenders);
         }
