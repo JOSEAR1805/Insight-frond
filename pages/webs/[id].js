@@ -85,7 +85,7 @@ const WebForm = () => {
         },
         {
           name: "countries_ids",
-          value: payload.data?.countries_ids.split(',').map(Number),
+          value: payload.data?.countries_ids?.split(',').map(Number),
         },
         {
           name: "url",

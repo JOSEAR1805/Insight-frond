@@ -137,7 +137,7 @@ const TenderList = () => {
         if (response && response.data?.tenders) {
           response.data?.tenders.map((tender) => {
             let aux_countries = '';
-            let countries_ids = tender.countries_ids.split(',').map(Number);
+            let countries_ids = tender?.countries_ids?.split(',').map(Number);
             
             countries_ids.map((country_id) => {
               countries.map((country) => {

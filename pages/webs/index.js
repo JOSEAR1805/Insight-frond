@@ -123,7 +123,7 @@ const WebList = () => {
         if (response && response.data) {
           response.data.map((web) => {
             let aux_countries = '';
-            let countries_ids = web.countries_ids.split(',').map(Number);
+            let countries_ids = web?.countries_ids?.split(',').map(Number);
 
             countries_ids.map((country_id) => {
               countries.map((country) => {
