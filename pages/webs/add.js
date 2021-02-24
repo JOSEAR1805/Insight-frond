@@ -1,9 +1,12 @@
-import App from "../../src/components/layout/app";
-import { Form, Input, Row, Col, Button, Select, notification, Spin, } from "antd";
-import axios from "axios";
-import { useRouter } from "next/router";
-import TextArea from "antd/lib/input/TextArea";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+
+import App from "../../src/components/layout/app";
+import ButtomLink from "../../src/components/buttomLink";
+
+import { Form, Input, Row, Col, Button, Select, notification, Switch, PageHeader } from "antd";
+import TextArea from "antd/lib/input/TextArea";
 
 const { Option } = Select;
 
@@ -47,8 +50,9 @@ const WebForm = () => {
     if (values.countries_ids.length >= 1) {
       values.countries_ids = values.countries_ids.join(',');
     }
-    
+
     setLoading(true)
+    // values.status = values.status? 1: 0; 
     await axios
       .post("https://insightcron.com/webs/", values)
       .then( resp => {
@@ -79,101 +83,132 @@ const WebForm = () => {
 
   return (
     <App navigation={navigation}>
-      <Spin tip="Cargando..." spinning={loading}>
+      <PageHeader
+        className="site-page-header"
+        title="Form. de Web"
+        style={{ paddingTop: "0px"}}
+      />
+      <Row justify="center" style={{ paddingTop: "15px" }}>
+        <Col md={24} lg={16}>
+          <Form
+            layout="vertical"
+            name="basic"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+          >
+            <Row gutter={[16, 16]}>
 
-        <Row justify="center" style={{ paddingTop: "15px" }}>
-          <Col md={24} lg={16}>
-            <Form
-              layout="vertical"
-              name="basic"
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={onFinish}
-            >
-              <Row gutter={[16, 16]}>
-
-                <Col span={24}>
-                  <Form.Item
-                    label={'Nombre de Intitución'}
-                    name={'name'}
-                    rules={[messageRequred]}
-                  >
-                    <Input
-                      placeholder={'Nombre de Institución'}
-                      type={'text'}
-                      size="small"
-                    />
-                  </Form.Item>
-                </Col>
-
-                <Col span={24}>
-                  <Form.Item
-                    label="Pais(es)"
-                    name="countries_ids"
-                    rules={[messageRequred]}
-                  >
-                    <Select
-                      mode="multiple"
-                      showSearch
-                      allowClear
-                      size="small"
-                      onChange={value => setSelectCountry(value)}
-                      value={selectCountry}
-                      placeholder="Seleccione un País"
-                      filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
-                    >
-                      {countries.map((resp) => {
-                        return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;
-                      })}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                
-                <Col span={24}>
-                  <Form.Item
-                    label={'Url Web'}
-                    name={'url'}
-                    rules={[messageRequred]}
-                  >
-                    <Input
-                      placeholder={'Introduzca la url'}
-                      type={'text'}
-                      size="small"
-                    />
-                  </Form.Item>
-                </Col>
-
-                <Col span={24}>
-                  <Form.Item
-                    label={'Descripción'}
-                    name={'description'}
-                  >
-                    <TextArea
-                      rows={2}
-                      size="small"
-                      placeholder={"Descripción..."}
-                    />
-                  </Form.Item>
-                </Col>
-
-              </Row>
-              <Row justify="center">
-                <Col xs={24} sm={12} md={6}>
-                  <Button
-                    type="primary"
-                    block="true"
-                    htmlType="buttom"
+              <Col span={24}>
+                <Form.Item
+                  label={'Nombre de Intitución'}
+                  name={'name'}
+                  rules={[messageRequred]}
+                >
+                  <Input
+                    placeholder={'Nombre de Institución'}
+                    type={'text'}
                     size="small"
+                  />
+                </Form.Item>
+              </Col>
+
+              <Col span={24}>
+                <Form.Item
+                  label="Pais(es)"
+                  name="countries_ids"
+                  rules={[messageRequred]}
+                >
+                  <Select
+                    mode="multiple"
+                    showSearch
+                    allowClear
+                    size="small"
+                    onChange={value => setSelectCountry(value)}
+                    value={selectCountry}
+                    placeholder="Seleccione un País"
+                    filterOption={(value, option) => option.children?.toUpperCase().indexOf(value.toUpperCase()) !== -1}
                   >
-                    Guardar
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-          </Col>
-        </Row>
-      </Spin>
+                    {countries.map((resp) => {
+                      return <Option value={resp.id} key={resp.id}>{resp.name}</Option>;
+                    })}
+                  </Select>
+                </Form.Item>
+              </Col>
+              
+              <Col span={20}>
+                <Form.Item
+                  label={'Url Web'}
+                  name={'url'}
+                  rules={[messageRequred]}
+                >
+                  <Input
+                    placeholder={'Introduzca la url'}
+                    type={'text'}
+                    size="small"
+                  />
+                </Form.Item>
+              </Col>
+
+              <Col span={4}>
+                <Form.Item
+                  label={'Estado'}
+                  name={'status'}
+                  valuePropName="checked"
+                >
+                  <Switch
+                    checkedChildren="Habilitada"
+                    unCheckedChildren="Deshabilitada"
+                  />
+                </Form.Item>
+              </Col>
+
+              <Col span={24}>
+                <Form.Item
+                  label={'Descripción'}
+                  name={'description'}
+                >
+                  <TextArea
+                    rows={2}
+                    size="small"
+                    placeholder={"Descripción..."}
+                  />
+                </Form.Item>
+              </Col>
+
+              <Col span={24}>
+                <Form.Item
+                  label={'Nota'}
+                  name={'note'}
+                >
+                  <TextArea
+                    rows={2}
+                    size="small"
+                    placeholder={"Nota..."}
+                  />
+                </Form.Item>
+              </Col>
+
+            </Row>
+            <Row gutter={[16, 16]} justify="center">
+              <Col xs={24} sm={12} md={6}>
+                <ButtomLink type="primary" title="Cancelar" path="/webs" />
+              </Col>
+              <Col xs={24} sm={12} md={6}>
+                <Button
+                  type="primary"
+                  block="true"
+                  htmlType="buttom"
+                  size="small"
+                >
+                  Guardar
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
     </App>
   );
 };

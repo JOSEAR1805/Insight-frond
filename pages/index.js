@@ -1,11 +1,9 @@
-import App from "../src/components/layout/app";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import { Statistic, Row, Col, Spin } from 'antd';
 
-import axios from "axios";
-
-
+import App from "../src/components/layout/app";
 
 const Home = () => {
 	const [loading, setLoading] = useState(false);

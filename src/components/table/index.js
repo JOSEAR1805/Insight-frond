@@ -4,7 +4,7 @@ import { SearchOutlined } from '@ant-design/icons';
 
 const TableSystem = (props) => {
 
-	const {columns, data } = props;
+	const {columns, data, loading } = props;
 	const [ sourceColumns, setSourceColumns ] = useState(columns);
 
 	const getColumnSearchProps = item => ({
@@ -63,7 +63,7 @@ const TableSystem = (props) => {
 	return (
 		<Row>
 			<Col span={24}>
-				<Table dataSource={data} columns={sourceColumns} size="small" scroll={{x: 'auto'}} pagination={{ position: [ 'bottomCenter']  }} className="text-color-secondary" />
+				<Table dataSource={data} columns={sourceColumns} size="small" loading={loading} scroll={{x: 'auto'}} pagination={{ position: [ 'bottomCenter']  }} className="text-color-secondary" />
 			</Col>
 		</Row>
 	);

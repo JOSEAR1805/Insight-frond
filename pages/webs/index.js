@@ -1,13 +1,28 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Button, Tooltip, notification, Spin } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import axios from "axios";
 
 import App from "../../src/components/layout/app";
 import TableSystem from "../../src/components/table";
-import Link from "next/link";
-import { DeleteTwoTone, EyeTwoTone } from "@ant-design/icons";
 
-import axios from "axios";
+import {
+  Row,
+  Col,
+  Button,
+  Tooltip,
+  notification,
+  PageHeader,
+  Typography,
+} from "antd";
+import {
+  DeleteTwoTone,
+  EyeTwoTone,
+  RedoOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
+
+const { Text } = Typography;
 
 const WebList = () => {
   const router = useRouter();
@@ -28,7 +43,15 @@ const WebList = () => {
       dataIndex: "country",
       key: "country",
       search: true,
-      width: "25%",
+      render: (text) => {
+        return (
+          <>
+            {text.map((res) => (
+              <p style={{ margin: "0" }}>{res}</p>
+            ))}
+          </>
+        );
+      },
     },
     {
       title: "Nombre de Institución",
@@ -57,16 +80,11 @@ const WebList = () => {
       key: "status",
       search: true,
       width: "15%",
-      render: (key, record) => {
-        switch (record.status) {
-          case 0:
-            return (<span style={{ color: '#ffc107' }}> Pendiente! </span>)
-          case 1:
-            return (<span style={{ color: '#4CAF50' }}> Habilitada! </span>)
-          default:
-            return (<span style={{ color: '#FF5722' }}> Url no aceptable! </span>)
-        }
-      }
+      render: (text, record) => (
+        <span style={{ color: text ? "#4CAF50" : "#ff0000" }}>
+          {text ? "Habilitada" : "Deshabilitada"}!
+        </span>
+      ),
     },
     {
       title: "Acción",
@@ -104,37 +122,39 @@ const WebList = () => {
   ];
 
   const getCountries = async () => {
-    await axios.get("https://insightcron.com/countries/")
-      .then( response => {
+    await axios
+      .get("https://insightcron.com/countries/")
+      .then((response) => {
         if (response && response.data) {
           getWebs(response.data);
         }
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
       });
   };
 
   const getWebs = async (countries) => {
-
     setLoading(true);
-    await axios.get("https://insightcron.com/webs")
-      .then( response => {
+    await axios
+      .get("https://insightcron.com/webs")
+      .then((response) => {
         if (response && response.data) {
           response.data.map((web) => {
-            let aux_countries = '';
-            let countries_ids = web?.countries_ids?.split(',').map(Number);
+            let aux_countries = [];
+            let countries_ids = web?.countries_ids?.split(",").map(Number);
 
             countries_ids?.map((country_id) => {
               countries.map((country) => {
-                if (country_id == country.id ) {
-                  aux_countries += " *" + String(country.name);
+                if (country_id == country.id) {
+                  aux_countries.push(String(country.name));
                 }
               });
             });
 
             web.country = aux_countries;
           });
+          console.log("response.data", response.data);
           setData(response.data);
           setLoading(false);
         }
@@ -143,49 +163,51 @@ const WebList = () => {
   };
 
   const deleteWebs = async (id) => {
-    await axios.delete(`https://insightcron.com/webs/${id}/`)
-      .then( res => {
+    await axios
+      .delete(`https://insightcron.com/webs/${id}/`)
+      .then((res) => {
         if (res) {
           getCountries();
           notification.success({
-            message: 'Web  eliminada con exito!!',
-            placement: 'bottomRight',
+            message: "Web  eliminada con exito!!",
+            placement: "bottomRight",
           });
         }
       })
       .catch((err) => console.log(err));
   };
 
-  useEffect( () => {
+  useEffect(() => {
     getCountries();
   }, []);
 
   return (
     <App navigation={navigation}>
-      <Spin tip="Cargando..." spinning={loading}>
-        <Row gutter={[8, 16]} justify="end">
-          <Col>
-            <Link href="/webs/add">
-              <a>
-                <Button type="primary" size="small">
-                  NUEVA WEB
-                </Button>
-              </a>
-            </Link>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <p>
-              <strong>IMPORTANTE: </strong> 
-              En esta pantalla usted podrá visualizar y crear las WEBS que fueron configuradas para realizar SCRAPING diariamente.
-              <br/>
-              La activación de una Nueva WEB creada puede llevar hasta 72 hs.
-            </p>
-          </Col>
-        </Row>
-        <TableSystem columns={columns} data={data} />
-      </Spin>
+      <PageHeader
+        className="site-page-header"
+        title="Lista de Webs"
+        style={{ paddingTop: "0px" }}
+        extra={[
+          <Button
+            shape="circle"
+            type="text"
+            icon={<RedoOutlined />}
+            onClick={() => getCountries()}
+          />,
+          <Link href="/webs/add">
+            <a>
+              <Button type="primary" size="small">
+                NUEVA WEB
+              </Button>
+            </a>
+          </Link>,
+        ]}
+      >
+        <Text>
+          Webs Registradas: {loading ? <SyncOutlined spin /> : data.length}
+        </Text>
+      </PageHeader>
+      <TableSystem columns={columns} data={data} loading={loading} />
     </App>
   );
 };

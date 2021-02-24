@@ -1,8 +1,11 @@
-import { Form, Input, Row, Col, Button, notification, Spin } from "antd";
 import { useEffect, useState } from "react";
-import App from "../../src/components/layout/app";
-import axios from "axios";
 import { useRouter } from "next/router";
+import axios from "axios";
+
+import App from "../../src/components/layout/app";
+import ButtomLink from "../../src/components/buttomLink";
+
+import { Form, Input, Row, Col, Button, notification, Spin, PageHeader } from "antd";
 
 const { TextArea } = Input;
 
@@ -85,6 +88,11 @@ const ProfilesForm = () => {
   return (
     <App navigation={navigation}>
       <Spin tip="Cargando..." spinning={loading}>
+        <PageHeader
+          className="site-page-header"
+          title="Form. de Perfil"
+          style={{ paddingTop: "0px"}}
+        />
         <Row justify="center" style={{ "padding-top": "15px" }}>
           <Col md={24} lg={16}>
             <Form
@@ -161,7 +169,10 @@ const ProfilesForm = () => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row justify="center">
+              <Row gutter={[16, 16]} justify="center">
+                <Col xs={24} sm={12} md={6}>
+                  <ButtomLink type="primary" title="Cancelar" path="/profiles" />
+                </Col>
                 <Col xs={24} sm={12} md={6}>
                   <Button
                     type="primary"
@@ -169,7 +180,7 @@ const ProfilesForm = () => {
                     htmlType="buttom"
                     size="small"
                   >
-                    Editar
+                    Guardar
                   </Button>
                 </Col>
               </Row>

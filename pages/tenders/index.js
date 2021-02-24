@@ -1,22 +1,30 @@
+
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+import App from "../../src/components/layout/app";
+import TableSystem from "../../src/components/table";
+
 import {
   Row,
   Col,
+  Button,
   Tooltip,
   notification,
-  Spin,
+  PageHeader,
+  Typography,
   Select,
   Modal,
-  Button,
   Form,
 } from "antd";
-import App from "../../src/components/layout/app";
-import { useState, useEffect } from "react";
+import {
+  DeleteTwoTone,
+  EditTwoTone,
+  RedoOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
 
-import TableSystem from "../../src/components/table";
-import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-
-import axios from "axios";
-
+const { Text } = Typography;
 const { Option } = Select;
 
 const TenderList = () => {
@@ -27,24 +35,12 @@ const TenderList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const columns = [
-    {
-      title: "Pais",
-      dataIndex: "country",
-      key: "country",
-      search: true,
-    },
-    {
-      title: "F. publicación",
-      dataIndex: "publication_date",
-      key: "publication_date",
-      search: false,
-    },
-    {
-      title: "F. recepción",
-      dataIndex: "closing_date",
-      key: "closing_date",
-      search: false,
-    },
+    // {
+    //   title: "Pais",
+    //   dataIndex: "country",
+    //   key: "country",
+    //   search: true,
+    // },
     {
       title: "Proyecto",
       dataIndex: "description",
@@ -57,19 +53,6 @@ const TenderList = () => {
       dataIndex: "code",
       key: "code",
       search: true,
-    },
-    {
-      title: "Link",
-      dataIndex: "link",
-      key: "link",
-      search: false,
-      render: (text, record) => {
-        return (
-          <a href={text} target="_blank">
-            Ver licitación
-          </a>
-        );
-      },
     },
     {
       title: "Lugar de Ejecución",
@@ -85,10 +68,45 @@ const TenderList = () => {
       width: "20%",
     },
     {
+      title: "Link",
+      dataIndex: "link",
+      key: "link",
+      search: false,
+      render: (text, record) => {
+        return (
+          <a href={text} target="_blank">
+            Ver licitación
+          </a>
+        );
+      },
+    },
+    {
       title: "Estado",
       dataIndex: "status",
       key: "status",
       search: true,
+      render: (text, record) => {
+        switch (parseInt(record.status)) {
+          case 0:
+            return (<span style={{ color: '#fa8c16' }}> Nuevo! </span>)
+          case 1:
+            return (<span style={{ color: '#4CAF50' }}> Presentada! </span>)
+          case 2:
+            return (<span style={{ color: '#ff0000' }}> No Presentada! </span>)
+        }
+      }
+    },
+    {
+      title: "F. publicación",
+      dataIndex: "publication_date",
+      key: "publication_date",
+      search: false,
+    },
+    {
+      title: "F. recepción",
+      dataIndex: "closing_date",
+      key: "closing_date",
+      search: false,
     },
     {
       title: "Acción",
@@ -147,6 +165,7 @@ const TenderList = () => {
               });
             });
             tender.country = aux_countries;
+            tender.key = tender.id
           });
           setTenders(response.data?.tenders);
         }
@@ -216,9 +235,24 @@ const TenderList = () => {
 
   return (
     <App>
-      <Spin tip="Cargando..." spinning={loading}>
-        <TableSystem columns={columns} data={tenders} />
-      </Spin>
+      <PageHeader
+        className="site-page-header"
+        title="Lista de Licitaciones"
+        style={{ paddingTop: "0px" }}
+        extra={[
+          <Button
+            shape="circle"
+            type="text"
+            icon={<RedoOutlined />}
+            onClick={() => getCountries()}
+          />
+        ]}
+      >
+        <Text>
+        Licitaciones Registradas: {loading ? <SyncOutlined spin /> : tenders.length}
+        </Text>
+      </PageHeader>
+      <TableSystem columns={columns} data={tenders} loading={loading}/>
       <Modal
         title="Editar Estado de Licitación"
         visible={isModalVisible}
@@ -248,8 +282,8 @@ const TenderList = () => {
                 <Select
                   placeholder="Seleccionar Estado"
                 >
-                  <Option value="Presentada">Presentada</Option>
-                  <Option value="No Presentada">No Presentada</Option>
+                  <Option value="1">Presentada</Option>
+                  <Option value="2">No Presentada</Option>
                 </Select>
               </Form.Item>
             </Col>

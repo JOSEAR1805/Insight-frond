@@ -1,9 +1,12 @@
-import App from "../../src/components/layout/app";
-import { Form, Input, Row, Col, Button, Select, notification, Spin } from "antd";
-import axios from "axios";
-import { useRouter } from "next/router";
-import TextArea from "antd/lib/input/TextArea";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+
+import App from "../../src/components/layout/app";
+import ButtomLink from "../../src/components/buttomLink";
+
+import { Form, Input, Row, Col, Button, Select, notification, PageHeader, Switch } from "antd";
+import TextArea from "antd/lib/input/TextArea";
 
 const { Option } = Select;
 
@@ -92,8 +95,16 @@ const WebForm = () => {
           value: payload.data?.url,
         },
         {
+          name: "status",
+          value: payload.data?.status,
+        },
+        {
           name: "description",
           value: payload.data?.description,
+        },
+        {
+          name: "note",
+          value: payload.data?.note,
         },
       ]);
     }
@@ -110,6 +121,11 @@ const WebForm = () => {
   return (
     <App navigation={navigation}>
       <Spin tip="Cargando..." spinning={loading}>
+        <PageHeader
+          className="site-page-header"
+          title="Form. de Web"
+          style={{ paddingTop: "0px"}}
+        />
         <Row justify="center" style={{ paddingTop: "15px" }}>
           <Col md={24} lg={16}>
             <Form
@@ -157,7 +173,7 @@ const WebForm = () => {
                   </Form.Item>
                 </Col>
 
-                <Col span={24}>
+                <Col span={20}>
                   <Form.Item
                     label={"Url Web"}
                     name={"url"}
@@ -167,6 +183,19 @@ const WebForm = () => {
                       placeholder={"Introduzca la url"}
                       type={"text"}
                       size="small"
+                    />
+                  </Form.Item>
+                </Col>
+
+                <Col span={4}>
+                  <Form.Item
+                    label={'Estado'}
+                    name={'status'}
+                    valuePropName="checked"
+                  >
+                    <Switch
+                      checkedChildren="Habilitada"
+                      unCheckedChildren="Deshabilitada"
                     />
                   </Form.Item>
                 </Col>
@@ -183,8 +212,24 @@ const WebForm = () => {
                     />
                   </Form.Item>
                 </Col>
+
+                <Col span={24}>
+                  <Form.Item
+                    label={'Nota'}
+                    name={'note'}
+                  >
+                    <TextArea
+                      rows={2}
+                      size="small"
+                      placeholder={"Nota referente a la web..."}
+                    />
+                  </Form.Item>
+                </Col>
               </Row>
-              <Row justify="center">
+              <Row gutter={[16, 16]} justify="center">
+                <Col xs={24} sm={12} md={6}>
+                  <ButtomLink type="primary" title="Cancelar" path="/webs" />
+                </Col>
                 <Col xs={24} sm={12} md={6}>
                   <Button
                     type="primary"
@@ -192,7 +237,7 @@ const WebForm = () => {
                     htmlType="buttom"
                     size="small"
                   >
-                    Editar
+                    Guardar
                   </Button>
                 </Col>
               </Row>

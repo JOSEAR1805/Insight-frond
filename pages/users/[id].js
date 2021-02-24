@@ -1,7 +1,10 @@
-import App from "../../src/components/layout/app";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
+import axios from "axios";
+
+import App from "../../src/components/layout/app";
+import ButtomLink from "../../src/components/buttomLink";
+
 import {
   Form,
   Input,
@@ -10,8 +13,7 @@ import {
   Button,
   Select,
   Divider,
-  List,
-  Tooltip,
+  PageHeader,
   notification,
   Spin,
   Checkbox,
@@ -293,8 +295,13 @@ const UserForm = () => {
   }, [router]);
 
   return (
-    <Spin tip="Cargando..." spinning={loading}>
-      <App navigation={navigation}>
+    <App navigation={navigation}>
+      <Spin tip="Cargando..." spinning={loading}>
+        <PageHeader
+          className="site-page-header"
+          title="Form. de Usuario"
+          style={{ paddingTop: "0px"}}
+        />
         <Row justify="center" style={{ "padding-top": "15px" }}>
           <Col md={24} lg={16}>
             <Form
@@ -487,7 +494,10 @@ const UserForm = () => {
               </Row>
               )}
 
-              <Row justify="center">
+              <Row gutter={[16, 16]} justify="center">
+                <Col xs={24} sm={12} md={6}>
+                  <ButtomLink type="primary" title="Cancelar" path="/users" />
+                </Col>
                 <Col xs={24} sm={12} md={6}>
                   <Button
                     type="primary"
@@ -495,7 +505,7 @@ const UserForm = () => {
                     htmlType="buttom"
                     size="small"
                   >
-                    Editar
+                    Guardar
                   </Button>
                 </Col>
               </Row>
@@ -623,8 +633,8 @@ const UserForm = () => {
           </Row>
         )} */}
 
-      </App>
-    </Spin>
+      </Spin>
+    </App>
   );
 };
 

@@ -1,12 +1,27 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Button, Tooltip, notification, Spin } from "antd";
+import Link from "next/link";
+import axios from "axios";
 
 import App from "../../src/components/layout/app";
 import TableSystem from "../../src/components/table";
-import Link from "next/link";
-import { DeleteTwoTone, EyeTwoTone } from "@ant-design/icons";
 
-import axios from "axios";
+import {
+  Row,
+  Col,
+  Button,
+  Tooltip,
+  notification,
+  PageHeader,
+  Typography,
+} from "antd";
+import {
+  DeleteTwoTone,
+  EyeTwoTone,
+  RedoOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
+
+const { Text } = Typography;
 
 const UserList = () => {
   const [data, setData] = useState([]);
@@ -48,12 +63,6 @@ const UserList = () => {
         return text ? "Administrador" : "Estándar";
       },
     },
-    // {
-    //   title: "Dirección",
-    //   dataIndex: "username",
-    //   key: "address",
-    //   search: true,
-    // },
     {
       title: "Acción",
       dataIndex: "key",
@@ -94,7 +103,7 @@ const UserList = () => {
     setLoading(true);
     await axios
       .get("https://insightcron.com/users")
-      .then(resp => setData(resp.data))
+      .then((resp) => setData(resp.data))
       .catch((err) => console.log(err));
 
     setLoading(false);
@@ -103,12 +112,12 @@ const UserList = () => {
   const deleteUser = async (id) => {
     await axios
       .delete(`https://insightcron.com/users/${id}/`)
-      .then( res => {
+      .then((res) => {
         if (res) {
           getUsers();
           notification.success({
-            message: 'usuario eliminado con exito!!',
-            placement: 'bottomRight',
+            message: "usuario eliminado con exito!!",
+            placement: "bottomRight",
           });
         }
       })
@@ -121,19 +130,29 @@ const UserList = () => {
 
   return (
     <App navigation={navigation}>
-      <Spin tip="Cargando..." spinning={loading}>
-        <Row gutter={[8, 16]} justify="end">
-          <Col>
-            <Link href="/users/add">
-              <Button type="primary" size="small">
-                NUEVO USUARIO
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-
-        <TableSystem columns={columns} data={data} />
-      </Spin>
+      <PageHeader
+        className="site-page-header"
+        title="Lista de Usuarios"
+        style={{ paddingTop: "0px" }}
+        extra={[
+          <Button
+            shape="circle"
+            type="text"
+            icon={<RedoOutlined />}
+            onClick={() => getUsers()}
+          />,
+          <Link href="/users/add">
+            <Button type="primary" size="small">
+              NUEVO USUARIO
+            </Button>
+          </Link>,
+        ]}
+      >
+        <Text>
+          Usuarios Registrados: {loading ? <SyncOutlined spin /> : data.length}
+        </Text>
+      </PageHeader>
+      <TableSystem columns={columns} data={data} loading={loading} />
     </App>
   );
 };

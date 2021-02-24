@@ -118,7 +118,7 @@ const HeaderApp = () => {
           notifications.map((item) => {
             if (item.tender_viewed == false) {
               return (
-                <Alert message="Licitación" description={item.description} type="success" afterClose={ () => handleClose(item)} closable style={{ marginBottom: '5px' }}/>
+                <Alert message="Licitación" key={item.id} description={item.description} type="success" afterClose={ () => handleClose(item)} closable style={{ marginBottom: '5px' }}/>
               )
             }
           })
