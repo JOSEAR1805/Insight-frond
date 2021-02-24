@@ -5,7 +5,7 @@ import axios from "axios";
 import App from "../../src/components/layout/app";
 import ButtomLink from "../../src/components/buttomLink";
 
-import { Form, Input, Row, Col, Button, Select, notification, PageHeader, Switch } from "antd";
+import { Form, Input, Row, Col, Button, Select, notification, PageHeader, Switch, Spin } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 
 const { Option } = Select;
